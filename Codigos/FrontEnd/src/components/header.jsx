@@ -37,7 +37,7 @@ const Header = () => {
                     <div className="login_cadastro">
                         <p onClick={handleLogin}>Login</p>
                         <span></span>
-                        <p onClick={handleLogin}>Cadastro</p>
+                        <p onClick={handleCadastro}>Cadastro</p>
                     </div>
                 </nav>
             </header>
