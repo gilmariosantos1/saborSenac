@@ -12,6 +12,12 @@ const Header = () => {
     const handleSugestoes = () => {
         navigate('/sugestoes');
     }
+    const handleLogin = () => {
+        navigate('/login');
+    }
+    const handleCadastro = () => {
+        navigate('/cadastro');
+    }
 
     return (
         <>
@@ -29,9 +35,9 @@ const Header = () => {
                         <p>Exemplo Exemplo</p>
                     </div>
                     <div className="login_cadastro">
-                        <p>Login</p>
+                        <p onClick={handleLogin}>Login</p>
                         <span></span>
-                        <p>Cadastro</p>
+                        <p onClick={handleLogin}>Cadastro</p>
                     </div>
                 </nav>
             </header>

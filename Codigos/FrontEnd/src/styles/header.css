@@ -59,3 +59,7 @@ nav {
     height: 16px;
     background-color: #1855A5;
 }
+
+.login_cadastro p {
+    cursor: pointer;
+}
