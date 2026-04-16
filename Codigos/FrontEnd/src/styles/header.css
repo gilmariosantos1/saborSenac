@@ -1,3 +1,49 @@
-h2 {
-    background-color: yellow;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+header {
+    padding: 5px 30px;
+    border-bottom: 1px solid #E4E6EA;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo img {
+    max-width: 180px;
+    max-height: 108px;
+    width: 100%;
+    height: 100%;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+}
+
+.sugestoes {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #1855A5;
+    gap: 5px;
+}
+.sugestoes img {
+    margin-bottom: 5px;
+    width: 35px;
+    height: 35px;
+}
+
+.perfil {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    gap: 5px;
+    
+}
+.perfil p {
+    font-family: Open-Sans;
+}
+.perfil img {
+    width: 35px;
+    height: 35px;
 }
