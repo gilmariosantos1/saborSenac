@@ -34,8 +34,8 @@ nav {
 }
 
 .perfil {
-    /* display: flex; */
-    display: none;
+    display: flex;
+    /* display: none; */
     align-items: center;
     font-weight: 500;
     gap: 5px;
@@ -46,9 +46,9 @@ nav {
     height: 35px;
 }
 .login_cadastro {
-    display: flex;
+    display: none;
+    /* display: flex; */
     align-items: center;
-    font-size: 16px;
     font-weight: 700;
     gap: 10px;
     color: #1855A5;
@@ -62,4 +62,39 @@ nav {
 
 .login_cadastro p {
     cursor: pointer;
+}
+
+@media only screen and (max-width:600px) {
+    header {
+        padding: 5px 10px;
+    }
+    .login_cadastro {
+        flex-direction: column;
+        gap: 3px;
+    }
+    .login_cadastro span {
+        width: 70%;
+        height: 1.5px;
+    }
+    .perfil p {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .logo img {
+        max-width: 95px;
+    }
+    .sugestoes {
+        font-size: 14px;
+    }
+    .sugestoes img {
+        width: 30px;
+    }
+    .login_cadastro {
+        font-size: 14px;
+    }
+    nav {
+        gap: 10px;
+    }
 }
