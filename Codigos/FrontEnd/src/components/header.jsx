@@ -4,8 +4,14 @@ import sugestoes from '../assets/imagens/sugestoes.svg'
 import perfil from '../assets/imagens/perfil.svg'
 import '../styles/header.css'
 
+
+
 const Header = () => {
     const navigate = useNavigate();
+
+    const handleSugestoes = () => {
+        navigate('/sugestoes');
+    }
 
     return (
         <>
@@ -14,13 +20,18 @@ const Header = () => {
                     <img src={logo} alt="Logo sabor senac"/>
                 </div>
                 <nav>
-                    <div className="sugestoes">
+                    <div onClick={handleSugestoes} className="sugestoes">
                         <h3>Sugestões</h3>
                         <img src={sugestoes} alt="sugestoes" />
                     </div>
                     <div className="perfil">
                         <img src={perfil} alt="perfil" />
                         <p>Exemplo Exemplo</p>
+                    </div>
+                    <div className="login_cadastro">
+                        <p>Login</p>
+                        <span></span>
+                        <p>Cadastro</p>
                     </div>
                 </nav>
             </header>
