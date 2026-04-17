@@ -6,6 +6,9 @@ header {
     align-items: center;
 }
 
+.logo {
+    cursor: pointer;
+}
 .logo img {
     max-width: 180px;
     max-height: 108px;
@@ -19,19 +22,13 @@ nav {
     height: auto;
 }
 
-.sugestoes {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    color: #1855A5;
-    gap: 5px;
-    cursor: pointer;
-}
 .sugestoes img {
     margin-bottom: 5px;
     width: 35px;
     height: 35px;
 }
+
+/* -----PERFIL DO USUARIO----- */
 
 .perfil {
     display: flex;
@@ -45,6 +42,9 @@ nav {
     width: 35px;
     height: 35px;
 }
+
+/* -----LOGIN / CADASTRO----- */
+
 .login_cadastro {
     display: none;
     /* display: flex; */
@@ -64,6 +64,36 @@ nav {
     cursor: pointer;
 }
 
+.nav_itens {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #1855A5;
+    gap: 5px;
+    cursor: pointer;
+}
+
+/* -----CARDAPIO----- */
+
+.cardapio {
+    display: none;
+}
+
+/* ----- SIMBOLO DO ADM */
+
+.adm {
+    display: none;
+    position: absolute;
+    margin-left: 175px;
+    margin-bottom: 35px;
+    background-color: #DD9933;
+    padding: 3px 4px;
+    font-size: 9px;
+    line-height: 12px;
+    color: #fff;
+    border-radius: 12px 1px 12px 1px;
+}
+
 @media only screen and (max-width:600px) {
     header {
         padding: 5px 10px;
@@ -79,13 +109,21 @@ nav {
     .perfil p {
         display: none;
     }
+    .adm {
+        margin-left: 25px;
+        font-size: 6px;
+        padding: 2px 3px;
+        position: relative;
+        margin: 0 0 30px -15px;
+
+    }
 }
 
 @media only screen and (max-width: 450px) {
     .logo img {
         max-width: 95px;
     }
-    .sugestoes {
+    .nav_itens {
         font-size: 14px;
     }
     .sugestoes img {
@@ -96,5 +134,14 @@ nav {
     }
     nav {
         gap: 10px;
+    }
+}
+
+@media only screen and (max-width: 380px) { 
+    .sugestoes img {
+        display: none;
+    }
+    .nav_itens {
+        font-size: 13px;
     }
 }

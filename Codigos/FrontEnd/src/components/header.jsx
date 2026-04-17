@@ -9,6 +9,9 @@ import '../styles/header.css'
 const Header = () => {
     const navigate = useNavigate();
 
+    const handleHome = () => {
+        navigate('/')
+    }
     const handleSugestoes = () => {
         navigate('/sugestoes');
     }
@@ -22,17 +25,21 @@ const Header = () => {
     return (
         <>
             <header>
-                <div className="logo">
+                <div onClick={handleHome} className="logo">
                     <img src={logo} alt="Logo sabor senac"/>
                 </div>
                 <nav>
-                    <div onClick={handleSugestoes} className="sugestoes">
+                    <div onClick={handleHome} className="cardapio nav_itens">
+                        <h3>Cardapio</h3>
+                    </div>
+                    <div onClick={handleSugestoes} className="sugestoes nav_itens">
                         <h3>Sugestões</h3>
                         <img src={sugestoes} alt="sugestoes" />
                     </div>
                     <div className="perfil">
                         <img src={perfil} alt="perfil" />
                         <p>Exemplo Exemplo</p>
+                        <div className="adm">ADM</div>
                     </div>
                     <div className="login_cadastro">
                         <p onClick={handleLogin}>Login</p>
