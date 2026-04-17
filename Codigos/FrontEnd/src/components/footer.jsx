@@ -37,8 +37,7 @@ const Footer = () => {
 
         {/* TEXTO CENTRAL PEQUENO */}
         <div className="footer-note">
-          Site desenvolvido pela turma de 2025 do curso técnico em TI e a turma de 2026 do curso assistente adriministrativo Senac/SE -
-          Nossa Senhora da Glória
+          Desenvolvido pelas turmas de TI (2025) e Assist. Administrativo (2026) — Senac/SE, N. Sra. da Glória
         </div>
       </div>
 
