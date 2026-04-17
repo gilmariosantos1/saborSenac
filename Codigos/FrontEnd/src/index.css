@@ -11,8 +11,8 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', open-sans,  sans-serif;
-  --font_btn: system-ui, 'Segoe UI', inter, sans-serif;
+  --sans:  'Open Sans', sans-serif;
+  --font_btn: 'inter', sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
@@ -53,6 +53,9 @@
 
 body {
   margin: 0;
+}
+* {
+    margin: 0;
 }
 
 #root {
