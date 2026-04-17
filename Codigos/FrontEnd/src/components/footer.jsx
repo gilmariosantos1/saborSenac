@@ -2,6 +2,8 @@ import React from "react";
 import logo from "../assets/logo-fecomercio.png";
 import "../styles/footer.css"
 import icon1 from "../assets/icon-insta.png";
+import icon2 from "../assets/Facebook.png";
+import icon3 from "../assets/icon-X.png";
 const Footer = () => {
   return (
     <footer className="footer">
@@ -50,9 +52,9 @@ const Footer = () => {
           </p>
 
           <div className="footer-icons">
-            <div className="icon">f</div>
-            <div className="icon">x</div>
-            <div className="icon">< img src={icon1} alt="icone do instagram"/></div>
+            <div className="icon"><a href="https://www.facebook.com/people/Senac-Sergipe/61578779873777/">< img src={icon2} alt="icone do facebook"/></a></div>
+            <div className="icon"><a href="https://x.com/senacsergipe">< img src={icon3} alt="icone do X"/></a></div>
+            <div className="icon"><a href="https://www.instagram.com/senacse">< img src={icon1} alt="icone do instagram"/></a></div>
           </div>
         </div>
       </div>
