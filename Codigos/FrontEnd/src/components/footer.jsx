@@ -46,14 +46,14 @@ const Footer = () => {
         <div className="footer-bottom-container">
           <p>
             Serviço Nacional de Aprendizagem Comercial - Departamento Regional
-            de Sergipe. (c) 2018 | NCME | <span><a href="https://www.se.senac.br/wpautoterms/privacy-policy/" > Política de Privacidade</a></span>
+            de Sergipe. (c) 2018 | NCME | <span><a href="https://www.se.senac.br/wpautoterms/privacy-policy/" target="_blank" > Política de Privacidade</a></span>
             
           </p>
 
           <div className="footer-icons">
-            <div className="icon"><a href="https://www.facebook.com/people/Senac-Sergipe/61578779873777/">< img src={icon2} alt="icone do facebook"/></a></div>
-            <div className="icon"><a href="https://x.com/senacsergipe">< img src={icon3} alt="icone do X"/></a></div>
-            <div className="icon"><a href="https://www.instagram.com/senacse">< img src={icon1} alt="icone do instagram"/></a></div>
+            <div className="icon"><a href="https://www.facebook.com/people/Senac-Sergipe/61578779873777/" target="_blank" >< img src={icon2} alt="icone do facebook"/></a></div>
+            <div className="icon"><a href="https://x.com/senacsergipe" target="_blank" >< img src={icon3} alt="icone do X"/></a></div>
+            <div className="icon"><a href="https://www.instagram.com/senacse" target="_blank" >< img src={icon1} alt="icone do instagram"/></a></div>
           </div>
         </div>
       </div>
