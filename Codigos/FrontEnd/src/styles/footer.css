@@ -14,7 +14,7 @@
 
 .footer-top-container,
 .footer-bottom-container {
-  max-width: 1180px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -24,15 +24,19 @@
 /* ========================= */
 
 .footer-top-container {
+  display: flex;
   background-color: #d9952f;
   color: #fff;
   padding: 35px 0 15px;
+  flex-direction: column;
+  align-items: center;
 }
 
 .footer-top {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+  width: 60%;
 }
 
 /* ESQUERDA */
@@ -103,6 +107,7 @@
   padding: 15px 20px;
   color: #ccc;
   font-size: 12px;
+  width: 80%;
 }
 
 .footer-bottom span {
@@ -133,6 +138,11 @@
 .icon:hover {
   background-color: #fff;
   color: #000;
+}
+
+.footer-bottom-container a {
+ color: #fff;
+ text-decoration: none; 
 }
 
 /* ========================= */

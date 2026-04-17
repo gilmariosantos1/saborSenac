@@ -1,8 +1,8 @@
 import React from "react";
-import "./FooterSenac.css";
 import logo from "../assets/logo-fecomercio.png";
-
-const FooterSenac = () => {
+import "../styles/footer.css"
+import icon1 from "../assets/icon-insta.png";
+const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-top-container">
@@ -25,7 +25,7 @@ const FooterSenac = () => {
 
             <p>
               Rua Manoel Francisco de Andrade, nº 100 <br />
-              Bairro Silvio I, N.S. Glória <br />
+              Bairro Silo | N.S. Glória <br />
               CEP: 49.680-000 <br />
               (79) 3411-4400 <br />
               Whatsapp (79) 99867-3337
@@ -35,7 +35,7 @@ const FooterSenac = () => {
 
         {/* TEXTO CENTRAL PEQUENO */}
         <div className="footer-note">
-          Site desenvolvido pela turma de 2025 do curso técnico em TI Senac/SE -
+          Site desenvolvido pela turma de 2025 do curso técnico em TI e a turma de 2026 do curso assistente adriministrativo Senac/SE -
           Nossa Senhora da Glória
         </div>
       </div>
@@ -45,13 +45,14 @@ const FooterSenac = () => {
         <div className="footer-bottom-container">
           <p>
             Serviço Nacional de Aprendizagem Comercial - Departamento Regional
-            de Sergipe. (c) 2018 | NCME | <span>Política de Privacidade</span>
+            de Sergipe. (c) 2018 | NCME | <span><a href="https://www.se.senac.br/wpautoterms/privacy-policy/" > Política de Privacidade</a></span>
+            
           </p>
 
           <div className="footer-icons">
             <div className="icon">f</div>
             <div className="icon">x</div>
-            <div className="icon">◎</div>
+            <div className="icon">< img src={icon1} alt="icone do instagram"/></div>
           </div>
         </div>
       </div>
@@ -59,4 +60,4 @@ const FooterSenac = () => {
   );
 };
 
-export default FooterSenac;
+export default Footer;
