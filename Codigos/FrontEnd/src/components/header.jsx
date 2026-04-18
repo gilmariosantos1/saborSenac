@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import logo from '../assets/imagens/logo_sabor_senac.svg'
 import sugestoes from '../assets/imagens/sugestoes.svg'
 import perfil from '../assets/imagens/perfil.svg'
+import logout_icon from '../assets/imagens/logout_icon.svg'
 import '../styles/header.css'
 
 
@@ -47,6 +48,12 @@ const Header = () => {
                         <p onClick={handleCadastro}>Cadastro</p>
                     </div>
                 </nav>
+                <div className="menu_drop">
+                    <div>
+                        <img src={logout_icon} alt="" />
+                        <div>Sair da Conta</div>
+                    </div>
+                </div>
             </header>
         </>
     )
