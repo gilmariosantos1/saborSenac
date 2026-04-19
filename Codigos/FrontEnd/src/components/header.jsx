@@ -22,6 +22,13 @@ const Header = () => {
     const handleCadastro = () => {
         navigate('/cadastro');
     }
+    const handleSair = () => {
+        navigate('/sair');
+    }
+    const openDrop = () => {
+        const drop = document.getElementById("menu_drop");
+        drop.classList.toggle("ativo");
+    }
 
     return (
         <>
@@ -37,7 +44,7 @@ const Header = () => {
                         <h3>Sugestões</h3>
                         <img src={sugestoes} alt="sugestoes" />
                     </div>
-                    <div className="perfil">
+                    <div onClick={openDrop} className="perfil">
                         <img src={perfil} alt="perfil" />
                         <p>Exemplo Exemplo</p>
                         <div className="adm">ADM</div>
@@ -48,8 +55,8 @@ const Header = () => {
                         <p onClick={handleCadastro}>Cadastro</p>
                     </div>
                 </nav>
-                <div className="menu_drop">
-                    <div>
+                <div id="menu_drop">
+                    <div onClick={handleSair} className="menu_drop_item">
                         <img src={logout_icon} alt="" />
                         <div>Sair da Conta</div>
                     </div>
