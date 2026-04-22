@@ -22,6 +22,10 @@ const Header = () => {
     const handleCadastro = () => {
         navigate('/cadastro');
     }
+    // ✅ NOVO: navega para a página de cadastrar produto
+    const handleCadastrarProduto = () => {
+        navigate('/cadastrar-produto');
+    }
     const handleSair = () => {
         navigate('/sair');
     }
@@ -29,6 +33,7 @@ const Header = () => {
         const drop = document.getElementById("menu_drop");
         drop.classList.toggle("ativo");
     }
+    
 
     return (
         <>
@@ -56,6 +61,11 @@ const Header = () => {
                     </div>
                 </nav>
                 <div id="menu_drop">
+                    {/* ✅ NOVO: item no dropdown para cadastrar produto (visível só p/ ADM) */}
+                    <div onClick={handleCadastrarProduto} className="menu_drop_item">
+                        <img src={logout_icon} alt="" />
+                        <div>Cadastrar Produto</div>
+                    </div>
                     <div onClick={handleSair} className="menu_drop_item">
                         <img src={logout_icon} alt="" />
                         <div>Sair da Conta</div>
