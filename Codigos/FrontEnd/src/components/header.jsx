@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import logo from '../assets/imagens/logo_sabor_senac.svg'
 import sugestoes from '../assets/imagens/sugestoes.svg'
 import perfil from '../assets/imagens/perfil.svg'
+import logout_icon from '../assets/imagens/logout_icon.svg'
 import '../styles/header.css'
 
 
@@ -21,6 +22,13 @@ const Header = () => {
     const handleCadastro = () => {
         navigate('/cadastro');
     }
+    const handleSair = () => {
+        navigate('/sair');
+    }
+    const openDrop = () => {
+        const drop = document.getElementById("menu_drop");
+        drop.classList.toggle("ativo");
+    }
 
     return (
         <>
@@ -36,7 +44,7 @@ const Header = () => {
                         <h3>Sugestões</h3>
                         <img src={sugestoes} alt="sugestoes" />
                     </div>
-                    <div className="perfil">
+                    <div onClick={openDrop} className="perfil">
                         <img src={perfil} alt="perfil" />
                         <p>Exemplo Exemplo</p>
                         <div className="adm">ADM</div>
@@ -47,6 +55,12 @@ const Header = () => {
                         <p onClick={handleCadastro}>Cadastro</p>
                     </div>
                 </nav>
+                <div id="menu_drop">
+                    <div onClick={handleSair} className="menu_drop_item">
+                        <img src={logout_icon} alt="" />
+                        <div>Sair da Conta</div>
+                    </div>
+                </div>
             </header>
         </>
     )
