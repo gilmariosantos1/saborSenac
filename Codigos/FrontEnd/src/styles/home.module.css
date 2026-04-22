@@ -1,0 +1,112 @@
+.section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.banner {
+    width: 100%;
+    margin-bottom: -6.094px;
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.cardapio_title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    background-color: #033061;
+    color: #fff;
+    padding: 20px;
+    font-weight: 700;
+}
+
+.cardapio_title > div {
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+.cardapio_title > div > p > span {
+    color: #DD9933;
+}
+
+.categorias {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border-bottom: 1px solid #E4E6EA;
+}
+
+.categorias > div {
+    width: 300px;
+    height: 40px;
+    display: flex;
+}
+
+.categorias_itens, .categorias_itens_ponta_esquerda, .categorias_itens_ponta_direita {
+    width: 100%;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+.categorias_itens {
+    border-top: 1px solid #1855A5;
+    border-bottom: 1px solid #1855A5;
+}
+
+.categorias_itens_ponta_esquerda {
+    border: 1px solid #1855A5;
+    border-radius: 20px 0 0 20px;
+}
+
+.categorias_itens_ponta_direita {
+    border: 1px solid #1855A5;
+    border-radius: 0 20px 20px 0;
+}
+
+.ativo {
+    background-color: #1855A5;
+    color: #fff;
+    border: 0;
+}
+
+
+
+
+
+
+@media only screen and (min-width: 1400px) {
+    .banner img {
+        max-height: 450px;
+        
+    }
+}
+
+@media only screen and (max-width: 770px) {
+    .banner {
+        margin-bottom: 0;
+    }
+}
+@media only screen and (max-width: 640px) {
+    .section {
+        flex-direction: column;
+    }
+    .cardapio_title {
+        width: 100%;
+        padding: 15px 0;
+        
+    }
+    .cardapio_title div, .cardapio_title p {
+        text-align: center;
+        font-size: 14px;
+        padding: 0;
+    }
+    
+}
