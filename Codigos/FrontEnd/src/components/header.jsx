@@ -14,7 +14,7 @@ const Header = () => {
         navigate('/')
     }
     const handleSugestoes = () => {
-        navigate('/sugestoes');
+        navigate('/DuvidasSugestoes');
     }
     const handleLogin = () => {
         navigate('/login');
