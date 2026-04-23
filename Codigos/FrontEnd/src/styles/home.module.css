@@ -77,9 +77,136 @@
     border: 0;
 }
 
+.cardapio {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 10px 0px;
+    justify-content: center;
+    width: 100%;
+}
 
+.cardapio_item {
+    background-color: #0E004E;
+    color: #fff;
+    width: 100%;
+    max-width: 190px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.61);
+    gap: 5px;
+    margin: 10px;
+}
 
+.cardapio_item_head_qtd, .cardapio_item_head_qtd_indisponivel {
+    position: absolute;
+    width: 29px;
+    height: 25px;
+    font-size: 16px;
+    line-height: 25px;
+    border-radius: 10px 0 0 0;
+}
 
+.cardapio_item_head_qtd {
+    background-color: #DD9933;
+}
+
+.cardapio_item_head_qtd_indisponivel {
+    background-color: #9D9D9D;
+}
+
+.cardapio_item_head h4 {
+    font-weight: 500;
+}
+
+.cardapio_item_head img {
+    width: 100%;
+    max-width: 190px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+    
+}
+
+.cardapio_item_mid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardapio_item_mid_qtd {
+    display: flex;
+    gap: 8px;
+}
+
+.cardapio_item_mid_seletores {
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.cardapio_item_mid div {
+    font-family: 'Sanchez';
+}
+
+.cardapio_item_mid span {
+    background-color: #fff;
+    color: #000;
+    width: 30px;
+    display: block;
+    font-size: 20px;
+}
+
+.cardapio_item_bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 5px 0;
+}
+
+.cardapio_item_bottom_add {
+    background-color: #DD9933;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 0 5px 0 5px;
+    height: 26px;
+    width: 140px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cardapio_item_bottom_reservar {
+    background-color: #1855A5;
+    width: 100px;
+    height: 26px;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.paginacao {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+.paginacao div {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 20px;
+    cursor: pointer;
+    
+}
+
+.paginacao_ativa {
+    background-color: #1855A5;
+    color: #fff;
+}
 
 
 @media only screen and (min-width: 1400px) {

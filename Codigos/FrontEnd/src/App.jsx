@@ -7,6 +7,7 @@ import Sugestoes from './pages/Sugestoes';
 import '@fontsource/open-sans';
 import '@fontsource/open-sans/700.css';
 import '@fontsource/inter';
+import '@fontsource/sanchez';
 
 // useRoutes();
 
