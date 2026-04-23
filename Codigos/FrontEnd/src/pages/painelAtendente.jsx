@@ -18,33 +18,38 @@ export default function PainelAtentende() {
 
                     <h3>Funcionalidades</h3>
 
-                    <div className={styles.section}>
-
-                        <div className={styles.inputs}>
-
-                            <div className={styles.icons}>
-                                <Link to="#" className={styles.icon}>
-                                    <img src={icon1} alt='Icone de consultar' />
-                                </Link>
-                                <Link to="#" className={styles.icon}>
-                                    <img src={icon2} alt='Icone de consultar' />
-                                </Link>
-                                <Link to="#" className={styles.icon}>
-                                    <img src={icon4} alt='Icone de consultar' />
-                                </Link>
-                                <Link to="#" className={styles.icon}>
-                                    <img src={icon3} alt='Icone de consultar' />
-                                </Link>
-                            </div>
 
 
+                    <div className={styles.icons}>
+                        <div>
+                            <Link to="#" className={styles.icon}>
+                                <img src={icon1} alt='Icone de consultar' />
+                            </Link>
+                            <p>Consultar reserva</p>
                         </div>
 
-                        <div className={styles.descricao}>
-
+                        <div>
+                            <Link to="#" className={styles.icon}>
+                                <img src={icon2} alt='Icone de consultar' />
+                            </Link>
+                            <p>Cadastrar produto</p>
                         </div>
 
+                        <div>
+                            <Link to="#" className={styles.icon}>
+                                <img src={icon4} alt='Icone de consultar' />
+                            </Link>
+                            <p>Controle de estoque</p>
+                        </div>
+
+                        <div>
+                            <Link to="#" className={styles.icon}>
+                                <img src={icon3} alt='Icone de consultar' />
+                            </Link>
+                            <p>Painel de sugestões</p>
+                        </div>
                     </div>
+
 
                 </div>
 
