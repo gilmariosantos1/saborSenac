@@ -7,45 +7,39 @@ const Login = () => {
     const navigate = useNavigate();
 
 
-     return (
-    <>
-      <Header />
-      <main className="auth-page">  
-
-         <form className="auth-form">
-           
-            
-
+      return (
+      <>
+        <Header />
+        <main className="auth-page">  
+<div><img src="./assents/fundo.svg" alt="" /></div>
+          <form className="auth-form">
             <div className="auth-input-group">
-              <label htmlFor="email">E-mail</label>
-              
-            
+                <label htmlFor="email">E-mail</label>
                 <input
-                  type="email"
-                  id="email"
-                  placeholder="exemplo@email.com"
-                
-                 
-                  required
-                />
-              </div>
-            
-
-           
-
-            <button type="submit" >
-             
-            </button>
-          </form>
-      </main>
-            < Footer />
-   
-    </>
-  )
-}
+                    type="email"
+                    id="email"
+                    placeholder="exemplo@email.com">
+                </input>
+                    <br></br>
+                <label htmlFor="password">Senha</label>
+                <input
+                    type="password"
+                    id="password"
+                    required
+                  />
+                </div>
+                <button type="submit" > ENTRAR AGORA</button>
+            </form>
+                <p><a class="Não tem conta?" href="#">Crie </a></p>
+           </main>
+              < Footer />
     
+      </>
+    )
+  }
+      
 
 
 
 
-export default Login;
+  export default Login;
