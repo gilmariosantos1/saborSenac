@@ -3,10 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 
-/* ─────────────────────────────────────────────
-   Inline styles keep this file self-contained.
-   Move to a .css / .module.css if preferred.
-───────────────────────────────────────────── */
 const styles = {
   page: {
     display: "flex",
