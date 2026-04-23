@@ -1,3 +1,16 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 .section {
     display: flex;
     justify-content: space-between;
@@ -25,6 +38,8 @@
     color: #fff;
     padding: 20px;
     font-weight: 700;
+    font-size: 25px;
+    gap: 10px;
 }
 
 .cardapio_title > div {
@@ -140,6 +155,7 @@
 .cardapio_item_mid_qtd {
     display: flex;
     gap: 8px;
+    align-items: center;
 }
 
 .cardapio_item_mid_seletores {
@@ -151,12 +167,16 @@
     font-family: 'Sanchez';
 }
 
-.cardapio_item_mid span {
+.cardapio_item_mid input {
     background-color: #fff;
     color: #000;
-    width: 30px;
+    width: 20px;
+    height: 20px;
     display: block;
     font-size: 20px;
+    border: none;
+    display: flex;
+    text-align: center;
 }
 
 .cardapio_item_bottom {
@@ -169,22 +189,27 @@
 
 .cardapio_item_bottom_add {
     background-color: #DD9933;
+    color: #fff;
     padding: 5px;
     border-radius: 10px;
     margin: 0 5px 0 5px;
-    height: 26px;
+    height: 36px;
     width: 140px;
     font-size: 14px;
     cursor: pointer;
+    border: none;
 }
 
 .cardapio_item_bottom_reservar {
     background-color: #1855A5;
+    color: #fff;
     width: 100px;
-    height: 26px;
+    height: 36px;
     padding: 5px;
     border-radius: 10px;
+    font-size: 14px;
     cursor: pointer;
+    border: none;
 }
 
 .paginacao {
@@ -200,13 +225,33 @@
     text-align: center;
     border-radius: 20px;
     cursor: pointer;
-    
+}
+
+.paginacao div:hover {
+    border: 1px solid #000;
+    box-sizing: border-box;
 }
 
 .paginacao_ativa {
     background-color: #1855A5;
     color: #fff;
 }
+
+.carrinho {
+    position: fixed;
+    top: 300px;
+    right: 0px;
+    width: 50px;
+    height: 34px;
+    background-color: #DD9933;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px 0 0 10px;
+}
+
+
 
 
 @media only screen and (min-width: 1400px) {
