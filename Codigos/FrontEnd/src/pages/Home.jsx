@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import Footer from "../components/footer";
 import Header from '../components/header';
 import styles from '../styles/home.module.css';
@@ -13,13 +14,33 @@ import carrinho from '../assets/imagens/carrinho_de_compras.png'
 const Home = () => {
     const navigate = useNavigate();
     const [categoria, setCategoria] = useState("salgados")
-
     const [produtos, setProdutos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        carregarProdutos();
+        console.log(produtos);
+    }, []);
+
+    const carregarProdutos = async () => {
+        try {
+            setLoading(true);
+            const response = await listarProdutos();
+            setColaboradores(response.data);
+            setError(null);
+        } catch (err) {
+            console.error("Erro ao carregar produtos: ", err);
+            setError("Erro ao carregar produtos");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     async function onSubmit(e) {
         e.preventDefault();
         console.log("submitou")
-    }
+    };
 
 
     // const [produtos, setProduto] = useState([])
@@ -83,6 +104,15 @@ const Home = () => {
                     </div>
                 </div>
 
+                {loading && <div>Carregando...</div>}
+                {error && <div>{error}</div>}
+
+                {!loading && produtos.length === 0 && (
+                    <div>Nenhum produto cadastrado!</div>
+                )}
+
+                
+
                 {categoria === "salgados" &&
                     <div className={styles.cardapio}>
 
@@ -96,7 +126,7 @@ const Home = () => {
                                 <div>R$ 6,00</div>
                                 <div className={styles.cardapio_item_mid_qtd}>
                                     <div className={styles.cardapio_item_mid_seletores}>-</div>
-                                    <input type="number" value={0} />
+                                        <input type="number" value={0} />
                                     <div className={styles.cardapio_item_mid_seletores}>+</div>
                                 </div>
                             </div>
