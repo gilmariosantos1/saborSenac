@@ -4,15 +4,50 @@ import Footer from "../components/footer";
 import Header from '../components/header';
 import styles from '../styles/home.module.css';
 
-
 import banner from '../assets/imagens/banner.png';
 import coxinha from '../assets/imagens/coxinha.png';
 import carrinho from '../assets/imagens/carrinho_de_compras.png'
 
+// import {listarProdutos} from "../services/homeService";
+
 const Home = () => {
     const navigate = useNavigate();
-
     const [categoria, setCategoria] = useState("salgados")
+
+    const [produtos, setProdutos] = useState([]);
+
+    async function onSubmit(e) {
+        e.preventDefault();
+        console.log("submitou")
+    }
+
+
+    // const [produtos, setProduto] = useState([])
+
+    // function adicionarAoCarrinho(produto) {
+    // setProdutos((prev) => {
+    //     const produtoExistente = prev.find(
+    //         (p) => p.id === produto.id
+    //     )
+
+    //     if (produtoExistente) {
+    //         return prev.map((p) =>
+    //             p.id === produto.id
+    //                 ? {
+    //                       ...p,
+    //                       quantidade: p.quantidade + 1
+    //                   }
+    //                 : p
+    //         )
+    //     }
+
+    //     return [
+    //         ...prev,
+    //         { ...produto, quantidade: 1 }
+    //     ]
+    // })
+    //}
+
 
     if(categoria == 'doces') {
         const ativo = '${styles.ativo}';
@@ -21,9 +56,11 @@ const Home = () => {
     return (
         <>
             <Header />
+
             <div className={styles.carrinho}>
                 <img src={carrinho} alt="carrinho de compras" />
             </div>
+
             <section className={styles.section}>
                 <div className={styles.cardapio_title}>
                     <div>
@@ -48,7 +85,8 @@ const Home = () => {
 
                 {categoria === "salgados" &&
                     <div className={styles.cardapio}>
-                        <div className={styles.cardapio_item}>
+
+                        <form onSubmit={onSubmit} className={styles.cardapio_item}>
                             <div className={styles.cardapio_item_head}>
                                 <div className={`${styles.cardapio_item_head_qtd}`}>0</div>
                                 <img src={coxinha} alt="Imagem de um coxinha em cima de um prato branco" />
@@ -58,16 +96,18 @@ const Home = () => {
                                 <div>R$ 6,00</div>
                                 <div className={styles.cardapio_item_mid_qtd}>
                                     <div className={styles.cardapio_item_mid_seletores}>-</div>
-                                    <input type="number" value={1} />
+                                    <input type="number" value={0} />
                                     <div className={styles.cardapio_item_mid_seletores}>+</div>
                                 </div>
                             </div>
                             <div className={styles.cardapio_item_bottom}>
-                                <button type="submit" className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</button>
+                                <button className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</button>
                                 <button type="submit" className={styles.cardapio_item_bottom_reservar}>Reservar</button>
                             </div>
-                        </div>
+                        </form>
+
                     </div>
+
                 }
                 {categoria === "doces" && 
                 <div className={styles.cardapio}>
