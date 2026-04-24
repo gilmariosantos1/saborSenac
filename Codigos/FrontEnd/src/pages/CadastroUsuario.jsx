@@ -1,3 +1,4 @@
+import "./CadastroUsuario.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuarioController from '../controllers/UsuarioController';
@@ -65,15 +66,22 @@ const Usuario = () =>{
               <input id="senha" type="password" placeholder="Digite sua senha" value={usuario.senha} onChange={(e) => setUsuario({...usuario, senha: e.target.value})}/>
             </div>
           </div>
-        </div>
+       </div>
 
-       <button type="submit" className="submit-button">Criar conta</button>
-    </form>
-  </div>
-);
+        <div className="confirma senha">
+          <label htmlFor="confirma senha">Confirma senha</label>
+          <input id="confirma senha" type="password" placeholder="Confirme sua senha" value={usuario.senha} onChange={(e)=> setUsuario({...usuario,senha: e.target.value})}/>
+        </div>
+      </div>
+    </div>
+
+        <button type="submit" className="submit-button">Criar conta</button>
+     </form>
+   </div>
+  );
 };
 
-export default Usuario;
+export default CadastroUsuario;
  
 
 
