@@ -8,7 +8,9 @@ import PainelAtentende from './pages/painelAtendente';
 import '@fontsource/open-sans';
 import '@fontsource/open-sans/700.css';
 import '@fontsource/inter';
+import Consultapedido from './pages/consultapedido';
 import '@fontsource/sanchez';
+
 
 // useRoutes();
 
@@ -19,7 +21,9 @@ function App() {
       <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/sugestoes' element={<Sugestoes />} />
+          <Route path='/consultapedido' element={<Consultapedido />} />
           <Route path='/painelAtendente' element={<PainelAtentende />} />
+
       </Routes>
     </>
   )
