@@ -9,25 +9,101 @@ import banner from '../assets/imagens/banner.png';
 import coxinha from '../assets/imagens/coxinha.png';
 import carrinho from '../assets/imagens/carrinho_de_compras.png'
 
-// import {listarProdutos} from "../services/homeService";
+// import {listarProdutos, adcionarAoCarrinho} from "../services/homeService";
 
 const Home = () => {
     const navigate = useNavigate();
     const [categoria, setCategoria] = useState("salgados")
-    const [produtos, setProdutos] = useState([]);
+    const [produtos, setProdutos] = useState([
+  {
+    id: 1,
+    nome: "Coxinha de frango",
+    preco: 6,
+    quantidade_atual: 1,
+    quantidade: 10
+  },
+  {
+    id: 2,
+    nome: "Pastel de carne",
+    preco: 7,
+    quantidade_atual: 1,
+    quantidade: 15
+  },
+  {
+    id: 3,
+    nome: "Empada de frango",
+    preco: 6,
+    quantidade_atual: 1,
+    quantidade: 12
+  },
+  {
+    id: 4,
+    nome: "Kibe",
+    preco: 5,
+    quantidade_atual: 1,
+    quantidade: 20
+  },
+  {
+    id: 5,
+    nome: "Enroladinho de salsicha",
+    preco: 4,
+    quantidade_atual: 1,
+    quantidade: 18
+  },
+  {
+    id: 6,
+    nome: "Esfirra de carne",
+    preco: 6,
+    quantidade_atual: 1,
+    quantidade: 14
+  },
+  {
+    id: 7,
+    nome: "Suco de laranja",
+    preco: 5,
+    quantidade_atual: 1,
+    quantidade: 25
+  },
+  {
+    id: 8,
+    nome: "Refrigerante lata",
+    preco: 6,
+    quantidade_atual: 1,
+    quantidade: 30
+  },
+  {
+    id: 9,
+    nome: "Água mineral",
+    preco: 3,
+    quantidade_atual: 1,
+    quantidade: 40
+  },
+  {
+    id: 10,
+    nome: "Bolo de chocolate",
+    preco: 8,
+    quantidade_atual: 1,
+    quantidade: 10
+  }
+]);
+    const [pessoa, setPessoa] = useState({
+        id: 1,
+        nome: 'Guilherme',
+        perfil: 'user'
+    })
+    const [carrinho, setCarrinho] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         carregarProdutos();
-        console.log(produtos);
     }, []);
 
     const carregarProdutos = async () => {
         try {
             setLoading(true);
-            const response = await listarProdutos();
-            setColaboradores(response.data);
+            const response = await listarProdutos(categoria);
+            setProdutos(response.data);
             setError(null);
         } catch (err) {
             console.error("Erro ao carregar produtos: ", err);
@@ -37,42 +113,52 @@ const Home = () => {
         }
     };
 
-    async function onSubmit(e) {
+    async function adcionarAoCarrinho() {
+        try {
+            await addCarrinho(carrinho)
+            console.log("Adicionado com sucesso");
+        } catch(e) {
+            console.error("Erro ao adicionar ao carrinho",e);
+        }
+    }
+
+
+    function aumentarQuantidade(id) {
+        setProdutos((prev) =>
+        prev.map((produto) =>
+        produto.id === id
+            ? {
+                ...produto,
+                quantidade_atual:
+                produto.quantidade_atual <
+                produto.quantidade
+                    ? produto.quantidade_atual + 1
+                    : produto.quantidade_atual
+            }
+            : produto
+        )
+  );
+}
+    function diminuirQuantidade(id) {
+        setProdutos((prevProdutos) =>
+        prevProdutos.map((produto) =>
+        produto.id === id
+            ? {
+                ...produto,
+                quantidade_atual:
+                produto.quantidade_atual > 0
+                    ? produto.quantidade_atual - 1
+                    : 0
+            }
+            : produto
+    )
+  );
+}
+
+    async function onSubmit(idPessoa, idProduto, nome, preco, qt_atual, e) {
         e.preventDefault();
         console.log("submitou")
     };
-
-
-    // const [produtos, setProduto] = useState([])
-
-    // function adicionarAoCarrinho(produto) {
-    // setProdutos((prev) => {
-    //     const produtoExistente = prev.find(
-    //         (p) => p.id === produto.id
-    //     )
-
-    //     if (produtoExistente) {
-    //         return prev.map((p) =>
-    //             p.id === produto.id
-    //                 ? {
-    //                       ...p,
-    //                       quantidade: p.quantidade + 1
-    //                   }
-    //                 : p
-    //         )
-    //     }
-
-    //     return [
-    //         ...prev,
-    //         { ...produto, quantidade: 1 }
-    //     ]
-    // })
-    //}
-
-
-    if(categoria == 'doces') {
-        const ativo = '${styles.ativo}';
-    }
 
     return (
         <>
@@ -111,30 +197,32 @@ const Home = () => {
                     <div>Nenhum produto cadastrado!</div>
                 )}
 
-                
-
-                {categoria === "salgados" &&
+                {!loading && produtos.length > 0 && (
+                    <div>
+                        {categoria === "salgados" &&
                     <div className={styles.cardapio}>
 
-                        <form onSubmit={onSubmit} className={styles.cardapio_item}>
+                        {produtos.map((produto) => (
+                            <form onSubmit={onSubmit(pessoa.id, produto.id, produto.nome, produto.preco, produto.quantidade_atual)} className={styles.cardapio_item}>
                             <div className={styles.cardapio_item_head}>
-                                <div className={`${styles.cardapio_item_head_qtd}`}>0</div>
+                                <div className={`${styles.cardapio_item_head_qtd}`}>{produto.quantidade}</div>
                                 <img src={coxinha} alt="Imagem de um coxinha em cima de um prato branco" />
-                                <h4>Coxinha de frango</h4>
+                                <h4>{produto.nome}</h4>
                             </div>
                             <div className={styles.cardapio_item_mid}>
-                                <div>R$ 6,00</div>
+                                <div>R$ {produto.preco},00</div>
                                 <div className={styles.cardapio_item_mid_qtd}>
-                                    <div className={styles.cardapio_item_mid_seletores}>-</div>
-                                        <input type="number" value={0} />
-                                    <div className={styles.cardapio_item_mid_seletores}>+</div>
+                                    <div onClick={() => diminuirQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>-</div>
+                                        <input type="number" value={produto.quantidade_atual} />
+                                    <div onClick={() => aumentarQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>+</div>
                                 </div>
                             </div>
                             <div className={styles.cardapio_item_bottom}>
-                                <button className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</button>
-                                <button type="submit" className={styles.cardapio_item_bottom_reservar}>Reservar</button>
+                                <div onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual})} className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</div>
+                                <button onSubmit={onSubmit} type="submit" className={styles.cardapio_item_bottom_reservar}>Reservar</button>
                             </div>
                         </form>
+                        ))}
 
                     </div>
 
@@ -149,7 +237,10 @@ const Home = () => {
                     <h2>Lista de bebidas</h2>
                 </div>
                 }
+                    </div>
+                )}
 
+{console.log(carrinho)}
                 <div className={styles.paginacao}>
 
                     <div className={styles.paginacao_ativa}>1</div>
