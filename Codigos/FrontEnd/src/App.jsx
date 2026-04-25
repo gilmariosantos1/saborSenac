@@ -11,6 +11,7 @@ import '@fontsource/inter';
 import Consultapedido from './pages/consultapedido';
 import ConfirmarPedido from './pages/ConfirmarPedido';
 import '@fontsource/sanchez';
+import ControleDeEstoque from './pages/ControleDeEstoque';
 
 
 // useRoutes();
@@ -25,7 +26,7 @@ function App() {
           <Route path='/consultapedido' element={<Consultapedido />} />
           <Route path='/confirmarpedido' element={<ConfirmarPedido />} />
           <Route path='/painelAtendente' element={<PainelAtentende />} />
-
+          <Route path='/controledeestoque' element={<ControleDeEstoque />} />
       </Routes>
     </>
   )
