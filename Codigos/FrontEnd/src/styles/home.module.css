@@ -251,7 +251,11 @@ input[type=number] {
     border-radius: 10px 0 0 10px;
 }
 
-
+.carregando {
+    text-align: center;
+    padding: 40px;
+    font-size: 30px;
+}
 
 
 @media only screen and (min-width: 1400px) {

@@ -7,97 +7,26 @@ import styles from '../styles/home.module.css';
 
 import banner from '../assets/imagens/banner.png';
 import coxinha from '../assets/imagens/coxinha.png';
-import carrinho from '../assets/imagens/carrinho_de_compras.png'
+import carrinhoImg from '../assets/imagens/carrinho_de_compras.png'
 
-// import {listarProdutos, adcionarAoCarrinho} from "../services/homeService";
+import {listarProdutos} from "../services/homeService";
 
 const Home = () => {
     const navigate = useNavigate();
     const [categoria, setCategoria] = useState("salgados")
-    const [produtos, setProdutos] = useState([
-  {
-    id: 1,
-    nome: "Coxinha de frango",
-    preco: 6,
-    quantidade_atual: 1,
-    quantidade: 10
-  },
-  {
-    id: 2,
-    nome: "Pastel de carne",
-    preco: 7,
-    quantidade_atual: 1,
-    quantidade: 15
-  },
-  {
-    id: 3,
-    nome: "Empada de frango",
-    preco: 6,
-    quantidade_atual: 1,
-    quantidade: 12
-  },
-  {
-    id: 4,
-    nome: "Kibe",
-    preco: 5,
-    quantidade_atual: 1,
-    quantidade: 20
-  },
-  {
-    id: 5,
-    nome: "Enroladinho de salsicha",
-    preco: 4,
-    quantidade_atual: 1,
-    quantidade: 18
-  },
-  {
-    id: 6,
-    nome: "Esfirra de carne",
-    preco: 6,
-    quantidade_atual: 1,
-    quantidade: 14
-  },
-  {
-    id: 7,
-    nome: "Suco de laranja",
-    preco: 5,
-    quantidade_atual: 1,
-    quantidade: 25
-  },
-  {
-    id: 8,
-    nome: "Refrigerante lata",
-    preco: 6,
-    quantidade_atual: 1,
-    quantidade: 30
-  },
-  {
-    id: 9,
-    nome: "Água mineral",
-    preco: 3,
-    quantidade_atual: 1,
-    quantidade: 40
-  },
-  {
-    id: 10,
-    nome: "Bolo de chocolate",
-    preco: 8,
-    quantidade_atual: 1,
-    quantidade: 10
-  }
-]);
+    const [produtos, setProdutos] = useState([]);
     const [pessoa, setPessoa] = useState({
         id: 1,
         nome: 'Guilherme',
         perfil: 'user'
     })
-    const [carrinho, setCarrinho] = useState({});
+    const [carrinho, setCarrinho] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         carregarProdutos();
-    }, []);
+    }, [categoria]);
 
     const carregarProdutos = async () => {
         try {
@@ -122,6 +51,16 @@ const Home = () => {
         }
     }
 
+    async function onSubmit(e) {
+        e.preventDefault();
+        try {
+            await addCarrinho(carrinho);
+            console.log("Reservado com sucesso!");
+            navigate("/carrinho");
+        } catch(e) {
+            console.error("Erro ao reservar: ",e)
+        }
+    };
 
     function aumentarQuantidade(id) {
         setProdutos((prev) =>
@@ -155,17 +94,12 @@ const Home = () => {
   );
 }
 
-    async function onSubmit(idPessoa, idProduto, nome, preco, qt_atual, e) {
-        e.preventDefault();
-        console.log("submitou")
-    };
-
     return (
         <>
             <Header />
 
-            <div className={styles.carrinho}>
-                <img src={carrinho} alt="carrinho de compras" />
+            <div onClick={() => navigate("/carrinho")} className={styles.carrinho}>
+                <img src={carrinhoImg} alt="carrinho de compras" />
             </div>
 
             <section className={styles.section}>
@@ -190,8 +124,8 @@ const Home = () => {
                     </div>
                 </div>
 
-                {loading && <div>Carregando...</div>}
-                {error && <div>{error}</div>}
+                {loading && <div className={styles.carregando}>Carregando...</div>}
+                {error && <div className={styles.carregando}>{error}</div>}
 
                 {!loading && produtos.length === 0 && (
                     <div>Nenhum produto cadastrado!</div>
@@ -203,7 +137,7 @@ const Home = () => {
                     <div className={styles.cardapio}>
 
                         {produtos.map((produto) => (
-                            <form onSubmit={onSubmit(pessoa.id, produto.id, produto.nome, produto.preco, produto.quantidade_atual)} className={styles.cardapio_item}>
+                            <form onSubmit={onSubmit} className={styles.cardapio_item}>
                             <div className={styles.cardapio_item_head}>
                                 <div className={`${styles.cardapio_item_head_qtd}`}>{produto.quantidade}</div>
                                 <img src={coxinha} alt="Imagem de um coxinha em cima de um prato branco" />
@@ -218,8 +152,8 @@ const Home = () => {
                                 </div>
                             </div>
                             <div className={styles.cardapio_item_bottom}>
-                                <div onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual})} className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</div>
-                                <button onSubmit={onSubmit} type="submit" className={styles.cardapio_item_bottom_reservar}>Reservar</button>
+                                <div onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual}), () => adcionarAoCarrinho()} className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</div>
+                                <button onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual})} type="submit" className={styles.cardapio_item_bottom_reservar}>Reservar</button>
                             </div>
                         </form>
                         ))}
@@ -229,12 +163,60 @@ const Home = () => {
                 }
                 {categoria === "doces" && 
                 <div className={styles.cardapio}>
-                    <h2>Lista de Doces</h2>
+                    <div className={styles.cardapio}>
+
+                        {produtos.map((produto) => (
+                            <form onSubmit={onSubmit} className={styles.cardapio_item}>
+                            <div className={styles.cardapio_item_head}>
+                                <div className={`${styles.cardapio_item_head_qtd}`}>{produto.quantidade}</div>
+                                <img src={coxinha} alt="Imagem de um coxinha em cima de um prato branco" />
+                                <h4>{produto.nome}</h4>
+                            </div>
+                            <div className={styles.cardapio_item_mid}>
+                                <div>R$ {produto.preco},00</div>
+                                <div className={styles.cardapio_item_mid_qtd}>
+                                    <div onClick={() => diminuirQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>-</div>
+                                        <input type="number" value={produto.quantidade_atual} />
+                                    <div onClick={() => aumentarQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>+</div>
+                                </div>
+                            </div>
+                            <div className={styles.cardapio_item_bottom}>
+                                <div onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual}), () => adcionarAoCarrinho()} className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</div>
+                                <button onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual})} type="submit" className={styles.cardapio_item_bottom_reservar}>Reservar</button>
+                            </div>
+                        </form>
+                        ))}
+
+                    </div>
                 </div>
                 }
                 {categoria === "bebidas" &&
                 <div className={styles.cardapio}>
-                    <h2>Lista de bebidas</h2>
+                    <div className={styles.cardapio}>
+
+                        {produtos.map((produto) => (
+                            <form onSubmit={onSubmit} className={styles.cardapio_item}>
+                            <div className={styles.cardapio_item_head}>
+                                <div className={`${styles.cardapio_item_head_qtd}`}>{produto.quantidade}</div>
+                                <img src={coxinha} alt="Imagem de um coxinha em cima de um prato branco" />
+                                <h4>{produto.nome}</h4>
+                            </div>
+                            <div className={styles.cardapio_item_mid}>
+                                <div>R$ {produto.preco},00</div>
+                                <div className={styles.cardapio_item_mid_qtd}>
+                                    <div onClick={() => diminuirQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>-</div>
+                                        <input type="number" value={produto.quantidade_atual} />
+                                    <div onClick={() => aumentarQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>+</div>
+                                </div>
+                            </div>
+                            <div className={styles.cardapio_item_bottom}>
+                                <div onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual}), () => adcionarAoCarrinho()} className={styles.cardapio_item_bottom_add}>Adcionar ao carrinho</div>
+                                <button onClick={() => setCarrinho({idPessoa: pessoa.id ,idProduto: produto.id, nome: produto.nome, preco: produto.preco, quantidade: produto.quantidade_atual})} type="submit" className={styles.cardapio_item_bottom_reservar}>Reservar</button>
+                            </div>
+                        </form>
+                        ))}
+
+                    </div>
                 </div>
                 }
                     </div>
