@@ -198,6 +198,7 @@ input[type=number] {
     font-size: 14px;
     cursor: pointer;
     border: none;
+    line-height: 36px
 }
 
 .cardapio_item_bottom_reservar {
@@ -257,6 +258,17 @@ input[type=number] {
     font-size: 30px;
 }
 
+.bg_sem_estoque {
+    background-color: #9D9D9D;
+}
+
+.item_sem_estoque {
+    order: 1;
+}
+
+button:disabled, .cardapio_item_bottom_add_desativado {
+    background-color: #9D9D9D;
+}
 
 @media only screen and (min-width: 1400px) {
     .banner img {
