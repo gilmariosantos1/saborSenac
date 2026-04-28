@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import UsuarioController from './controllers/UsuarioController';
+import UsuarioController from '../controllers/UsuarioController';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import './EditarCadastroUsuario.css';
@@ -88,12 +88,12 @@ const EditarUsuario = () => {
               </div> 
 
               <div className="field">
-                <label htmlFor="confirma senha"> Confirma Senha</label>
+                <label htmlFor="confirmasenha">Confirma Senha</label>
                 <input 
-                  id="confirma senha" 
+                  id="confirmasenha" 
                   type="password"
                   placeholder="Confirme sua senha"
-                  value={usuario.senha} 
+                  value={usuario.confirmasenha} 
                   onChange={(e) => setUsuario({...usuario, confirmasenha: e.target.value})} 
                 />
               </div> 
