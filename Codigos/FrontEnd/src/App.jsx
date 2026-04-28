@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Sugestoes from './pages/Sugestoes';
+import EditarProduto from "./pages/EditarProduto";
 
 
 import '@fontsource/open-sans';
@@ -15,8 +16,9 @@ function App() {
   return (
     <>
       <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/sugestoes' element={<Sugestoes />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/sugestoes' element={<Sugestoes />} />
+        <Route path='/EditarProduto' element={<EditarProduto />} />
       </Routes>
     </>
   )
