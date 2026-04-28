@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Sugestoes from './pages/Sugestoes';
+import EditarUsuario from './pages/EditarCadastroUsuario';
 
 
 import '@fontsource/open-sans';
@@ -17,6 +18,7 @@ function App() {
       <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/sugestoes' element={<Sugestoes />} />
+          <Route path='/EditarUsuario' element={<EditarUsuario />} />
       </Routes>
     </>
   )
