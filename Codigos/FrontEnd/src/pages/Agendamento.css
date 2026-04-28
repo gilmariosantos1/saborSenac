@@ -5,35 +5,74 @@ body {
   color: #fff;
 }
 
+/* HEADER */
 header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: #fff;
   color: #003366;
-  padding: 15px;
-  text-align: center;
+  padding: 15px 40px;
 }
 
-.container {
-  max-width: 600px;
-  margin: 30px auto;
+/* LOGO + TOPO */
+.topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 60px;
+  height: auto;
+}
+
+/* CONTAINER PRINCIPAL (AZUL GRANDE) */
+.container-principal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #1f5ca8;
-  padding: 30px;
+  padding: 60px;
+  gap: 60px;
+}
+
+/* IMAGEM ESQUERDA */
+.area-imagem {
+  background: #eee;
+  padding: 40px;
   border-radius: 8px;
 }
 
+.area-imagem img {
+  width: 320px;
+  display: block;
+}
+
+/* FORMULÁRIO DIREITA */
+.area-formulario {
+  width: 320px;
+}
+
+/* TÍTULO */
 h1 {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 28px;
 }
 
+/* VALOR */
 .valor {
-  font-size: 32px;
+  font-size: 36px;
+  font-weight: bold;
   margin-bottom: 20px;
 }
 
-
+/* GRUPOS */
 .form-group {
   margin-bottom: 15px;
 }
 
+/* SELECT */
 select {
   width: 100%;
   padding: 10px;
@@ -41,6 +80,17 @@ select {
   border: none;
 }
 
+/* TIMER */
+.timer {
+  margin: 20px 0;
+  background: #eee;
+  color: #000;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* BOTÃO */
 button {
   width: 100%;
   padding: 12px;
@@ -56,26 +106,37 @@ button:hover {
   opacity: 0.9;
 }
 
-.timer {
-  margin: 20px 0;
-  background: #eee;
-  color: #000;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
+/* BOTÃO QUANDO AGENDADO */
+button.sucesso {
+  background: #00c853;
 }
 
+/* OCULTO */
 .hidden {
   display: none;
 }
 
-.topo {
+.container-valor {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
 }
 
-.logo {
-  width: 50px;
-  height: auto;
+.badge-valor {
+  background-color: #c8e6c9; 
+  color: #2e7d32;            
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 10px;
+  border-radius: 4px;
+  margin-bottom: 4px;       
+}
+
+
+.valor {
+  font-size: 36px;          
+  font-weight: bold;
+  margin-bottom: 0;
+  color: #fff;
 }
