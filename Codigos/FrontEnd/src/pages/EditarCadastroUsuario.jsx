@@ -21,11 +21,9 @@ const EditarUsuario = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica para enviar os dados do usuário para o backend
-    // Por exemplo, usando o UsuarioController para atualizar as informações do usuário
-    // UsuarioController.atualizarUsuario(usuario);
+   //Inserir a lógica para enviar os dados atualizados para o backend usando a ServiceEditarUsuario e UsuarioController
     
-    // Após a atualização, você pode redirecionar o usuário de volta para a página inicial ou outra página
+    // Após a atualização, você pode redirecionar o usuário para página home ou exibir uma mensagem de sucesso
     navigate('/');
   };
   return (
