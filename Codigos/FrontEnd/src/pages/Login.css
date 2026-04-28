@@ -1,0 +1,146 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f4f8;
+  padding: 1rem;
+}
+
+.login-container {
+  width: min(600px, 100%);
+  display: grid;
+  grid-template-columns: 5.85fr 0.25fr;
+  background: #ffffff;
+  border-radius: 32px;
+  box-shadow: 0 32px 90px rgba(34, 60, 80, 0.14);
+  overflow: hidden;
+  min-height: 80vh;
+}
+
+.login-left {
+  background: url('../assets/imagens/logo_sabor_senac.jpeg') center/cover no-repeat;
+}
+
+.login-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.login-logo {
+  width: 230px;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.login-card h1 {
+  font-size: clamp(2rem, 2.5vw, 2.6rem);
+  margin-bottom: 0.5rem;
+  color: #0f3a71;
+}
+
+.login-subtitle {
+  margin-bottom: 2rem;
+  color: #7d8ca3;
+  font-size: 1rem;
+}
+
+.login-form {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  border: 1px solid #dde2ea;
+  border-radius: 18px;
+  padding: 1rem 1.25rem;
+  background: #f7f8fb;
+  color: #2f3d59;
+  font-size: 1rem;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #f2a91f;
+  box-shadow: 0 0 0 4px rgba(242, 169, 31, 0.12);
+  background: #ffffff;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  border: none;
+  background: #e1a82f;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.btn-login:hover {
+  background: #d59826;
+}
+
+.login-footer {
+  margin-top: 1.5rem;
+  color: #6c7a94;
+  font-size: 0.95rem;
+}
+
+.login-footer a {
+  color: #1d5bbf;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 980px) {
+  .login-container {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .login-left {
+    min-height: 240px;
+  }
+
+  .login-right {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-card {
+    padding: 0;
+  }
+
+  .login-right {
+    padding: 1.5rem;
+  }
+}
