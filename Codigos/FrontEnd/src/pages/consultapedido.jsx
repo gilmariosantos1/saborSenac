@@ -22,11 +22,11 @@ const Consultapedido = () => {
           />
 
           <div className="botoes">
-            <button className="voltar">
+            <button className="voltar" onClick={() => navigate(-1)}>
               Voltar
             </button>
 
-            <button className="buscar">
+            <button className="buscar" onClick={() => navigate('/confirmarpedido')}>
               Buscar
             </button>
           </div>

@@ -3,6 +3,7 @@ import './App.css';
 import Home from './pages/Home';
 import Sugestoes from './pages/Sugestoes';
 import PainelAtentende from './pages/painelAtendente';
+import CadastrarProduto from './pages/CadastrarProduto';
 
 
 import '@fontsource/open-sans';
@@ -27,6 +28,7 @@ function App() {
           <Route path='/confirmarpedido' element={<ConfirmarPedido />} />
           <Route path='/painelAtendente' element={<PainelAtentende />} />
           <Route path='/controledeestoque' element={<ControleDeEstoque />} />
+          <Route path='/cadastrar-produto' element={<CadastrarProduto />} />
       </Routes>
     </>
   )
