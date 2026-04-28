@@ -1,4 +1,5 @@
 import logo from '../assets/imagens/logo_sabor_senac.svg'
+import fundo from '../assets/fundo.svg'
 import './Login.css';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
@@ -11,10 +12,15 @@ const Login = () => {
       <Header />
         <main className="auth-page">
           <div className="login-left" />
-          <div className="login-container">            
+          <div className="login-container">
+            <div className="login-left" >  
+            </div>            
             <div className="login-right">
               <section className="login-card">
-                <img className="login-logo" src={logo} alt="logo_sabor_senac" />
+                <div className="login-logo-wrapper">
+                  <img className="login-logo" src={logo} alt="logo_sabor_senac" />
+                </div>
+
                 <h1>Entre em sua conta</h1>
                 <p className="login-subtitle">Acesse para pedir seu lanche</p>
 

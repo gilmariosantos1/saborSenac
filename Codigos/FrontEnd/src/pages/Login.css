@@ -8,7 +8,7 @@
 }
 
 .login-container {
-  width: min(600px, 100%);
+  width: min(800px, 100%);
   display: grid;
   grid-template-columns: 5.85fr 0.25fr;
   background: #ffffff;
@@ -19,7 +19,7 @@
 }
 
 .login-left {
-  background: url('../assets/imagens/logo_sabor_senac.jpeg') center/cover no-repeat;
+  background: url('../assets/fundo.svg') center/cover no-repeat;
 }
 
 .login-right {
@@ -31,7 +31,7 @@
 
 .login-card {
   width: 100%;
-  max-width: 480px;
+  max-width: 500px;
   text-align: center;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .login-card h1 {
-  font-size: clamp(2rem, 2.5vw, 2.6rem);
+  font-size: clamp(8rem, 2.5vw, 2.6rem);
   margin-bottom: 0.5rem;
   color: #0f3a71;
 }
@@ -94,7 +94,7 @@
   background: #e1a82f;
   color: #ffffff;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 5rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   cursor: pointer;
