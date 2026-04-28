@@ -13,6 +13,7 @@ import Consultapedido from './pages/consultapedido';
 import ConfirmarPedido from './pages/ConfirmarPedido';
 import '@fontsource/sanchez';
 import ControleDeEstoque from './pages/ControleDeEstoque';
+import AdicionarProduto from './pages/Adicionarproduto';
 
 
 // useRoutes();
@@ -29,6 +30,7 @@ function App() {
           <Route path='/painelAtendente' element={<PainelAtentende />} />
           <Route path='/controledeestoque' element={<ControleDeEstoque />} />
           <Route path='/cadastrar-produto' element={<CadastrarProduto />} />
+          <Route path='/adicionarproduto' element={<AdicionarProduto />} />
       </Routes>
     </>
   )
