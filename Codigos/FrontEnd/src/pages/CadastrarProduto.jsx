@@ -6,12 +6,9 @@ import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
 
 const CATEGORIAS = [
   "Selecione uma categoria",
-  "Lanches",
-  "Refeições",
+  "Salgados",
+  "Doces",
   "Bebidas",
-  "Sobremesas",
-  "Saladas",
-  "Snacks",
 ];
 
 const CadastrarProduto = () => {

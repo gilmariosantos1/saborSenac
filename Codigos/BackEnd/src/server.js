@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import models from './models/index.js';
 import produtoRoutes from "./routes/produtoRoutes.js";
 
+import carrinhoRoutes from './routes/carrinhoRoutes.js';
+
 dotenv.config({
     path: '../.env'
 })
@@ -15,6 +17,9 @@ app.use(express.json());
 app.use(produtoRoutes);
 
 const PORT = process.env.PORT;
+
+// ROTAS
+app.use("/api/carrinho", carrinhoRoutes);
 
 async function testConnection() {
     try {
