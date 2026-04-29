@@ -15,19 +15,23 @@ header {
   padding: 15px 40px;
 }
 
-/* LOGO + TOPO */
+header img {
+  height: 50px;
+}
+
+/* TOPO */
 .topo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .logo {
-  width: 60px;
-  height: auto;
+  height: 50px;
 }
 
-/* CONTAINER PRINCIPAL (AZUL GRANDE) */
+/* CONTAINER PRINCIPAL */
 .container-principal {
   display: flex;
   justify-content: center;
@@ -37,21 +41,31 @@ header {
   gap: 60px;
 }
 
-/* IMAGEM ESQUERDA */
+/* === IMAGEM (IGUAL AO PRINT) === */
 .area-imagem {
   background: #eee;
-  padding: 40px;
-  border-radius: 8px;
+  border-radius: 10px;
+
+  width: 650px;   /* tamanho correto */
+  height: 420px;  /* proporção do layout */
+
+  padding: 30px;  /* espaço interno igual */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .area-imagem img {
-  width: 320px;
-  display: block;
+  width: 100%;   /* proporção da logo */
+  height: auto;
 }
 
-/* FORMULÁRIO DIREITA */
+/* === FORMULÁRIO === */
 .area-formulario {
-  width: 320px;
+  width: 450px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* TÍTULO */
@@ -64,15 +78,31 @@ h1 {
 .valor {
   font-size: 36px;
   font-weight: bold;
+  margin-bottom: 0;
+  color: #fff;
+}
+
+/* BLOCO VALOR */
+.container-valor {
   margin-bottom: 20px;
 }
 
-/* GRUPOS */
+.badge-valor {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+/* FORM */
 .form-group {
   margin-bottom: 15px;
 }
 
-/* SELECT */
 select {
   width: 100%;
   padding: 10px;
@@ -85,9 +115,27 @@ select {
   margin: 20px 0;
   background: #eee;
   color: #000;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 15px;
+  border-radius: 8px;
   text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.titulo-timer {
+  font-weight: 500;
+}
+
+.texto-timer {
+  font-size: 12px;
+  color: #333;
+}
+
+.tempo {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 /* BOTÃO */
@@ -106,37 +154,23 @@ button:hover {
   opacity: 0.9;
 }
 
-/* BOTÃO QUANDO AGENDADO */
+/* BOTÃO SUCESSO */
 button.sucesso {
   background: #00c853;
 }
 
-/* OCULTO */
-.hidden {
-  display: none;
+/* AVISO */
+.aviso {
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.container-valor {
+.linha-dupla {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  gap: 15px;
 }
 
-.badge-valor {
-  background-color: #c8e6c9; 
-  color: #2e7d32;            
-  font-size: 12px;
-  font-weight: bold;
-  padding: 2px 10px;
-  border-radius: 4px;
-  margin-bottom: 4px;       
-}
-
-
-.valor {
-  font-size: 36px;          
-  font-weight: bold;
-  margin-bottom: 0;
-  color: #fff;
+.linha-dupla .form-group {
+  flex: 1;
 }

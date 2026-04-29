@@ -6,107 +6,102 @@ import './Agendamento.css';
 import imagem from "../assets/imagens/logo_sabor_senac.svg"; 
 
 const Agendamento = () => {
-    const navigate = useNavigate();
-    const [agendado, setAgendado] = useState(false);
+  const [agendado, setAgendado] = useState(false);
 
-    const handleAgendar = () => {
-        const confirmou = window.confirm(
-            "Atenção: Seu pedido será cancelado automaticamente se não for retirado em até 10 minutos. Deseja confirmar o agendamento?"
-        );
+  const handleAgendar = () => {
+    const confirmou = window.confirm(
+      "Atenção: Seu pedido será cancelado automaticamente se não for retirado em até 10 minutos. Deseja confirmar o agendamento?"
+    );
 
-        if (confirmou) {
-            setAgendado(true);
-            
-            setTimeout(() => {
-                alert("Agendamento realizado com sucesso!");
-            }, 500);
-        }
-    };
-    
-      return (
-        <>
-            <Header />
+    if (confirmou) {
+      setAgendado(true);
 
-<main className="container-principal">
+      setTimeout(() => {
+        alert("Agendamento realizado com sucesso!");
+      }, 500);
+    }
+  };
 
-    {/* IMAGEM ESQUERDA */}
-    <div className="area-imagem">
-        <img src={imagem} alt="Logo Sabor Senac" />
-    </div>
+  return (
+    <>
+      <Header />
 
-    {/* FORMULÁRIO DIREITA */}
-    <section className="area-formulario">
-        <h1>Escolha seu lanche!</h1>
+      <main className="container-principal">
+        {/* LADO ESQUERDO */}
+        <div className="area-imagem">
+          <img src={imagem} alt="Logo Sabor Senac" />
+        </div>
 
-       {/* SEÇÃO DO VALOR COM ETIQUETA */}
-    <div className="container-valor">
-    <span className="badge-valor">Valor</span>
-    <div className="valor">R$6,00</div>
-</div>
+        {/* LADO DIREITO */}
+        <section className="area-formulario">
+          <h1>Escolha seu lanche!</h1>
 
-        <div className="form-group">
-            <label>Comida</label>
-            <select>
-                <option>Escolha</option>
+          {/* VALOR */}
+          <div className="container-valor">
+            <span className="badge-valor">Valor</span>
+            <div className="valor">R$6,00</div>
+          </div>
+
+          {/* LINHA COMIDA + BEBIDA */}
+          <div className="linha-dupla">
+            <div className="form-group">
+              <label>Comida</label>
+              <select defaultValue="">
+                <option value="" disabled>Escolha</option>
                 <option>Sanduíche Natural</option>
                 <option>Salgado</option>
                 <option>Bolo</option>
-            </select>
-        </div>
+              </select>
+            </div>
 
-        <div className="form-group">
-            <label>Bebida</label>
-            <select>
-                <option>Escolha</option>
+            <div className="form-group">
+              <label>Bebida</label>
+              <select defaultValue="">
+                <option value="" disabled>Escolha</option>
                 <option>H2O</option>
                 <option>Suco</option>
                 <option>Refrigerante</option>
+              </select>
+            </div>
+          </div>
+
+          {/* PAGAMENTO */}
+          <div className="form-group">
+            <label>Escolha a forma de pagamento</label>
+            <select defaultValue="">
+              <option value="" disabled>Escolha</option>
+              <option>Pix</option>
+              <option>Cartão</option>
+              <option>Dinheiro</option>
             </select>
-        </div>
+          </div>
 
-        <div className="form-group">
-            <label>Pagamento</label>
-            <select>
-                <option>Escolha</option>
-                <option>Pix</option>
-                <option>Cartão</option>
-                <option>Dinheiro</option>
-            </select>
-        </div>
+          {/* TIMER */}
+<div className="timer">
+  <span className="titulo-timer">
+    Tempo para resgatar o lanche:
+  </span>
 
-                    {/* TIMER (igual da imagem) */}
-                    <div className="timer">
-                        Tempo para resgatar o lanche:<br />
-                        <strong>10:00</strong>
-                    </div>
-                        {/* MENSAGEM DE ACORDO */}
-                    <p style={{ 
-                    fontSize: '13px', 
-                    color: '#ffffff', 
-                    textAlign: 'center', 
-                    marginBottom: '10px',
-                    padding: '0 10px',
-                    lineHeight: '1.4'
-                }}>
-    Ao clicar em agendar, você declara estar ciente de que o pedido será cancelado se não for retirado no tempo previsto.
-</p>
-                    
+  <small className="texto-timer">
+    (Se o tempo for excedido, o pedido será automaticamente cancelado.)
+  </small>
 
-                    {/* BOTÃO */}
-                    <button 
-                        onClick={handleAgendar}
-                        className={agendado ? "sucesso" : ""}
-                    >
-                        {agendado ? "AGENDADO!" : "Agendar"}
+  <strong className="tempo">10:00</strong>
+</div>
 
-        </button>
-    </section>
+          {/* BOTÃO */}
+          <button
+            onClick={handleAgendar}
+            className={agendado ? "sucesso" : ""}
+          >
+            {agendado ? "AGENDADO!" : "Agendar"}
+          </button>
+        </section>
+      </main>
 
-</main>
-
-            <Footer />
-        </>
-    );
+      <Footer />
+    </>
+  );
 };
 
 export default Agendamento;
