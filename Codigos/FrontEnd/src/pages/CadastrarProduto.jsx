@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
-
+import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
 
 const CATEGORIAS = [
   "Selecione uma categoria",
