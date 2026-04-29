@@ -1,19 +1,9 @@
+import { cadastrarUsuario, atualizarUsuario } from '../../services/UsuarioService';
+
 const UsuarioController = {
-  atualizar: async (dados) => {
-    const response = await fetch('http://localhost:5173/usuarios', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dados),
-    });
+  cadastrar: (dados) => cadastrarUsuario(dados),
 
-    if (!response.ok) {
-      throw new Error('Erro ao atualizar usuário');
-    }
-
-    return response.json();
-  },
+  atualizar: (dados) => atualizarUsuario(dados),
 };
 
 export default UsuarioController;
