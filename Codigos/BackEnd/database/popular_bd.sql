@@ -32,14 +32,16 @@ INSERT INTO reservas (id_pessoa, data_reserva, status) VALUES
 (3, '2024-04-29 12:00:00', 'CANCELADA'),
 (4, '2024-04-29 13:00:00', 'PAGA');
 
--- Inserir itens de reserva
-INSERT INTO reserva_itens (id_reserva, id_produto, quantidade, preco_unitario) VALUES
-(1, 1, 2, 5.50),
-(1, 3, 1, 8.00),
-(2, 2, 1, 12.00),
-(2, 4, 1, 6.00),
-(4, 5, 1, 25.00),
-(4, 6, 1, 15.00);
+-- Inserir itens de reserva (AGORA COM id_pessoa)
+INSERT INTO reserva_itens (id_pessoa, id_reserva, id_produto, quantidade, preco_unitario) VALUES
+(1, 1, 1, 2, 5.50),
+(1, 1, 3, 1, 8.00),
+
+(2, 2, 2, 1, 12.00),
+(2, 2, 4, 1, 6.00),
+
+(4, 4, 5, 1, 25.00),
+(4, 4, 6, 1, 15.00);
 
 -- Inserir vendas (apenas para reservas pagas)
 INSERT INTO vendas (id_reserva, tipo_pagamento, valor_total) VALUES
