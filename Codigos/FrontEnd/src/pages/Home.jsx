@@ -6,7 +6,8 @@ import Header from '../components/header';
 import styles from '../styles/home.module.css';
 
 import banner from '../assets/imagens/banner.png';
-import carrinhoImg from '../assets/imagens/carrinho_de_compras.png'
+import carrinhoImg from '../assets/imagens/carrinho_de_compras.png';
+import logo from '../assets/imagens/logo_sabor_senac.svg';
 
 import {listarProdutos} from "../services/homeService";
 // import {listarProdutos, addCarrinho} from "../services/homeService";
@@ -27,7 +28,7 @@ const Home = () => {
     useEffect(() => {
         carregarProdutos();
     }, [categoria]);
-
+    
     const carregarProdutos = async () => {
         try {
             setLoading(true);
@@ -127,6 +128,24 @@ const Home = () => {
   );
 }
 
+    const BASE_URL = "http://localhost:3000"; // backend
+    const DEFAULT_IMAGE = logo;
+
+    function getImageUrl(imagem) {
+    try {
+        if (!imagem || imagem.trim() === "") {
+        return DEFAULT_IMAGE;
+        }
+
+        // return `${BASE_URL}/uploads/produtos/${imagem}`;
+        return DEFAULT_IMAGE;  
+    } catch (error) {
+        return DEFAULT_IMAGE;
+    }
+    }   
+
+
+
     return (
         <>
             <Header />
@@ -169,7 +188,7 @@ const Home = () => {
                             <form onSubmit={onSubmit} key={produto.id} className={`${produto.quantidade === 0 ? styles.item_sem_estoque : ""} ${styles.cardapio_item}`}>
                                 <div className={styles.cardapio_item_head}>
                                     <div className={`${styles.cardapio_item_head_qtd} ${produto.quantidade === 0 ? styles.bg_sem_estoque : ""}`}>{produto.quantidade}</div>
-                                    <img src="../public/coxinha.png" alt={produto.nome} />
+                                    <img src={getImageUrl(produto.imagem)} alt={produto.nome} />
                                     <h4>{produto.nome}</h4>
                                 </div>
                                 <div className={styles.cardapio_item_mid}>
