@@ -1,4 +1,3 @@
-import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
 import axios from "axios";
 
 const API_URL = "http://localhost:3000";
@@ -8,12 +7,9 @@ const ServiceCadastrarProduto = async (dados) => {
     const formData = new FormData();
 
     formData.append("nome", dados.nome);
-    formData.append("descricao", dados.descricao);
     formData.append("preco", dados.preco);
-    formData.append("categoria", dados.categoria);
-    formData.append("quantidade", dados.quantidade);
+    formData.append("categoria_id_categoria", dados.categoria_id_categoria);
 
-    // Arquivo de imagem (campo do tipo <input type="file">)
     if (dados.imagem) {
       formData.append("imagem", dados.imagem);
     }

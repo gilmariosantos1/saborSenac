@@ -236,4 +236,26 @@ const CadastrarProduto = () => {
   );
 };
 
+const styles = {
+  page: { display: "flex", flexDirection: "column", minHeight: "100vh" },
+  main: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: "32px 16px", background: "#f4f6f9" },
+  card: { background: "#fff", borderRadius: "12px", padding: "36px 32px", width: "100%", maxWidth: "480px", boxShadow: "0 2px 16px rgba(0,0,0,0.10)" },
+  title: { fontSize: "22px", fontWeight: 700, marginBottom: "24px", color: "#1855A5" },
+  fieldGroup: { marginBottom: "18px" },
+  label: { display: "block", fontWeight: 600, marginBottom: "6px", color: "#333", fontSize: "14px" },
+  input: { width: "100%", padding: "10px 12px", borderRadius: "7px", border: "1.5px solid #c8cdd6", fontSize: "15px", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" },
+  select: { width: "100%", padding: "10px 12px", borderRadius: "7px", border: "1.5px solid #c8cdd6", fontSize: "15px", outline: "none", appearance: "none", background: "#fff", boxSizing: "border-box" },
+  uploadBox: { border: "2px dashed #c8cdd6", borderRadius: "8px", padding: "18px", cursor: "pointer", textAlign: "center", color: "#666", transition: "border-color 0.2s" },
+  uploadTrigger: { display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px" },
+  uploadIcon: { fontSize: "22px" },
+  previewImg: { maxWidth: "100%", maxHeight: "160px", borderRadius: "6px", marginTop: "10px" },
+  fileName: { display: "block", fontSize: "12px", color: "#888", marginTop: "6px" },
+  hiddenInput: { display: "none" },
+  errorMsg: { color: "#e53935", fontSize: "12px", marginTop: "4px" },
+  successBanner: { background: "#e8f5e9", color: "#2e7d32", borderRadius: "7px", padding: "12px 16px", marginBottom: "18px", fontWeight: 600 },
+  actions: { display: "flex", gap: "12px", marginTop: "28px", justifyContent: "flex-end" },
+  btnCancelar: { padding: "10px 24px", borderRadius: "7px", border: "none", background: "#e53935", color: "#fff", fontWeight: 700, fontSize: "15px", cursor: "pointer", transition: "background 0.2s" },
+  btnConfirma: { padding: "10px 24px", borderRadius: "7px", border: "none", background: "#2e7d32", color: "#fff", fontWeight: 700, fontSize: "15px", cursor: "pointer", transition: "background 0.2s" },
+};
+
 export default CadastrarProduto;
