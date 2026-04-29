@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import models from './models/index.js';
 
+import carrinhoRoutes from './routes/carrinhoRoutes.js';
+
 dotenv.config({
     path: '../.env'
 })
@@ -13,6 +15,9 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT;
+
+// ROTAS
+app.use("/api/carrinho", carrinhoRoutes);
 
 async function testConnection() {
     try {

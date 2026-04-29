@@ -1,7 +1,7 @@
 // import api from './api';
 
 // export const listarProdutos = (params = {}) => api.get('/produtos', { params });
-// export const addCarrinho = (data) => api.post('/produtos', data);
+// export const addCarrinho = (data) => api.post('/carrinho', data);
 
 
 const mockProdutos_salgados = [
