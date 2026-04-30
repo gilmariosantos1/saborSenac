@@ -1,0 +1,88 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial, sans-serif;
+}
+
+.consulta-container{
+background:#1456A8;
+min-height:75vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+gap:90px;
+padding:60px;
+}
+
+.consulta-box{
+background:#fff;
+width:280px;
+padding:30px;
+border-radius:8px;
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+
+.consulta-box h3{
+text-align:center;
+margin-bottom:25px;
+font-size:18px;
+}
+
+.consulta-box label{
+display:block;
+margin-bottom:8px;
+font-size:14px;
+}
+
+.consulta-box input{
+width:100%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:4px;
+margin-bottom:20px;
+}
+
+.botoes{
+display:flex;
+justify-content:space-between;
+}
+
+.botoes button{
+border:none;
+padding:10px 20px;
+border-radius:4px;
+background:#D99A2B;
+color:white;
+cursor:pointer;
+}
+
+.historico-box{
+background:white;
+width:420px;
+border-radius:8px;
+overflow:hidden;
+}
+
+.historico-box h4{
+text-align:center;
+padding:14px;
+background:#f2f2f2;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th, td, th{
+border:1px solid #ddd;
+height:35px;
+text-align:center;
+background:#fafafa;
+
+}

@@ -1,0 +1,84 @@
+.user {
+    margin-left: 10px;
+}
+
+.EditarProduto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background: #f5f7fb;
+    padding: 30px 0;
+}
+
+.logo {
+    display: none;
+}
+
+/* MAIN */
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    width: 350px;
+    border-radius: 8px;
+    text-align: left;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+    text-align: center;
+}
+
+.card label {
+    display: block;
+    margin-top: 15px;
+}
+
+.card input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+/* Upload */
+.upload {
+    margin-top: 10px;
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    color: #666;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cancel {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+.confirm {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
