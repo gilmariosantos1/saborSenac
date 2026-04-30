@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
-import "../pages/CadastroProduto.css";
+import "../styles/CadastroProduto.css";
 
 const CATEGORIAS = [
   "Selecione uma categoria",
