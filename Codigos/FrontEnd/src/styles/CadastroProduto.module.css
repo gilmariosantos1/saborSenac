@@ -4,7 +4,7 @@
   min-height: 100svh;
 }
 
-main {
+.page main {
   flex: 1;
   background-color: #1855a5;
   display: flex;
@@ -35,7 +35,7 @@ main {
   margin-bottom: 18px;
 }
 
-label {
+.page label {
   display: block;
   font-size: 15px;
   font-weight: 500;
@@ -44,7 +44,8 @@ label {
   font-family: 'Open Sans', sans-serif;
 }
 
-input, select {
+.page input,
+.page select {
   width: 100%;
   box-sizing: border-box;
   border: 1.5px solid #c8cdd6;
@@ -58,7 +59,8 @@ input, select {
   background-color: #fafafa;
 }
 
-input:focus, select:focus {
+.page input:focus,
+.page select:focus {
   border-color: #1855a5;
 }
 
@@ -115,6 +117,23 @@ input:focus, select:focus {
 
 .btnConfirma:hover {
   background-color: #1b5e20;
+}
+
+.page input::-webkit-outer-spin-button,
+.page input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.page input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.btnCancelar:disabled,
+.btnConfirma:disabled,
+.page button:disabled {
+  background-color: #9d9d9d;
+  cursor: not-allowed;
 }
 
 .errorMsg {

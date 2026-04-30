@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
-import "../styles/CadastroProduto.css";
+import styles from "../styles/CadastroProduto.module.css";
 
 const CATEGORIAS = [
   "Selecione uma categoria",
@@ -80,25 +80,25 @@ const CadastrarProduto = () => {
   const handleCancelar = () => navigate("/");
 
   return (
-    <div className="page">
+    <div className={styles.page}>
       <Header />
 
       <main>
-        <div className="card">
-          <h2 className="title">Cadastrar produto</h2>
+        <div className={styles.card}>
+          <h2 className={styles.title}>Cadastrar produto</h2>
 
           {submitted && (
-            <div className="successBanner">
+            <div className={styles.successBanner}>
               ✅ Produto cadastrado com sucesso! Redirecionando…
             </div>
           )}
 
           {errors.geral && (
-            <div className="errorBanner">{errors.geral}</div>
+            <div className={styles.errorBanner}>{errors.geral}</div>
           )}
 
           {/* Nome */}
-          <div className="fieldGroup">
+          <div className={styles.fieldGroup}>
             <label htmlFor="nome">Nome</label>
             <input
               id="nome"
@@ -108,11 +108,11 @@ const CadastrarProduto = () => {
               onChange={handleChange}
               autoComplete="off"
             />
-            {errors.nome && <p className="errorMsg">{errors.nome}</p>}
+            {errors.nome && <p className={styles.errorMsg}>{errors.nome}</p>}
           </div>
 
           {/* Preço */}
-          <div className="fieldGroup">
+          <div className={styles.fieldGroup}>
             <label htmlFor="preco">Preço</label>
             <input
               id="preco"
@@ -123,11 +123,11 @@ const CadastrarProduto = () => {
               value={form.preco}
               onChange={handleChange}
             />
-            {errors.preco && <p className="errorMsg">{errors.preco}</p>}
+            {errors.preco && <p className={styles.errorMsg}>{errors.preco}</p>}
           </div>
 
           {/* Categoria */}
-          <div className="fieldGroup">
+          <div className={styles.fieldGroup}>
             <label htmlFor="categoria">Categoria</label>
             <select
               id="categoria"
@@ -145,13 +145,13 @@ const CadastrarProduto = () => {
                 </option>
               ))}
             </select>
-            {errors.categoria && <p className="errorMsg">{errors.categoria}</p>}
+            {errors.categoria && <p className={styles.errorMsg}>{errors.categoria}</p>}
           </div>
 
           {/* Imagem */}
-          <div className="fieldGroup">
+          <div className={styles.fieldGroup}>
             <label>Imagem</label>
-            <div className="uploadBox" onClick={() => fileInputRef.current.click()}>
+            <div className={styles.uploadBox} onClick={() => fileInputRef.current.click()}>
               <span>🖼️ Add file</span>
               {preview && (
                 <img
@@ -171,15 +171,15 @@ const CadastrarProduto = () => {
               style={{ display: "none" }}
               onChange={handleFileChange}
             />
-            {errors.imagem && <p className="errorMsg">{errors.imagem}</p>}
+            {errors.imagem && <p className={styles.errorMsg}>{errors.imagem}</p>}
           </div>
 
           {/* Botões */}
           <div style={{ display: "flex", gap: "12px", marginTop: "28px" }}>
-            <button className="btnCancelar" onClick={handleCancelar}>
+            <button className={styles.btnCancelar} onClick={handleCancelar}>
               Cancelar
             </button>
-            <button className="btnConfirma" onClick={handleConfirmar}>
+            <button className={styles.btnConfirma} onClick={handleConfirmar}>
               Confirma
             </button>
           </div>
