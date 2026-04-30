@@ -21,9 +21,10 @@ const EditarUsuario = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-   //Inserir a lógica para enviar os dados atualizados para o backend usando a ServiceEditarUsuario e UsuarioController
-    
-    // Após a atualização, você pode redirecionar o usuário para página home ou exibir uma mensagem de sucesso
+    if (usuario.senha !== usuario.confirmasenha) {
+      alert("As senhas não conferem");
+      return;
+    } 
     navigate('/');
   };
   return (

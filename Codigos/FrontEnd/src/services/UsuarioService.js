@@ -1,5 +1,5 @@
 export const cadastrarUsuario = async (dados) => {
-  const response = await fetch('http://localhost:3000/usuarios', {
+  const response = await fetch('http://localhost:5173/usuarios', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ export const cadastrarUsuario = async (dados) => {
 };
 
 export const atualizarUsuario = async (dados) => {
-  const response = await fetch('http://localhost:3000/usuarios', {
+  const response = await fetch('http://localhost:5173/usuarios', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

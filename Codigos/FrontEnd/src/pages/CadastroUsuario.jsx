@@ -30,7 +30,7 @@ const CadastroUsuario = () => {
       });
 
       alert("Usuário cadastrado com sucesso!");
-      navigate("/HomeMenu");
+      navigate("/");
     } catch (error) {
       console.error("Erro ao cadastrar usuario:", error);
       alert("Ocorreu um erro ao cadastrar o usuario. Por favor, tente novamente.");
