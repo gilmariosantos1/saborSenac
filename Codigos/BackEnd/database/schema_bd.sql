@@ -4,11 +4,18 @@
 -- ------------------------------------------------------
 -- Server version	8.4.8-0ubuntu0.25.10.1
 
+
+CREATE DATABASE sabor_senac;
+
+USE sabor_senac
+
 DROP TABLE IF EXISTS `categoria`;
 
 CREATE TABLE `categoria` (
   `id_categoria` int NOT NULL AUTO_INCREMENT,
   `descricao` varchar(50) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_categoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -26,6 +33,8 @@ CREATE TABLE `pessoas` (
   `matricula` varchar(20) NOT NULL,
   `senha` varchar(255) NOT NULL,
   `perfil` enum('ALUNO','FUNCIONARIO','ADMIN') NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pessoa`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `matricula` (`matricula`)
@@ -44,9 +53,12 @@ CREATE TABLE `produtos` (
   `preco` decimal(10,2) NOT NULL,
   `estoque` int NOT NULL,
   `id_categoria` int NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_produto`),
   KEY `fk_produto_categoria` (`id_categoria`),
-  CONSTRAINT `fk_produto_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`)
+  CONSTRAINT `fk_produto_categoria`
+    FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -62,9 +74,12 @@ CREATE TABLE `reservas` (
   `id_pessoa` int NOT NULL,
   `data_reserva` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('ABERTA','PAGA','CANCELADA') NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_reserva`),
   KEY `fk_reserva_pessoa` (`id_pessoa`),
-  CONSTRAINT `fk_reserva_pessoa` FOREIGN KEY (`id_pessoa`) REFERENCES `pessoas` (`id_pessoa`)
+  CONSTRAINT `fk_reserva_pessoa`
+    FOREIGN KEY (`id_pessoa`) REFERENCES `pessoas` (`id_pessoa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -73,36 +88,32 @@ CREATE TABLE `reservas` (
 
 DROP TABLE IF EXISTS reserva_itens;
 
-CREATE TABLE reserva_itens (
-  id_item INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE `reserva_itens` (
+  `id_item` INT NOT NULL AUTO_INCREMENT,
+  `id_pessoa` INT NOT NULL,
+  `id_reserva` INT NULL,
+  `id_produto` INT NOT NULL,
+  `quantidade` INT NOT NULL,
+  `preco_unitario` DECIMAL(10,2) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-  id_pessoa INT NOT NULL,
-  id_reserva INT NULL,
-  id_produto INT NOT NULL,
+  PRIMARY KEY (`id_item`),
 
-  quantidade INT NOT NULL,
-  preco_unitario DECIMAL(10,2) NOT NULL,
+  UNIQUE KEY `uk_pessoa_produto` (`id_pessoa`, `id_produto`),
 
-  PRIMARY KEY (id_item),
+  KEY `fk_item_produto` (`id_produto`),
+  KEY `fk_item_reserva` (`id_reserva`),
+  KEY `fk_item_pessoa` (`id_pessoa`),
 
-  UNIQUE KEY uk_pessoa_produto (id_pessoa, id_produto),
+  CONSTRAINT `fk_item_pessoa`
+    FOREIGN KEY (`id_pessoa`) REFERENCES `pessoas` (`id_pessoa`),
 
-  KEY fk_item_produto (id_produto),
-  KEY fk_item_reserva (id_reserva),
-  KEY fk_item_pessoa (id_pessoa),
+  CONSTRAINT `fk_item_reserva`
+    FOREIGN KEY (`id_reserva`) REFERENCES `reservas` (`id_reserva`),
 
-  CONSTRAINT fk_item_pessoa
-    FOREIGN KEY (id_pessoa)
-    REFERENCES pessoas (id_pessoa),
-
-  CONSTRAINT fk_item_reserva
-    FOREIGN KEY (id_reserva)
-    REFERENCES reservas (id_reserva),
-
-  CONSTRAINT fk_item_produto
-    FOREIGN KEY (id_produto)
-    REFERENCES produtos (id_produto)
-
+  CONSTRAINT `fk_item_produto`
+    FOREIGN KEY (`id_produto`) REFERENCES `produtos` (`id_produto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -118,9 +129,12 @@ CREATE TABLE `vendas` (
   `tipo_pagamento` enum('DINHEIRO','PIX','DEBITO','CREDITO') NOT NULL,
   `valor_total` decimal(10,2) NOT NULL,
   `data_venda` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_venda`),
   UNIQUE KEY `id_reserva` (`id_reserva`),
-  CONSTRAINT `fk_venda_reserva` FOREIGN KEY (`id_reserva`) REFERENCES `reservas` (`id_reserva`)
+  CONSTRAINT `fk_venda_reserva`
+    FOREIGN KEY (`id_reserva`) REFERENCES `reservas` (`id_reserva`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
