@@ -1,8 +1,9 @@
-// src/controllers/carrinhoController.js
+import models from "../models/index.js";
 
+const reservaItensModel = models.ReservaItens;
 import { body, param, validationResult } from "express-validator";
 
-export const carrinhoValidators = {
+export const reservaItensValidators = {
     id: [
         param("id")
             .isInt({ min: 1 })
@@ -10,7 +11,7 @@ export const carrinhoValidators = {
     ],
 
     create: [
-        body("produto_id")
+        body("id_produto")
             .notEmpty()
             .withMessage("Produto é obrigatório.")
             .isInt({ min: 1 }),
@@ -28,12 +29,12 @@ export const carrinhoValidators = {
     ],
 };
 
-export function createCarrinhoController(carrinhoModel) {
+export function createReservaItensController(reservaItensModel) {
     return {
         async list(req, res, next) {
             try {
                 const itens =
-                    await carrinhoModel.listAll();
+                    await reservaItensModel.listAll();
 
                 return res.status(200).json(itens);
             } catch (error) {
@@ -42,16 +43,8 @@ export function createCarrinhoController(carrinhoModel) {
         },
 
         async getById(req, res, next) {
-            try {
-                const errors = validationResult(req);
-
-                if (!errors.isEmpty()) {
-                    return res.status(400).json({
-                        errors: errors.array(),
-                    });
-                }
-
-                const item = await carrinhoModel.findById(
+            try {   
+                const item = await reservaItensModel.findById(
                     Number(req.params.id)
                 );
 
@@ -69,15 +62,7 @@ export function createCarrinhoController(carrinhoModel) {
 
         async create(req, res, next) {
             try {
-                const errors = validationResult(req);
-
-                if (!errors.isEmpty()) {
-                    return res.status(400).json({
-                        errors: errors.array(),
-                    });
-                }
-
-                const createdItem = await carrinhoModel.create(req.body);
+                const createdItem = await reservaItensModel.upsertItem(req.body);
 
                 return res.status(201).json(createdItem);
             } catch (error) {
@@ -87,15 +72,7 @@ export function createCarrinhoController(carrinhoModel) {
 
         async update(req, res, next) {
             try {
-                const errors = validationResult(req);
-
-                if (!errors.isEmpty()) {
-                    return res.status(400).json({
-                        errors: errors.array(),
-                    });
-                }
-
-                const updatedItem = await carrinhoModel.update(
+                const updatedItem = await reservaItensModel.update(
                     Number(req.params.id),
                     req.body
                 );
@@ -114,15 +91,7 @@ export function createCarrinhoController(carrinhoModel) {
 
         async remove(req, res, next) {
             try {
-                const errors = validationResult(req);
-
-                if (!errors.isEmpty()) {
-                    return res.status(400).json({
-                        errors: errors.array(),
-                    });
-                }
-
-                const removed = await carrinhoModel.remove(
+                const removed = await reservaItensModel.remove(
                     Number(req.params.id)
                 );
 
