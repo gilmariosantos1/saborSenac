@@ -1,9 +1,7 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-dotenv.config({
-    path: '../.env'
-})
+dotenv.config();
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -13,7 +11,9 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: 'mysql',
-        logging: process.env.DB_LOGGING === 'true' ? console.log : false, define: {
+        logging: process.env.DB_LOGGING === 'true' ? console.log : false,
+
+        define: {
             underscored: true,
             timestamps: true,
         },
@@ -25,14 +25,5 @@ const sequelize = new Sequelize(
         },
     }
 )
-
-sequelize.authenticate()
-  .then(() => {
-    console.log('✓ Conectado ao MySQL com sucesso!');
-  })
-  .catch(err => {
-    console.error('✗ Erro ao conectar ao MySQL:', err.message);
-    process.exit(1);
-  });
 
 export default sequelize;
