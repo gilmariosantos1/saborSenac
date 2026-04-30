@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import produtoRoutes from "./routes/produtoRoutes.js";
 
 import reservaItensRoutes from "./routes/reservaItensRoutes.js";
 
@@ -7,6 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(produtoRoutes);
 
 // ROTAS
 app.use("/api/reservaItens", reservaItensRoutes);
