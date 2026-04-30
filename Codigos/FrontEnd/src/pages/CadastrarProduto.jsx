@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
+import "../pages/CadastroProduto.css";
 
 const CATEGORIAS = [
   "Selecione uma categoria",
@@ -26,7 +27,6 @@ const CadastrarProduto = () => {
 
   const fileInputRef = useRef(null);
 
-  /* ─── Handlers ─── */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -54,66 +54,66 @@ const CadastrarProduto = () => {
     return newErrors;
   };
 
-  const handleConfirmar = () => {
+  const handleConfirmar = async () => {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
     }
-    // TODO: integrar com a API do back-end
-    // await api.post('/produtos', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 1800);
+
+    try {
+      await ServiceCadastrarProduto({
+        nome: form.nome,
+        preco: form.preco,
+        categoria_id_categoria: form.categoria,
+        imagem: form.imagem,
+      });
+
+      setSubmitted(true);
+      setTimeout(() => navigate("/"), 1800);
+    } catch (error) {
+      console.error("Erro ao cadastrar produto:", error);
+      setErrors({ geral: "Erro ao cadastrar produto. Tente novamente." });
+    }
   };
 
-  const handleCancelar = () => {
-    navigate("/");
-  };
-
-  /* ─── Focus border helper ─── */
-  const focusStyle = { borderColor: "#1855A5" };
+  const handleCancelar = () => navigate("/");
 
   return (
-    <div style={styles.page}>
+    <div className="page">
       <Header />
 
-      <main style={styles.main}>
-        <div style={styles.card}>
-          <h2 style={styles.title}>Cadastrar produto</h2>
+      <main>
+        <div className="card">
+          <h2 className="title">Cadastrar produto</h2>
 
           {submitted && (
-            <div style={styles.successBanner}>
+            <div className="successBanner">
               ✅ Produto cadastrado com sucesso! Redirecionando…
             </div>
           )}
 
+          {errors.geral && (
+            <div className="errorBanner">{errors.geral}</div>
+          )}
+
           {/* Nome */}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label} htmlFor="nome">
-              Nome
-            </label>
+          <div className="fieldGroup">
+            <label htmlFor="nome">Nome</label>
             <input
               id="nome"
               name="nome"
               type="text"
               value={form.nome}
               onChange={handleChange}
-              style={styles.input}
-              onFocus={(e) => (e.target.style.borderColor = "#1855A5")}
-              onBlur={(e) => (e.target.style.borderColor = "#c8cdd6")}
-              placeholder=""
               autoComplete="off"
             />
-            {errors.nome && <p style={styles.errorMsg}>{errors.nome}</p>}
+            {errors.nome && <p className="errorMsg">{errors.nome}</p>}
           </div>
 
           {/* Preço */}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label} htmlFor="preco">
-              Preço
-            </label>
+          <div className="fieldGroup">
+            <label htmlFor="preco">Preço</label>
             <input
               id="preco"
               name="preco"
@@ -122,109 +122,64 @@ const CadastrarProduto = () => {
               step="0.01"
               value={form.preco}
               onChange={handleChange}
-              style={styles.input}
-              onFocus={(e) => (e.target.style.borderColor = "#1855A5")}
-              onBlur={(e) => (e.target.style.borderColor = "#c8cdd6")}
-              placeholder=""
             />
-            {errors.preco && <p style={styles.errorMsg}>{errors.preco}</p>}
+            {errors.preco && <p className="errorMsg">{errors.preco}</p>}
           </div>
 
           {/* Categoria */}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label} htmlFor="categoria">
-              Categoria
-            </label>
-            <div style={{ position: "relative" }}>
-              <select
-                id="categoria"
-                name="categoria"
-                value={form.categoria}
-                onChange={handleChange}
-                style={styles.select}
-                onFocus={(e) => (e.target.style.borderColor = "#1855A5")}
-                onBlur={(e) => (e.target.style.borderColor = "#c8cdd6")}
-              >
-                {CATEGORIAS.map((cat) => (
-                  <option
-                    key={cat}
-                    value={cat === "Selecione uma categoria" ? "" : cat}
-                    disabled={cat === "Selecione uma categoria"}
-                  >
-                    {cat}
-                  </option>
-                ))}
-              </select>
-              {/* custom chevron */}
-              <span
-                style={{
-                  position: "absolute",
-                  right: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  pointerEvents: "none",
-                  color: "#666",
-                  fontSize: "12px",
-                }}
-              >
-                ▾
-              </span>
-            </div>
-            {errors.categoria && (
-              <p style={styles.errorMsg}>{errors.categoria}</p>
-            )}
+          <div className="fieldGroup">
+            <label htmlFor="categoria">Categoria</label>
+            <select
+              id="categoria"
+              name="categoria"
+              value={form.categoria}
+              onChange={handleChange}
+            >
+              {CATEGORIAS.map((cat) => (
+                <option
+                  key={cat}
+                  value={cat === "Selecione uma categoria" ? "" : cat}
+                  disabled={cat === "Selecione uma categoria"}
+                >
+                  {cat}
+                </option>
+              ))}
+            </select>
+            {errors.categoria && <p className="errorMsg">{errors.categoria}</p>}
           </div>
 
           {/* Imagem */}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Imagem</label>
-            <div
-              style={styles.uploadBox}
-              onClick={() => fileInputRef.current.click()}
-            >
-              <div style={styles.uploadTrigger}>
-                <span style={styles.uploadIcon}>🖼️</span>
-                <span>Add file</span>
-              </div>
+          <div className="fieldGroup">
+            <label>Imagem</label>
+            <div className="uploadBox" onClick={() => fileInputRef.current.click()}>
+              <span>🖼️ Add file</span>
+              {preview && (
+                <img
+                  src={preview}
+                  alt="preview"
+                  style={{ maxWidth: "100%", maxHeight: "120px", borderRadius: "6px" }}
+                />
+              )}
               {form.imagem && (
-                <>
-                  {preview && (
-                    <img src={preview} alt="preview" style={styles.previewImg} />
-                  )}
-                  <span style={styles.fileName}>{form.imagem.name}</span>
-                </>
+                <span style={{ fontSize: "12px", color: "#888" }}>{form.imagem.name}</span>
               )}
             </div>
             <input
               ref={fileInputRef}
               type="file"
               accept="image/*"
-              style={styles.hiddenInput}
+              style={{ display: "none" }}
               onChange={handleFileChange}
             />
-            {errors.imagem && <p style={styles.errorMsg}>{errors.imagem}</p>}
+            {errors.imagem && <p className="errorMsg">{errors.imagem}</p>}
           </div>
 
           {/* Botões */}
-          <div style={styles.actions}>
-            <button
-              style={styles.btnCancelar}
-              onClick={handleCancelar}
-              onMouseOver={(e) => (e.target.style.background = "#c62828")}
-              onMouseOut={(e) => (e.target.style.background = "#e53935")}
-              onMouseDown={(e) => (e.target.style.transform = "scale(0.97)")}
-              onMouseUp={(e) => (e.target.style.transform = "scale(1)")}
-            >
+          <div style={{ display: "flex", gap: "12px", marginTop: "28px" }}>
+            <button className="btnCancelar" onClick={handleCancelar}>
               Cancelar
             </button>
-            <button
-              style={styles.btnConfirma}
-              onClick={handleConfirmar}
-              onMouseOver={(e) => (e.target.style.background = "#1b5e20")}
-              onMouseOut={(e) => (e.target.style.background = "#2e7d32")}
-              onMouseDown={(e) => (e.target.style.transform = "scale(0.97)")}
-              onMouseUp={(e) => (e.target.style.transform = "scale(1)")}
-            >
+            <button className="btnConfirma" onClick={handleConfirmar}>
               Confirma
             </button>
           </div>
@@ -234,28 +189,6 @@ const CadastrarProduto = () => {
       <Footer />
     </div>
   );
-};
-
-const styles = {
-  page: { display: "flex", flexDirection: "column", minHeight: "100vh" },
-  main: { flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: "32px 16px", background: "#f4f6f9" },
-  card: { background: "#fff", borderRadius: "12px", padding: "36px 32px", width: "100%", maxWidth: "480px", boxShadow: "0 2px 16px rgba(0,0,0,0.10)" },
-  title: { fontSize: "22px", fontWeight: 700, marginBottom: "24px", color: "#1855A5" },
-  fieldGroup: { marginBottom: "18px" },
-  label: { display: "block", fontWeight: 600, marginBottom: "6px", color: "#333", fontSize: "14px" },
-  input: { width: "100%", padding: "10px 12px", borderRadius: "7px", border: "1.5px solid #c8cdd6", fontSize: "15px", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" },
-  select: { width: "100%", padding: "10px 12px", borderRadius: "7px", border: "1.5px solid #c8cdd6", fontSize: "15px", outline: "none", appearance: "none", background: "#fff", boxSizing: "border-box" },
-  uploadBox: { border: "2px dashed #c8cdd6", borderRadius: "8px", padding: "18px", cursor: "pointer", textAlign: "center", color: "#666", transition: "border-color 0.2s" },
-  uploadTrigger: { display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px" },
-  uploadIcon: { fontSize: "22px" },
-  previewImg: { maxWidth: "100%", maxHeight: "160px", borderRadius: "6px", marginTop: "10px" },
-  fileName: { display: "block", fontSize: "12px", color: "#888", marginTop: "6px" },
-  hiddenInput: { display: "none" },
-  errorMsg: { color: "#e53935", fontSize: "12px", marginTop: "4px" },
-  successBanner: { background: "#e8f5e9", color: "#2e7d32", borderRadius: "7px", padding: "12px 16px", marginBottom: "18px", fontWeight: 600 },
-  actions: { display: "flex", gap: "12px", marginTop: "28px", justifyContent: "flex-end" },
-  btnCancelar: { padding: "10px 24px", borderRadius: "7px", border: "none", background: "#e53935", color: "#fff", fontWeight: 700, fontSize: "15px", cursor: "pointer", transition: "background 0.2s" },
-  btnConfirma: { padding: "10px 24px", borderRadius: "7px", border: "none", background: "#2e7d32", color: "#fff", fontWeight: 700, fontSize: "15px", cursor: "pointer", transition: "background 0.2s" },
 };
 
 export default CadastrarProduto;

@@ -58,6 +58,10 @@ input, select {
   background-color: #fafafa;
 }
 
+input:focus, select:focus {
+  border-color: #1855a5;
+}
+
 .uploadBox {
   width: 100%;
   box-sizing: border-box;
@@ -75,6 +79,10 @@ input, select {
   gap: 8px;
 }
 
+.uploadBox:hover {
+  border-color: #1855a5;
+}
+
 .btnCancelar {
   flex: 1;
   padding: 11px 0;
@@ -85,6 +93,11 @@ input, select {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnCancelar:hover {
+  background-color: #c62828;
 }
 
 .btnConfirma {
@@ -97,4 +110,36 @@ input, select {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnConfirma:hover {
+  background-color: #1b5e20;
+}
+
+.errorMsg {
+  color: #e53935;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.errorBanner {
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.successBanner {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-weight: 600;
+  font-size: 14px;
 }
