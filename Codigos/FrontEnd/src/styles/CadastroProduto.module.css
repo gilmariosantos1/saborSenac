@@ -1,0 +1,164 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.page main {
+  flex: 1;
+  background-color: #1855a5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 36px 40px 40px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+}
+
+.title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 28px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.fieldGroup {
+  margin-bottom: 18px;
+}
+
+.page label {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.page input,
+.page select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #c8cdd6;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+  background-color: #fafafa;
+}
+
+.page input:focus,
+.page select:focus {
+  border-color: #1855a5;
+}
+
+.uploadBox {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #c8cdd6;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #fafafa;
+  cursor: pointer;
+  position: relative;
+  gap: 8px;
+}
+
+.uploadBox:hover {
+  border-color: #1855a5;
+}
+
+.btnCancelar {
+  flex: 1;
+  padding: 11px 0;
+  border: none;
+  border-radius: 6px;
+  background-color: #e53935;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnCancelar:hover {
+  background-color: #c62828;
+}
+
+.btnConfirma {
+  flex: 1;
+  padding: 11px 0;
+  border: none;
+  border-radius: 6px;
+  background-color: #2e7d32;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnConfirma:hover {
+  background-color: #1b5e20;
+}
+
+.page input::-webkit-outer-spin-button,
+.page input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.page input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.btnCancelar:disabled,
+.btnConfirma:disabled,
+.page button:disabled {
+  background-color: #9d9d9d;
+  cursor: not-allowed;
+}
+
+.errorMsg {
+  color: #e53935;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.errorBanner {
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.successBanner {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-weight: 600;
+  font-size: 14px;
+}

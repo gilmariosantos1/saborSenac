@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import models from './models/index.js';
+import produtoRoutes from "./routes/produtoRoutes.js";
 
 import carrinhoRoutes from './routes/carrinhoRoutes.js';
 
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(produtoRoutes);
 
 const PORT = process.env.PORT;
 
