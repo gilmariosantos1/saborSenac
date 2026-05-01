@@ -72,7 +72,7 @@ export function createReservaItensController(reservaItensModel) {
 
         async update(req, res, next) {
             try {
-                const updatedItem = await reservaItensModel.update(
+                const updatedItem = await reservaItensModel.updateItem(
                     Number(req.params.id),
                     req.body
                 );
@@ -91,7 +91,7 @@ export function createReservaItensController(reservaItensModel) {
 
         async remove(req, res, next) {
             try {
-                const removed = await reservaItensModel.remove(
+                const removed = await reservaItensModel.removeItem(
                     Number(req.params.id)
                 );
 

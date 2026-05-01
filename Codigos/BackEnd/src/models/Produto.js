@@ -1,41 +1,83 @@
-const Produto = (sequelize, DataTypes) => {
-  const Produto = sequelize.define(
-    "Produto",
+import { DataTypes } from "sequelize";
+
+export default (sequelize) => {
+  const Produtos = sequelize.define(
+    "Produtos",
     {
-      id_produtos: {
+      id_produto: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
+
       nome: {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
+
       preco: {
-        type: DataTypes.REAL,
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
-      quantidade: {
+
+      estoque: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0,
       },
-      imagem: {
-        type: DataTypes.STRING(255),
-        allowNull: true,
-      },
-      categoria_id_categoria: {
+
+      id_categoria: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
     },
     {
       tableName: "produtos",
-      timestamps: false,
     }
   );
 
-  return Produto;
-};
+  Produtos.decrementStock = async function (id_produto, quantidade) {
+    const produto = await this.findByPk(id_produto);
+    if (!produto) return null;
 
-export default Produto;
+    if (produto.estoque < quantidade) {
+      throw new Error("Estoque insuficiente");
+    }
+
+    produto.estoque -= quantidade;
+    return await produto.save();
+  };
+
+  // LISTAR
+  Produtos.listAll = async function () {
+    return await this.findAll();
+  };
+
+  // BUSCAR POR ID
+  Produtos.findById = async function (id) {
+    return await this.findByPk(id);
+  };
+
+  // CRIAR
+  Produtos.createItem = async function (data) {
+    return await this.create(data);
+  };
+
+  // UPDATE
+  Produtos.updateItem = async function (id, data) {
+    const produto = await this.findByPk(id);
+    if (!produto) return null;
+
+    return await produto.update(data);
+  };
+
+  // DELETE
+  Produtos.removeItem = async function (id) {
+    const produto = await this.findByPk(id);
+    if (!produto) return false;
+
+    await produto.destroy();
+    return true;
+  };
+
+  return Produtos;
+};

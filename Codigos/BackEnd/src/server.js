@@ -12,6 +12,7 @@ app.use(produtoRoutes);
 
 // ROTAS
 app.use("/api/reservaItens", reservaItensRoutes);
+app.use("/api/produtos", produtoRoutes);
 
 app.use((err, req, res, next) => {
   console.error("ERRO:", err);
