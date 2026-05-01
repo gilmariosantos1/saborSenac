@@ -48,11 +48,24 @@ export const produtoValidators = {
   ],
 };
 
+
+
 export function createProdutoController(produtoModel) {
   return {
+
     async list(req, res, next) {
       try {
-        const produtos = await produtoModel.listAll();
+        const { categoria } = req.query;
+
+        let produtos;
+
+        if (categoria) {
+          produtos = await produtoModel.findAll({
+            where: { id_categoria: Number(categoria) }
+          });
+        } else {
+          produtos = await produtoModel.findAll();
+        }
 
         return res.status(200).json(produtos);
       } catch (error) {

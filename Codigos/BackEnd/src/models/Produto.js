@@ -35,6 +35,12 @@ export default (sequelize) => {
     }
   );
 
+  Produtos.listByCategoria = async function (id_categoria) {
+    return await this.findAll({
+      where: { id_categoria }
+    });
+  };
+
   Produtos.decrementStock = async function (id_produto, quantidade) {
     const produto = await this.findByPk(id_produto);
     if (!produto) return null;

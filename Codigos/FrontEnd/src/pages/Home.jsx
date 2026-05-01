@@ -9,11 +9,18 @@ import banner from '../assets/imagens/banner.png';
 import carrinhoImg from '../assets/imagens/carrinho_de_compras.png';
 import logo from '../assets/imagens/logo_sabor_senac.svg';
 
-import {listarProdutos} from "../services/homeService";
+import { listarProdutos } from "../services/homeService";
 // import {listarProdutos, addCarrinho} from "../services/homeService";
 
 const Home = () => {
     const navigate = useNavigate();
+
+    const categoriasMap = {
+        salgados: 1,
+        doces: 2,
+        bebidas: 3
+    };
+
     const [categoria, setCategoria] = useState("salgados")
     const [produtos, setProdutos] = useState([]);
     const [pessoa, setPessoa] = useState({
@@ -28,15 +35,22 @@ const Home = () => {
     useEffect(() => {
         carregarProdutos();
     }, [categoria]);
-    
+
     const carregarProdutos = async () => {
         try {
             setLoading(true);
-            const response = await listarProdutos(categoria);
-            setProdutos(response.data.map((p) => ({
-                ...p,
-                quantidade_atual: p.quantidade > 0 ? 1 : 0
-            })));
+            const categoriaId = categoriasMap[categoria];
+            const response = await listarProdutos(categoriaId);
+
+            console.log("RESPOSTA:", response.data); // debug
+            setProdutos(
+                response.data.map((p) => ({
+                    ...p,
+                    quantidade_atual: p.estoque > 0 ? 1 : 0
+                }))
+            );
+            // setProdutos(response.data);
+
             setError(null);
         } catch (err) {
             console.error("Erro ao carregar produtos: ", err);
@@ -50,8 +64,8 @@ const Home = () => {
         try {
             await addCarrinho(carrinho)
             console.log("Adicionado com sucesso");
-        } catch(e) {
-            console.error("Erro ao adicionar ao carrinho",e);
+        } catch (e) {
+            console.error("Erro ao adicionar ao carrinho", e);
         }
     }
     async function reservarAdicionarAoCarrinho() {
@@ -59,17 +73,17 @@ const Home = () => {
             await addCarrinho(carrinho)
             console.log("Adicionado com sucesso");
             navigate("/carrinho");
-        } catch(e) {
-            console.error("Erro ao adicionar ao carrinho",e);
+        } catch (e) {
+            console.error("Erro ao adicionar ao carrinho", e);
         }
     }
 
     const handleAddCarrinho = (produto) => {
-        if (produto.quantidade === 0) return alert("Produto sem estoque!");
+        if (produto.estoque === 0) return alert("Produto sem estoque!");
 
         const item = {
             idPessoa: pessoa.id,
-            idProduto: produto.id,
+            idProduto: produto.id_produto,
             nome: produto.nome,
             preco: produto.preco,
             quantidade: produto.quantidade_atual
@@ -79,11 +93,11 @@ const Home = () => {
     };
 
     const handleReservar = (produto) => {
-        if (produto.quantidade === 0) return alert("Produto sem estoque!");
+        if (produto.estoque === 0) return alert("Produto sem estoque!");
 
         const item = {
             idPessoa: pessoa.id,
-            idProduto: produto.id,
+            idProduto: produto.id_produto,
             nome: produto.nome,
             preco: produto.preco,
             quantidade: produto.quantidade_atual
@@ -98,51 +112,51 @@ const Home = () => {
 
     function aumentarQuantidade(id) {
         setProdutos((prev) =>
-        prev.map((produto) =>
-        produto.id === id
-            ? {
-                ...produto,
-                quantidade_atual:
-                produto.quantidade_atual <
-                produto.quantidade
-                    ? produto.quantidade_atual + 1
-                    : produto.quantidade_atual
-            }
-            : produto
-        )
-  );
-}
+            prev.map((produto) =>
+                produto.id_produto === id
+                    ? {
+                        ...produto,
+                        quantidade_atual:
+                            produto.quantidade_atual <
+                                produto.estoque
+                                ? produto.quantidade_atual + 1
+                                : produto.quantidade_atual
+                    }
+                    : produto
+            )
+        );
+    }
     function diminuirQuantidade(id) {
         setProdutos((prevProdutos) =>
-        prevProdutos.map((produto) =>
-        produto.id === id
-            ? {
-                ...produto,
-                quantidade_atual:
-                produto.quantidade_atual > 0
-                    ? produto.quantidade_atual - 1
-                    : 0
-            }
-            : produto
-    )
-  );
-}
+            prevProdutos.map((produto) =>
+                produto.id_produto === id
+                    ? {
+                        ...produto,
+                        quantidade_atual:
+                            produto.quantidade_atual > 0
+                                ? produto.quantidade_atual - 1
+                                : 0
+                    }
+                    : produto
+            )
+        );
+    }
 
     const BASE_URL = "http://localhost:3000"; // backend
     const DEFAULT_IMAGE = logo;
 
     function getImageUrl(imagem) {
-    try {
-        if (!imagem || imagem.trim() === "") {
-        return DEFAULT_IMAGE;
-        }
+        try {
+            if (!imagem || imagem.trim() === "") {
+                return DEFAULT_IMAGE;
+            }
 
-        // return `${BASE_URL}/uploads/produtos/${imagem}`;
-        return DEFAULT_IMAGE;  
-    } catch (error) {
-        return DEFAULT_IMAGE;
+            // return `${BASE_URL}/uploads/produtos/${imagem}`;
+            return DEFAULT_IMAGE;
+        } catch (error) {
+            return DEFAULT_IMAGE;
+        }
     }
-    }   
 
 
 
@@ -185,28 +199,28 @@ const Home = () => {
                 {!loading && produtos.length > 0 && (
                     <div className={styles.cardapio}>
                         {produtos.map((produto) => (
-                            <form onSubmit={onSubmit} key={produto.id} className={`${produto.quantidade === 0 ? styles.item_sem_estoque : ""} ${styles.cardapio_item}`}>
+                            <form onSubmit={onSubmit} key={produto.id_produto} className={`${produto.estoque === 0 ? styles.item_sem_estoque : ""} ${styles.cardapio_item}`}>
                                 <div className={styles.cardapio_item_head}>
-                                    <div className={`${styles.cardapio_item_head_qtd} ${produto.quantidade === 0 ? styles.bg_sem_estoque : ""}`}>{produto.quantidade}</div>
+                                    <div className={`${styles.cardapio_item_head_qtd} ${produto.estoque === 0 ? styles.bg_sem_estoque : ""}`}>{produto.estoque}</div>
                                     <img src={getImageUrl(produto.imagem)} alt={produto.nome} />
                                     <h4>{produto.nome}</h4>
                                 </div>
                                 <div className={styles.cardapio_item_mid}>
                                     <div>R$ {produto.preco},00</div>
                                     <div className={styles.cardapio_item_mid_qtd}>
-                                        <div onClick={() => diminuirQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>-</div>
-                                            <input type="number" value={produto.quantidade_atual} readOnly disabled={produto.quantidade === 0}/>
-                                        <div onClick={() => aumentarQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>+</div>
+                                        <div onClick={() => diminuirQuantidade(produto.id_produto)} className={styles.cardapio_item_mid_seletores}>-</div>
+                                        <input type="number" value={produto.quantidade_atual ?? 0} readOnly disabled={produto.estoque === 0} />
+                                        <div onClick={() => aumentarQuantidade(produto.id_produto)} className={styles.cardapio_item_mid_seletores}>+</div>
                                     </div>
                                 </div>
                                 <div className={styles.cardapio_item_bottom}>
-                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.quantidade === 0 ? styles.cardapio_item_bottom_add_desativado : "" }`}>Adcionar ao carrinho</div>
-                                    <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.quantidade === 0}>Reservar</button>
+                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.estoque === 0 ? styles.cardapio_item_bottom_add_desativado : ""}`}>Adcionar ao carrinho</div>
+                                    <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.estoque === 0}>Reservar</button>
                                 </div>
                             </form>
                         ))}
 
-                        </div>
+                    </div>
                 )}
 
                 <div className={styles.paginacao}>

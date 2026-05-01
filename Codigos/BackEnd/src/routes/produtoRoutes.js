@@ -12,7 +12,7 @@ import { handleValidation } from "../middleware/handleValidation.js";
 
 const router = Router();
 
-const produtoModel = models.Produto;
+const produtoModel = models.Produtos;
 const controller = createProdutoController(produtoModel);
 
 // Configuração do multer
