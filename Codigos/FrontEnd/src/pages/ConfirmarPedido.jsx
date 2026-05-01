@@ -1,14 +1,37 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Footer from "../components/footer";
 import Header from "../components/header";
+import { getPedidoByNumero, updateStatusPedido, listPedidos } from "../services/pedidoService";
 import '../styles/confirmarpedido.css'
 
 const ConfirmarPedido = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [pedido, setPedido] = useState(null);
+  const [pedidos, setPedidos] = useState([]);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+
+  const numeroPedido = location.state?.numeroPedido;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const histResponse = await listPedidos();
+        setPedidos(histResponse.data);
+
+        if (numeroPedido) {
+          const pedResponse = await getPedidoByNumero(numeroPedido);
+          setPedido(pedResponse.data);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    };
+    fetchData();
+  }, [numeroPedido]);
 
   const handleCancelClick = () => setShowCancelModal(true);
   const handleConfirmClick = () => setShowConfirmModal(true);
@@ -19,19 +42,31 @@ const ConfirmarPedido = () => {
     setSuccessMessage("");
   };
 
-  const handleActionConfirm = (type) => {
-    if (type === "cancel") {
-      setSuccessMessage("Pedido cancelado com sucesso ✅");
-    } else {
-      setSuccessMessage("Pedido confirmado com sucesso ✅");
-    }
+  const handleActionConfirm = async (type) => {
+    if (!pedido) return;
 
-    setShowCancelModal(false);
-    setShowConfirmModal(false);
+    try {
+      const status = type === "cancel" ? "Cancelado" : "Confirmado";
+      await updateStatusPedido(pedido.id_reserva, status);
+      
+      setSuccessMessage(`Pedido ${status.toLowerCase()} com sucesso ✅`);
+      
+      // Atualiza o pedido localmente para refletir a mudança (se necessário)
+      setPedido({ ...pedido, status });
+      
+      // Atualiza o histórico
+      const histResponse = await listPedidos();
+      setPedidos(histResponse.data);
 
-    setTimeout(() => {
+      setShowCancelModal(false);
+      setShowConfirmModal(false);
+
+      setTimeout(() => {
         setSuccessMessage("");
-    }, 2000);
+      }, 2000);
+    } catch (error) {
+      console.error("Erro ao atualizar pedido:", error);
+    }
   };
 
   return (
@@ -43,32 +78,32 @@ const ConfirmarPedido = () => {
           <h3>Consultar pedido</h3>
 
           <label>Número do Pedido</label>
-          <input type="text" placeholder="000" readOnly />
+          <input type="text" value={pedido?.pedido || "---"} readOnly />
 
           <label>Nome</label>
-          <input type="text" placeholder="Value" readOnly />
+          <input type="text" value={pedido?.pessoa?.nome || "---"} readOnly />
 
           <div className="row">
             <div>
               <label>Produto</label>
-              <input type="text" placeholder="Salgado" readOnly />
+              <input type="text" value={pedido?.produto?.nome || "---"} readOnly />
             </div>
             <div>
               <label>Quantidade</label>
-              <input type="text" placeholder="0" readOnly />
+              <input type="text" value="1" readOnly />
             </div>
           </div>
 
           <label>Preço total</label>
           <div className="preco-total">
-            <input type="text" placeholder="R$: 0" readOnly />
+            <input type="text" value={`R$: ${pedido?.produto?.preco?.toFixed(2) || "0.00"}`} readOnly />
           </div>
 
           <div className="botoes-confirmar">
-            <button className="btn-cancelar" onClick={handleCancelClick}>
+            <button className="btn-cancelar" onClick={handleCancelClick} disabled={!pedido}>
               Cancelar
             </button>
-            <button className="btn-confirmar" onClick={handleConfirmClick}>
+            <button className="btn-confirmar" onClick={handleConfirmClick} disabled={!pedido}>
               Confirma
             </button>
           </div>
@@ -89,13 +124,19 @@ const ConfirmarPedido = () => {
               </tr>
             </thead>
             <tbody>
-              {[...Array(12)].map((_, i) => (
-                <tr key={i}>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+              {pedidos.length > 0 ? (
+                pedidos.map((p) => (
+                  <tr key={p.id_reserva}>
+                    <td>{p.pedido}</td>
+                    <td>{p.status}</td>
+                    <td>R$: {p.produto?.preco?.toFixed(2) || "0.00"}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3">Nenhum pedido encontrado</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </section>
