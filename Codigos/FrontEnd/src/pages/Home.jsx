@@ -9,7 +9,7 @@ import banner from '../assets/imagens/banner.png';
 import carrinhoImg from '../assets/imagens/carrinho_de_compras.png';
 import logo from '../assets/imagens/logo_sabor_senac.svg';
 
-import {listarProdutos} from "../services/homeService";
+import { listarProdutos } from "../services/homeService";
 // import {listarProdutos, addCarrinho} from "../services/homeService";
 
 const Home = () => {
@@ -28,7 +28,7 @@ const Home = () => {
     useEffect(() => {
         carregarProdutos();
     }, [categoria]);
-    
+
     const carregarProdutos = async () => {
         try {
             setLoading(true);
@@ -50,8 +50,8 @@ const Home = () => {
         try {
             await addCarrinho(carrinho)
             console.log("Adicionado com sucesso");
-        } catch(e) {
-            console.error("Erro ao adicionar ao carrinho",e);
+        } catch (e) {
+            console.error("Erro ao adicionar ao carrinho", e);
         }
     }
     async function reservarAdicionarAoCarrinho() {
@@ -59,8 +59,8 @@ const Home = () => {
             await addCarrinho(carrinho)
             console.log("Adicionado com sucesso");
             navigate("/carrinho");
-        } catch(e) {
-            console.error("Erro ao adicionar ao carrinho",e);
+        } catch (e) {
+            console.error("Erro ao adicionar ao carrinho", e);
         }
     }
 
@@ -98,51 +98,51 @@ const Home = () => {
 
     function aumentarQuantidade(id) {
         setProdutos((prev) =>
-        prev.map((produto) =>
-        produto.id === id
-            ? {
-                ...produto,
-                quantidade_atual:
-                produto.quantidade_atual <
-                produto.quantidade
-                    ? produto.quantidade_atual + 1
-                    : produto.quantidade_atual
-            }
-            : produto
-        )
-  );
-}
+            prev.map((produto) =>
+                produto.id === id
+                    ? {
+                        ...produto,
+                        quantidade_atual:
+                            produto.quantidade_atual <
+                                produto.quantidade
+                                ? produto.quantidade_atual + 1
+                                : produto.quantidade_atual
+                    }
+                    : produto
+            )
+        );
+    }
     function diminuirQuantidade(id) {
         setProdutos((prevProdutos) =>
-        prevProdutos.map((produto) =>
-        produto.id === id
-            ? {
-                ...produto,
-                quantidade_atual:
-                produto.quantidade_atual > 0
-                    ? produto.quantidade_atual - 1
-                    : 0
-            }
-            : produto
-    )
-  );
-}
+            prevProdutos.map((produto) =>
+                produto.id === id
+                    ? {
+                        ...produto,
+                        quantidade_atual:
+                            produto.quantidade_atual > 0
+                                ? produto.quantidade_atual - 1
+                                : 0
+                    }
+                    : produto
+            )
+        );
+    }
 
     const BASE_URL = "http://localhost:3000"; // backend
     const DEFAULT_IMAGE = logo;
 
     function getImageUrl(imagem) {
-    try {
-        if (!imagem || imagem.trim() === "") {
-        return DEFAULT_IMAGE;
-        }
+        try {
+            if (!imagem || imagem.trim() === "") {
+                return DEFAULT_IMAGE;
+            }
 
-        // return `${BASE_URL}/uploads/produtos/${imagem}`;
-        return DEFAULT_IMAGE;  
-    } catch (error) {
-        return DEFAULT_IMAGE;
+            // return `${BASE_URL}/uploads/produtos/${imagem}`;
+            return DEFAULT_IMAGE;
+        } catch (error) {
+            return DEFAULT_IMAGE;
+        }
     }
-    }   
 
 
 
@@ -160,7 +160,7 @@ const Home = () => {
                         <h1>Cardápio</h1>
                     </div>
                     <div>
-                        <p>Reserve seu <span>sabor</span>, viva a experiência <span>Senac</span>.</p>
+                        <p>Reserve seu <span>sabor,</span> viva a experiência <span>Senac.</span></p>
                     </div>
                 </div>
                 <div className={styles.banner}>
@@ -195,18 +195,18 @@ const Home = () => {
                                     <div>R$ {produto.preco},00</div>
                                     <div className={styles.cardapio_item_mid_qtd}>
                                         <div onClick={() => diminuirQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>-</div>
-                                            <input type="number" value={produto.quantidade_atual} readOnly disabled={produto.quantidade === 0}/>
+                                        <input type="number" value={produto.quantidade_atual} readOnly disabled={produto.quantidade === 0} />
                                         <div onClick={() => aumentarQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>+</div>
                                     </div>
                                 </div>
                                 <div className={styles.cardapio_item_bottom}>
-                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.quantidade === 0 ? styles.cardapio_item_bottom_add_desativado : "" }`}>Adcionar ao carrinho</div>
+                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.quantidade === 0 ? styles.cardapio_item_bottom_add_desativado : ""}`}>Adcionar ao carrinho</div>
                                     <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.quantidade === 0}>Reservar</button>
                                 </div>
                             </form>
                         ))}
 
-                        </div>
+                    </div>
                 )}
 
                 <div className={styles.paginacao}>
