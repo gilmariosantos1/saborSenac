@@ -22,29 +22,29 @@ export default function PainelAtentende() {
 
                     <div className={styles.icons}>
                         <div>
-                            <Link to="#" className={styles.icon}>
+                            <Link to="/consultapedido" className={styles.icon}>
                                 <img src={icon1} alt='Icone de consultar' />
                             </Link>
                             <p>Consultar reserva</p>
                         </div>
 
                         <div>
-                            <Link to="#" className={styles.icon}>
-                                <img src={icon2} alt='Icone de consultar' />
+                            <Link to="/cadastrar-produto" className={styles.icon}>
+                                <img src={icon2} alt='Icone de cadastrar' />
                             </Link>
                             <p>Cadastrar produto</p>
                         </div>
 
                         <div>
-                            <Link to="#" className={styles.icon}>
-                                <img src={icon4} alt='Icone de consultar' />
+                            <Link to="/controledeestoque" className={styles.icon}>
+                                <img src={icon4} alt='Icone de controle de estoque' />
                             </Link>
                             <p>Controle de estoque</p>
                         </div>
 
                         <div>
                             <Link to="#" className={styles.icon}>
-                                <img src={icon3} alt='Icone de consultar' />
+                                <img src={icon3} alt='Icone de painel de sugestões' />
                             </Link>
                             <p>Painel de sugestões</p>
                         </div>

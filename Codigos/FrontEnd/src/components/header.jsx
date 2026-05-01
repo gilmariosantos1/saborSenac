@@ -14,7 +14,7 @@ const Header = () => {
         navigate('/')
     }
     const handleSugestoes = () => {
-        navigate('/sugestoes');
+        navigate('/DuvidasSugestoes');
     }
     const handleLogin = () => {
         navigate('/login');
@@ -23,8 +23,8 @@ const Header = () => {
         navigate('/cadastro');
     }
     // ✅ NOVO: navega para a página de cadastrar produto
-    const handleCadastrarProduto = () => {
-        navigate('/cadastrar-produto');
+    const handlePainelAtendente = () => {
+        navigate('/painelatendente');
     }
     const handleSair = () => {
         navigate('/sair');
@@ -62,9 +62,9 @@ const Header = () => {
                 </nav>
                 <div id="menu_drop">
                     {/* ✅ NOVO: item no dropdown para cadastrar produto (visível só p/ ADM) */}
-                    <div onClick={handleCadastrarProduto} className="menu_drop_item">
+                    <div onClick={handlePainelAtendente} className="menu_drop_item">
                         <img src={logout_icon} alt="" />
-                        <div>Cadastrar Produto</div>
+                        <div>Painel do Atendente</div>
                     </div>
                     <div onClick={handleSair} className="menu_drop_item">
                         <img src={logout_icon} alt="" />
