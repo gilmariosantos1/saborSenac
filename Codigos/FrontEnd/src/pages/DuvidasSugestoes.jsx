@@ -2,8 +2,8 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../components/footer";
 import Header from '../components/header'
 import './DuvidasSugestoes.css';
-import Modal from "./Modal";
 import { useState } from "react";
+import Modal from "./Modal";
 
 const DuvidasSugestoes = () => {
   const navigate = useNavigate();
@@ -12,6 +12,7 @@ const DuvidasSugestoes = () => {
         navigate('./SugestoesConfirmação');
     }
     const [openModal, setOpenModal] = useState(false)
+    const [openconfirmaModal, setOpenConfirmaModal] = useState(false)
 
   return (
     <>
@@ -36,7 +37,7 @@ const DuvidasSugestoes = () => {
           <label>Digite aqui sua dúvida, sugestão ou reclamação:</label>
           <textarea rows="6"></textarea>
 
-          <button className="submit" onClick={handleSugestoesConfirmação}>ENVIAR</button>
+          <button className="submit" onClick={() => setOpenModal(true)}>ENVIAR</button>
         </div>
 
         {/* ÍCONES LATERAIS */}
@@ -45,17 +46,16 @@ const DuvidasSugestoes = () => {
           <div className="icon whatsapp">WA</div>
         </div>
 
-        <button onClick={() => setOpenModal(true)}> Abrir modal</button>
+        <button onClick={() => setOpenConfirmaModal(true)}>Confirma</button>
 
         <Modal isOpen={openModal} setModalOpen={( ) => setOpenModal(!openModal)}>
-          Conteúdo do Modal
+          <h5 className="text">REALMENTE DESEJA ENVIAR ESSE COMENTÁRIO?</h5>
         </Modal>
 
       </div>
 
       < Footer />
     </>
-
 
   )
 }

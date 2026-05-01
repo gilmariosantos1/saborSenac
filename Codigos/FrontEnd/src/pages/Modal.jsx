@@ -12,7 +12,7 @@ const BLACKGROUND_STYLE = {
 const MODAL_STYLE = {
     position:'fixed',
     top:'25%',
-    left:'35%',
+    left:'20%',
     tranform:'translate(-50%,-50%)',
     padding: '150px',
     backgroundColor: '#fff',
@@ -20,7 +20,7 @@ const MODAL_STYLE = {
     Color: 'Black'
 }
 
-export default function Modal({ isOpen, children }) {
+export default function Modal({ isOpen, setModalOpen, children }) {
     if(isOpen) {
         return(
             <div style={BLACKGROUND_STYLE}>
@@ -28,7 +28,8 @@ export default function Modal({ isOpen, children }) {
                     <div>
                         {children}
                     </div>
-                    <button onClick={setModelOpen}>Fechar</button>
+                    <button onClick={setModalOpen}>Fechar</button>
+                    <button onClick={0}>Confirma</button>
                 </div>
 
             </div>
