@@ -9,8 +9,7 @@ import banner from '../assets/imagens/banner.png';
 import carrinhoImg from '../assets/imagens/carrinho_de_compras.png';
 import logo from '../assets/imagens/logo_sabor_senac.svg';
 
-import { listarProdutos } from "../services/homeService";
-// import {listarProdutos, addCarrinho} from "../services/homeService";
+import {listarProdutos, addCarrinho} from "../services/homeService";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -42,14 +41,12 @@ const Home = () => {
             const categoriaId = categoriasMap[categoria];
             const response = await listarProdutos(categoriaId);
 
-            console.log("RESPOSTA:", response.data); // debug
             setProdutos(
                 response.data.map((p) => ({
                     ...p,
                     quantidade_atual: p.estoque > 0 ? 1 : 0
                 }))
             );
-            // setProdutos(response.data);
 
             setError(null);
         } catch (err) {
@@ -89,7 +86,7 @@ const Home = () => {
             quantidade: produto.quantidade_atual
         };
         setCarrinho(item);
-        // adicionarAoCarrinho(item);
+        adicionarAoCarrinho(item);
     };
 
     const handleReservar = (produto) => {
@@ -103,7 +100,7 @@ const Home = () => {
             quantidade: produto.quantidade_atual
         };
         setCarrinho(item);
-        // reservarAdicionarAoCarrinho(item);
+        reservarAdicionarAoCarrinho(item);
     };
 
     async function onSubmit(e) {
@@ -206,7 +203,12 @@ const Home = () => {
                                     <h4>{produto.nome}</h4>
                                 </div>
                                 <div className={styles.cardapio_item_mid}>
-                                    <div>R$ {produto.preco},00</div>
+                                    <div>
+                                        R$ {Number(produto.preco).toLocaleString("pt-BR", {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        })}
+                                    </div>
                                     <div className={styles.cardapio_item_mid_qtd}>
                                         <div onClick={() => diminuirQuantidade(produto.id_produto)} className={styles.cardapio_item_mid_seletores}>-</div>
                                         <input type="number" value={produto.quantidade_atual ?? 0} readOnly disabled={produto.estoque === 0} />
