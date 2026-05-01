@@ -4,10 +4,8 @@ export const cadastrarProduto = async (req, res) => {
   try {
     const { nome, preco, categoria_id_categoria } = req.body;
 
-    // Caminho da imagem salvo pelo multer
     const imagem = req.file ? `uploads/produtos/${req.file.filename}` : null;
 
-    // Validações básicas
     if (!nome || !preco || !categoria_id_categoria) {
       return res.status(400).json({ mensagem: "Preencha todos os campos obrigatórios." });
     }
