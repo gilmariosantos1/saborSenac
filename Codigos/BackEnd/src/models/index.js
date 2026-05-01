@@ -9,7 +9,6 @@ const __dirname = path.dirname(__filename);
 
 const models = {};
 
-// Carregar dinamicamente os modelos
 const modelDirs = [__dirname];
 
 for (const dir of modelDirs) {

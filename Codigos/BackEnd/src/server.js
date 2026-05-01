@@ -1,25 +1,39 @@
-import express from "express";
-import cors from "cors";
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import models from './models/index.js';
 import produtoRoutes from "./routes/produtoRoutes.js";
+import carrinhoRoutes from './routes/carrinhoRoutes.js';
+import pedidoRoutes from './routes/pedidoRoutes.js';
 
-import reservaItensRoutes from "./routes/reservaItensRoutes.js";
+dotenv.config({
+    path: '../.env'
+})
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(produtoRoutes);
+
+const PORT = process.env.PORT || 3000;
 
 // ROTAS
-app.use("/api/reservaItens", reservaItensRoutes);
+app.use("/api/produto", produtoRoutes);
+app.use("/api/carrinho", carrinhoRoutes);
+app.use("/api/pedidos", pedidoRoutes);
 
-app.use((err, req, res, next) => {
-  console.error("ERRO:", err);
+async function testConnection() {
+    try {
+        await models.sequelize.authenticate()
+        console.log('Banco conectado com sucesso! server.js');
 
-  return res.status(500).json({
-    message: "Erro interno do servidor",
-    error: err.message
-  });
-});
+        app.listen(PORT, () => {
+            console.log('Servidor rodando na porta', PORT)
+        })
 
-export default app;
+    } catch (error) {
+        console.error('Erro ao conectar no banco:', error.message);
+    }
+}
+
+testConnection();

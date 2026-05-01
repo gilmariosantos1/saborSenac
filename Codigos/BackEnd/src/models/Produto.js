@@ -35,6 +35,13 @@ const Produto = (sequelize, DataTypes) => {
     }
   );
 
+  Produto.associate = (models) => {
+    Produto.hasMany(models.Reserva, {
+      foreignKey: "produtos_id_produtos",
+      as: "reservas",
+    });
+  };
+
   return Produto;
 };
 
