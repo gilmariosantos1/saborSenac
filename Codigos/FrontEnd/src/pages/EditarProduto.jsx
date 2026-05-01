@@ -12,13 +12,13 @@ const EditarProduto = () => {
             <Header />
             <div >
                 <div className={Style.logo}>
-
+                    <img src={logo} alt="Logo" />
                 </div>
                 <div className={Style.EditarProduto}>
 
                     <main className={Style.main}>
                         <div className={Style.card}>
-                            <h2>Editar produto</h2>
+                            <h2>Atualizar Produto</h2>
 
                             <label>Nome</label>
                             <input type="text" />
@@ -27,14 +27,20 @@ const EditarProduto = () => {
                             <input type="text" />
 
                             <label>Categoria</label>
-                            <input type="text" />
+
+                            <select className={Style.select}>
+                                <option value="" disabled selected>Selecione uma categoria</option>
+                                <option value="">Salgados</option>
+                                <option value="">Doces</option>
+                                <option value="">Bebidas</option>
+                            </select>
 
                             <label>Imagem</label>
-                            <div className={Style.upload}>Add file 📄</div>
+                            <input type="file" className={Style.upload} />
 
                             <div className={Style.buttons}>
+                                <button className={Style.confirm}>Atualizar</button>
                                 <button className={Style.cancel}>Cancelar</button>
-                                <button className={Style.confirm}>Confirmar</button>
                             </div>
                         </div>
                     </main>
