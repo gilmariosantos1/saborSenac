@@ -48,12 +48,12 @@ const ConfirmarPedido = () => {
     try {
       const status = type === "cancel" ? "Cancelado" : "Confirmado";
       await updateStatusPedido(pedido.id_reserva, status);
-      
+
       setSuccessMessage(`Pedido ${status.toLowerCase()} com sucesso ✅`);
-      
+
       // Atualiza o pedido localmente para refletir a mudança (se necessário)
       setPedido({ ...pedido, status });
-      
+
       // Atualiza o histórico
       const histResponse = await listPedidos();
       setPedidos(histResponse.data);
@@ -64,13 +64,21 @@ const ConfirmarPedido = () => {
       setTimeout(() => {
         setSuccessMessage("");
         navigate('/Consultapedido');
-    }, 2000);
+      }, 2000);
+    } catch (error) {
+      console.error("Erro ao atualizar pedido:", error);
+      setSuccessMessage("Erro ao atualizar pedido");
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate('/Consultapedido');
+      }, 2000);
+    }
   };
 
   return (
     <>
       <Header />
-      
+
       <main className="consulta-container">
         <section className="consulta-box">
           <h3>Consultar pedido</h3>
@@ -176,5 +184,6 @@ const ConfirmarPedido = () => {
     </>
   );
 }
+
 
 export default ConfirmarPedido;

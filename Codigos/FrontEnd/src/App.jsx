@@ -9,25 +9,16 @@ import EditarProduto from "./pages/EditarProduto";
 import PainelAtentende from './pages/painelAtendente';
 import CadastrarProduto from './pages/CadastrarProduto';
 import Agendamento from './pages/Agendamento';
-import Consultapedido from './pages/consultapedido';
+import Consultapedido from './pages/Consultapedido';
 import ConfirmarPedido from './pages/ConfirmarPedido';
 import ControleDeEstoque from './pages/ControleDeEstoque';
 import AdicionarProduto from './pages/Adicionarproduto';
-
-import EditarProduto from "./pages/EditarProduto";
-import PainelAtentende from './pages/painelAtendente';
-import CadastrarProduto from './pages/CadastrarProduto';
 
 import '@fontsource/open-sans';
 import '@fontsource/open-sans/700.css';
 import '@fontsource/inter';
 
-import Consultapedido from './pages/Consultapedido';
-import ConfirmarPedido from './pages/ConfirmarPedido';
 // import '@fontsource/sanchez';
-
-import ControleDeEstoque from './pages/ControleDeEstoque';
-import AdicionarProduto from './pages/Adicionarproduto';
 //import DuvidasSugestoes from './pages/DuvidasSugestoes';
 
 function App() {
@@ -46,6 +37,7 @@ function App() {
         <Route path='/painelAtendente' element={<PainelAtentende />} />
         <Route path='/controledeestoque' element={<ControleDeEstoque />} />
         <Route path='/cadastrar-produto' element={<CadastrarProduto />} />
+        <Route path='/agendamento' element={<Agendamento />} />
         {/* <Route path='/DuvidasSugestoes' element={<DuvidasSugestoes />} /> */}
       </Routes>
     </>

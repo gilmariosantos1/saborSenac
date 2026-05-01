@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Footer from "../components/footer";
 import Header from '../components/header'
-import './Agendamento.css';
-import imagem from "../assets/imagens/logo_sabor_senac.svg"; 
+import '../styles/Agendamento.css';
+import imagem from "../assets/imagens/logo_sabor_senac.svg";
 
 const Agendamento = () => {
   const [agendado, setAgendado] = useState(false);
@@ -77,17 +76,17 @@ const Agendamento = () => {
           </div>
 
           {/* TIMER */}
-<div className="timer">
-  <span className="titulo-timer">
-    Tempo para resgatar o lanche:
-  </span>
+          <div className="timer">
+            <span className="titulo-timer">
+              Tempo para resgatar o lanche:
+            </span>
 
-  <small className="texto-timer">
-    (Se o tempo for excedido, o pedido será automaticamente cancelado.)
-  </small>
+            <small className="texto-timer">
+              (Se o tempo for excedido, o pedido será automaticamente cancelado.)
+            </small>
 
-  <strong className="tempo">10:00</strong>
-</div>
+            <strong className="tempo">10:00</strong>
+          </div>
 
           {/* BOTÃO */}
           <button
