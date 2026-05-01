@@ -31,6 +31,7 @@ const ConfirmarPedido = () => {
 
     setTimeout(() => {
         setSuccessMessage("");
+        navigate('/consultapedido');
     }, 2000);
   };
 

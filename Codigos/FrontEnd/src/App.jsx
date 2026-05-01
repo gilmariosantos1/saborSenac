@@ -19,6 +19,7 @@ import '@fontsource/sanchez';
 
 import ControleDeEstoque from './pages/ControleDeEstoque';
 import AdicionarProduto from './pages/Adicionarproduto';
+//import DuvidasSugestoes from './pages/DuvidasSugestoes';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path='/painelAtendente' element={<PainelAtentende />} />
         <Route path='/controledeestoque' element={<ControleDeEstoque />} />
         <Route path='/cadastrar-produto' element={<CadastrarProduto />} />
+        {/* <Route path='/DuvidasSugestoes' element={<DuvidasSugestoes />} /> */}
       </Routes>
     </>
   )
