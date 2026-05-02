@@ -7,7 +7,7 @@ const Reserva = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      pedido: {
+      id_pessoa: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -16,23 +16,10 @@ const Reserva = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: DataTypes.NOW,
       },
-      tipo_pagamento: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-      },
       status: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.ENUM('ABERTA', 'PAGA', 'CANCELADA'),
         allowNull: false,
-      },
-      pessoas_id_pessoas: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true, 
-      },
-      produtos_id_produtos: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true, 
+        defaultValue: 'ABERTA',
       },
     },
     {
@@ -43,12 +30,12 @@ const Reserva = (sequelize, DataTypes) => {
 
   Reserva.associate = (models) => {
     Reserva.belongsTo(models.Pessoa, {
-      foreignKey: "pessoas_id_pessoas",
+      foreignKey: "id_pessoa",
       as: "pessoa",
     });
-    Reserva.belongsTo(models.Produtos, {
-      foreignKey: "produtos_id_produtos",
-      as: "produto",
+    Reserva.hasMany(models.ReservaItens, {
+      foreignKey: "id_reserva",
+      as: "itens",
     });
   };
 

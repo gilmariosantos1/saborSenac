@@ -33,10 +33,30 @@ export function createReservaItensController(reservaItensModel) {
     return {
         async list(req, res, next) {
             try {
-                const itens =
-                    await reservaItensModel.listAll();
+                const where = {};
+                if (req.query.id_pessoa) {
+                    where.id_pessoa = Number(req.query.id_pessoa);
+                }
 
-                return res.status(200).json(itens);
+                const itens = await reservaItensModel.findAll({
+                    where,
+                    include: [
+                        {
+                            model: models.Produtos,
+                            as: "produto",
+                            attributes: ["nome", "imagem"],
+                        },
+                    ],
+                });
+
+                // Achata o resultado para facilitar o frontend
+                const resultado = itens.map((item) => ({
+                    ...item.toJSON(),
+                    nome: item.produto?.nome,
+                    imagem: item.produto?.imagem,
+                }));
+
+                return res.status(200).json(resultado);
             } catch (error) {
                 return next(error);
             }

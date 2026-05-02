@@ -13,6 +13,7 @@ import Consultapedido from './pages/Consultapedido';
 import ConfirmarPedido from './pages/ConfirmarPedido';
 import ControleDeEstoque from './pages/ControleDeEstoque';
 import AdicionarProduto from './pages/Adicionarproduto';
+import Carrinho from './pages/Carrinho';
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +37,7 @@ function App() {
         <Route path='/painelAtendente' element={<PainelAtentende />} />
         <Route path='/controledeestoque' element={<ControleDeEstoque />} />
         <Route path='/cadastrar-produto' element={<CadastrarProduto />} />
+        <Route path='/carrinho' element={<Carrinho />} />
         <Route path='/agendamento' element={<Agendamento />} />
         {/* <Route path='/DuvidasSugestoes' element={<DuvidasSugestoes />} /> */}
       </Routes>

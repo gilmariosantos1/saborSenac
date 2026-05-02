@@ -10,7 +10,7 @@ import banner from '../assets/imagens/banner.png';
 import carrinhoImg from '../assets/imagens/carrinho_de_compras.png';
 import logo from '../assets/imagens/logo_sabor_senac.svg';
 
-import { listarProdutos, addCarrinho } from "../services/homeService";
+import { listarProdutos, adicionarAoCarrinho, reservar } from "../services/homeService";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -59,84 +59,50 @@ const Home = () => {
         }
     };
 
-    async function adicionarAoCarrinho(item) {
+    const handleAddCarrinho = async (produto) => {
+        if (produto.estoque === 0) return toast.warning("Produto sem estoque");
+        if (produto.quantidade_atual < 1) return toast.warning("Selecione ao menos 1 unidade");
+
         try {
-            await addCarrinho(item)
-            toast.success("Adicionado com sucesso");
-        } catch (e) {
-            console.error("Erro ao adicionar ao carrinho", e);
-            toast.error("Erro ao adicionar ao carrinho");
-        }
-    }
-    async function reservarAdicionarAoCarrinho(item) {
-        try {
-            await addCarrinho(item)
-            toast.success("Adicionado com sucesso");
-            navigate("/carrinho");
-        } catch (e) {
-            console.error("Erro ao adicionar ao carrinho", e);
-            toast.error("Erro ao adicionar ao carrinho");
-        }
-    }
-
-    const handleAddCarrinho = (produto) => {
-        if (produto.estoque === 0) {
-            return toast.warning("Produto sem estoque");
-        }
-
-        const itemExistente = carrinho.find(
-            (item) => item.id_produto === produto.id_produto
-        );
-
-        const quantidadeAtualCarrinho = itemExistente
-            ? itemExistente.quantidade
-            : 0;
-
-        const novaQuantidade =
-            quantidadeAtualCarrinho + produto.quantidade_atual;
-
-        if (novaQuantidade > produto.estoque) {
-            return toast.error("Quantidade total excede o estoque!");
-        }
-
-        const item = {
-            id_pessoa: pessoa.id,
-            id_produto: produto.id_produto,
-            nome: produto.nome,
-            preco_unitario: produto.preco,
-            quantidade: produto.quantidade_atual
-        };
-
-        // Atualiza carrinho local
-        if (itemExistente) {
-            setCarrinho(prev =>
-                prev.map(i =>
-                    i.id_produto === produto.id_produto
-                        ? { ...i, quantidade: novaQuantidade }
-                        : i
-                )
+            await adicionarAoCarrinho(
+                pessoa.id,
+                produto.id_produto,
+                produto.quantidade_atual,
+                produto.preco
             );
-        } else {
-            setCarrinho(prev => [...prev, item]);
+            toast.success(`🛒 "${produto.nome}" adicionado ao carrinho!`);
+        } catch (e) {
+            const msg = e.response?.data?.error || e.response?.data?.message || "Erro ao adicionar ao carrinho";
+            toast.error(msg);
         }
-
-        adicionarAoCarrinho(item);
     };
 
-    const handleReservar = (produto) => {
-        if (produto.estoque === 0) {
-            return toast.warning("Produto sem estoque");
+    const handleReservar = async (produto) => {
+        if (produto.estoque === 0) return toast.warning("Produto sem estoque");
+        if (produto.quantidade_atual < 1) return toast.warning("Selecione ao menos 1 unidade");
+
+        try {
+            const itensPedido = [{
+                id_produto: produto.id_produto,
+                quantidade: produto.quantidade_atual,
+                preco_unitario: produto.preco,
+            }];
+            const response = await reservar(pessoa.id, itensPedido);
+            const { id_reserva, expira_em } = response.data;
+            const expira = new Date(expira_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            toast.success(`⏳ "${produto.nome}" reservado até ${expira}!`);
+            
+            setProdutos(prev => prev.map(p =>
+                p.id_produto === produto.id_produto
+                    ? { ...p, estoque: p.estoque - produto.quantidade_atual, quantidade_atual: p.estoque - produto.quantidade_atual > 0 ? 1 : 0 }
+                    : p
+            ));
+            
+            navigate(`/confirmarpedido?id_reserva=${id_reserva}`);
+        } catch (e) {
+            const msg = e.response?.data?.error || "Erro ao criar reserva";
+            toast.error(msg);
         }
-
-        const item = {
-            id_pessoa: pessoa.id,
-            id_produto: produto.id_produto,
-            nome: produto.nome,
-            preco_unitario: produto.preco,
-            quantidade: produto.quantidade_atual
-        };
-
-        reservarAdicionarAoCarrinho(item);
     };
 
     async function onSubmit(e) {

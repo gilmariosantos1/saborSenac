@@ -1,79 +1,82 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Footer from "../components/footer";
 import Header from "../components/header";
-import { getPedidoByNumero, updateStatusPedido, listPedidos } from "../services/pedidoService";
-import '../styles/confirmarpedido.css'
+import { getReservaById, confirmarReserva, cancelarReserva } from "../services/homeService";
+import { listPedidos } from "../services/pedidoService";
+import '../styles/confirmarpedido.css';
 
 const ConfirmarPedido = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [pedido, setPedido] = useState(null);
+  const [searchParams] = useSearchParams();
+  const idReservaUrl = searchParams.get("id_reserva");
+
+  const [reserva, setReserva] = useState(null);
   const [pedidos, setPedidos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-
-  const numeroPedido = location.state?.numeroPedido;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const histResponse = await listPedidos();
-        setPedidos(histResponse.data);
-
-        if (numeroPedido) {
-          const pedResponse = await getPedidoByNumero(numeroPedido);
-          setPedido(pedResponse.data);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      }
-    };
     fetchData();
-  }, [numeroPedido]);
+  }, [idReservaUrl]);
 
-  const handleCancelClick = () => setShowCancelModal(true);
-  const handleConfirmClick = () => setShowConfirmModal(true);
-
-  const handleModalClose = () => {
-    setShowCancelModal(false);
-    setShowConfirmModal(false);
-    setSuccessMessage("");
-  };
-
-  const handleActionConfirm = async (type) => {
-    if (!pedido) return;
-
+  const fetchData = async () => {
     try {
-      const status = type === "cancel" ? "Cancelado" : "Confirmado";
-      await updateStatusPedido(pedido.id_reserva, status);
-
-      setSuccessMessage(`Pedido ${status.toLowerCase()} com sucesso ✅`);
-
-      // Atualiza o pedido localmente para refletir a mudança (se necessário)
-      setPedido({ ...pedido, status });
-
-      // Atualiza o histórico
+      setLoading(true);
       const histResponse = await listPedidos();
       setPedidos(histResponse.data);
+
+      if (idReservaUrl) {
+        const resResponse = await getReservaById(idReservaUrl);
+        setReserva(resResponse.data);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao carregar detalhes.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAction = async (type) => {
+    if (!reserva) return;
+
+    try {
+      if (type === "confirm") {
+        await confirmarReserva(reserva.id_reserva, "PIX");
+        toast.success("✅ Pedido confirmado!");
+      } else {
+        await cancelarReserva(reserva.id_reserva);
+        toast.success("❌ Pedido cancelado.");
+      }
 
       setShowCancelModal(false);
       setShowConfirmModal(false);
 
       setTimeout(() => {
-        setSuccessMessage("");
-        navigate('/Consultapedido');
+        navigate('/');
       }, 2000);
     } catch (error) {
-      console.error("Erro ao atualizar pedido:", error);
-      setSuccessMessage("Erro ao atualizar pedido");
-      setTimeout(() => {
-        setSuccessMessage("");
-        navigate('/Consultapedido');
-      }, 2000);
+      toast.error("Erro ao processar ação");
     }
   };
+
+  const totalReserva = reserva?.itens?.reduce(
+    (acc, item) => acc + Number(item.preco_unitario) * item.quantidade,
+    0
+  ) || 0;
+
+  if (loading) {
+      return (
+          <>
+            <Header />
+            <div style={{ padding: "100px", textAlign: "center" }}>Carregando...</div>
+            <Footer />
+          </>
+      );
+  }
 
   return (
     <>
@@ -81,50 +84,55 @@ const ConfirmarPedido = () => {
 
       <main className="consulta-container">
         <section className="consulta-box">
-          <h3>Consultar pedido</h3>
+          <h3>Confirmar Reserva</h3>
 
-          <label>Número do Pedido</label>
-          <input type="text" value={pedido?.pedido || "---"} readOnly />
+          <label>ID da Reserva</label>
+          <input type="text" value={`#${reserva?.id_reserva || "---"}`} readOnly />
 
-          <label>Nome</label>
-          <input type="text" value={pedido?.pessoa?.nome || "---"} readOnly />
+          <label>Cliente</label>
+          <input type="text" value={reserva?.pessoa?.nome || "---"} readOnly />
 
-          <div className="row">
-            <div>
-              <label>Produto</label>
-              <input type="text" value={pedido?.produto?.nome || "---"} readOnly />
-            </div>
-            <div>
-              <label>Quantidade</label>
-              <input type="text" value="1" readOnly />
-            </div>
+          <div className="itens-reserva" style={{ marginTop: '15px' }}>
+            <label>Produtos Reservados</label>
+            {reserva?.itens?.map((item, idx) => (
+                <div key={idx} className="item-linha" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', background: '#f9f9f9', padding: '8px', borderRadius: '5px' }}>
+                    <span>{item.produto?.nome} (x{item.quantidade})</span>
+                    <span style={{ fontWeight: 'bold' }}>R$ {(Number(item.preco_unitario) * item.quantidade).toFixed(2)}</span>
+                </div>
+            ))}
           </div>
 
-          <label>Preço total</label>
+          <label style={{ marginTop: '15px' }}>Total a Pagar</label>
           <div className="preco-total">
-            <input type="text" value={`R$: ${pedido?.produto?.preco?.toFixed(2) || "0.00"}`} readOnly />
+            <input type="text" value={`R$ ${totalReserva.toFixed(2)}`} readOnly />
           </div>
 
-          <div className="botoes-confirmar">
-            <button className="btn-cancelar" onClick={handleCancelClick} disabled={!pedido}>
-              Cancelar
-            </button>
-            <button className="btn-confirmar" onClick={handleConfirmClick} disabled={!pedido}>
-              Confirma
-            </button>
-          </div>
+          {reserva?.status === 'ABERTA' ? (
+              <div className="botoes-confirmar">
+                <button className="btn-cancelar" onClick={() => setShowCancelModal(true)}>
+                  Cancelar
+                </button>
+                <button className="btn-confirmar" onClick={() => setShowConfirmModal(true)}>
+                  Confirmar
+                </button>
+              </div>
+          ) : (
+              <div style={{ textAlign: 'center', padding: '15px', color: reserva?.status === 'PAGA' ? 'green' : 'red', fontWeight: 'bold' }}>
+                  Reserva já está {reserva?.status}
+              </div>
+          )}
 
-          <button className="btn-voltar" onClick={() => navigate(-1)}>
-            Volta
+          <button className="btn-voltar" onClick={() => navigate('/')}>
+            Voltar ao Cardápio
           </button>
         </section>
 
         <section className="historico-box">
-          <h4>Histórico de pedidos</h4>
+          <h4>Seus Pedidos</h4>
           <table>
             <thead>
               <tr>
-                <th>Número</th>
+                <th>Reserva</th>
                 <th>Status</th>
                 <th>Preço</th>
               </tr>
@@ -133,9 +141,9 @@ const ConfirmarPedido = () => {
               {pedidos.length > 0 ? (
                 pedidos.map((p) => (
                   <tr key={p.id_reserva}>
-                    <td>{p.pedido}</td>
-                    <td>{p.status}</td>
-                    <td>R$: {p.produto?.preco?.toFixed(2) || "0.00"}</td>
+                    <td>#{p.id_reserva}</td>
+                    <td style={{ color: p.status === 'PAGA' ? 'green' : p.status === 'CANCELADA' ? 'red' : 'orange' }}>{p.status}</td>
+                    <td>R$ {Number(p.valor_total || 0).toFixed(2)}</td>
                   </tr>
                 ))
               ) : (
@@ -150,10 +158,11 @@ const ConfirmarPedido = () => {
         {showCancelModal && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h3>Tem certeza que cancelar pedido?</h3>
+              <h3>Deseja realmente cancelar esta reserva?</h3>
+              <p>O estoque será liberado para outros clientes.</p>
               <div className="modal-buttons">
-                <button className="btn-nao" onClick={handleModalClose}>Não</button>
-                <button className="btn-sim" onClick={() => handleActionConfirm("cancel")}>Sim</button>
+                <button className="btn-nao" onClick={() => setShowCancelModal(false)}>Não</button>
+                <button className="btn-sim" onClick={() => handleAction("cancel")}>Sim, Cancelar</button>
               </div>
             </div>
           </div>
@@ -162,19 +171,12 @@ const ConfirmarPedido = () => {
         {showConfirmModal && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h3>Tem certeza que confirmar pedido?</h3>
+              <h3>Confirmar pagamento?</h3>
+              <p>O pedido será enviado para a cozinha.</p>
               <div className="modal-buttons">
-                <button className="btn-nao" onClick={handleModalClose}>Não</button>
-                <button className="btn-sim" onClick={() => handleActionConfirm("confirm")}>Sim</button>
+                <button className="btn-nao" onClick={() => setShowConfirmModal(false)}>Não</button>
+                <button className="btn-sim" onClick={() => handleAction("confirm")}>Sim, Confirmar</button>
               </div>
-            </div>
-          </div>
-        )}
-
-        {successMessage && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <p className="success-message">{successMessage}</p>
             </div>
           </div>
         )}
@@ -184,6 +186,5 @@ const ConfirmarPedido = () => {
     </>
   );
 }
-
 
 export default ConfirmarPedido;

@@ -40,6 +40,14 @@ Object.keys(models).forEach(modelName => {
     }
 });
 
+// Associação explícita: item do carrinho → produto
+if (models.ReservaItens && models.Produtos) {
+    models.ReservaItens.belongsTo(models.Produtos, {
+        foreignKey: 'id_produto',
+        as: 'produto',
+    });
+}
+
 models.sequelize = sequelize;
 models.Sequelize = Sequelize;
 

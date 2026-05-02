@@ -1,0 +1,267 @@
+/* === CARRINHO PAGE === */
+
+.page {
+    min-height: 100vh;
+    background-color: #f4f6fb;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.titulo {
+    font-size: 28px;
+    font-weight: 700;
+    color: #033061;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #DD9933;
+}
+
+/* === LISTA DE ITENS === */
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.item {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    transition: box-shadow 0.2s;
+}
+
+.item:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+}
+
+.itemImagem {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #e8edf5;
+    flex-shrink: 0;
+}
+
+.itemInfo {
+    flex: 1;
+}
+
+.itemNome {
+    font-size: 17px;
+    font-weight: 600;
+    color: #033061;
+    margin-bottom: 4px;
+}
+
+.itemPreco {
+    font-size: 15px;
+    color: #DD9933;
+    font-weight: 600;
+}
+
+/* === CONTROLES DE QUANTIDADE === */
+.qtdControle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btnQtd {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #1855A5;
+    background: transparent;
+    color: #1855A5;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btnQtd:hover {
+    background: #1855A5;
+    color: #fff;
+}
+
+.qtdValor {
+    font-size: 17px;
+    font-weight: 600;
+    min-width: 28px;
+    text-align: center;
+    color: #033061;
+}
+
+/* === BOTÃO REMOVER === */
+.btnRemover {
+    background: transparent;
+    border: none;
+    color: #c0392b;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background 0.15s;
+}
+
+.btnRemover:hover {
+    background: #fdecea;
+}
+
+/* === RESUMO === */
+.resumo {
+    margin-top: 30px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.resumoLinha {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+.resumoTotal {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 700;
+    color: #033061;
+    border-top: 2px solid #e4e6ea;
+    padding-top: 14px;
+    margin-top: 10px;
+}
+
+/* === BOTÕES DE AÇÃO === */
+.acoes {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.btnVoltar {
+    flex: 1;
+    padding: 14px;
+    border: 2px solid #1855A5;
+    background: transparent;
+    color: #1855A5;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btnVoltar:hover {
+    background: #1855A5;
+    color: #fff;
+}
+
+.btnFinalizar {
+    flex: 2;
+    padding: 14px;
+    background: #DD9933;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btnFinalizar:hover {
+    background: #c5851f;
+}
+
+.btnFinalizar:disabled {
+    background: #9D9D9D;
+    cursor: not-allowed;
+}
+
+/* === CARRINHO VAZIO === */
+.vazio {
+    text-align: center;
+    padding: 80px 20px;
+    color: #888;
+}
+
+.vazioIcone {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.vazioTexto {
+    font-size: 20px;
+    font-weight: 600;
+    color: #033061;
+    margin-bottom: 8px;
+}
+
+.vazioSub {
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.btnVoltarVazio {
+    padding: 12px 32px;
+    background: #1855A5;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btnVoltarVazio:hover {
+    background: #033061;
+}
+
+/* === LOADING === */
+.loading {
+    text-align: center;
+    padding: 80px;
+    font-size: 18px;
+    color: #888;
+}
+
+/* === RESPONSIVO === */
+@media (max-width: 600px) {
+    .item {
+        flex-wrap: wrap;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+
+    .btnVoltar, .btnFinalizar {
+        flex: unset;
+        width: 100%;
+    }
+}

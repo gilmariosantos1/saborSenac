@@ -2,7 +2,7 @@ const Pessoa = (sequelize, DataTypes) => {
   const Pessoa = sequelize.define(
     "Pessoa",
     {
-      id_pessoas: {
+      id_pessoa: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -17,16 +17,16 @@ const Pessoa = (sequelize, DataTypes) => {
         unique: true,
       },
       matricula: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
       },
       senha: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
       perfil: {
-        type: DataTypes.STRING(5),
+        type: DataTypes.ENUM('ALUNO', 'FUNCIONARIO', 'ADMIN'),
         allowNull: false,
       },
     },
@@ -38,7 +38,7 @@ const Pessoa = (sequelize, DataTypes) => {
 
   Pessoa.associate = (models) => {
     Pessoa.hasMany(models.Reserva, {
-      foreignKey: "pessoas_id_pessoas",
+      foreignKey: "id_pessoa",
       as: "reservas",
     });
   };

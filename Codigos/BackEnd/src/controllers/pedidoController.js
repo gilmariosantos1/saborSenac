@@ -5,12 +5,26 @@ export const listarPedidos = async (req, res) => {
     const pedidos = await models.Reserva.findAll({
       include: [
         { model: models.Pessoa, as: 'pessoa', attributes: ['nome'] },
-        { model: models.Produto, as: 'produto', attributes: ['nome', 'preco'] }
+        { 
+          model: models.ReservaItens, 
+          as: 'itens',
+          include: [{ model: models.Produtos, as: 'produto', attributes: ['nome', 'preco'] }]
+        }
       ],
       order: [['data_reserva', 'DESC']]
     });
-    res.json(pedidos);
+
+    const resultado = pedidos.map(p => {
+        const total = p.itens?.reduce((acc, item) => acc + (Number(item.preco_unitario) * item.quantidade), 0) || 0;
+        return {
+            ...p.toJSON(),
+            valor_total: total
+        };
+    });
+
+    res.json(resultado);
   } catch (error) {
+    console.error("Erro ao listar pedidos:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -18,11 +32,14 @@ export const listarPedidos = async (req, res) => {
 export const getPedidoByNumero = async (req, res) => {
   try {
     const { numero } = req.params;
-    const pedido = await models.Reserva.findOne({
-      where: { pedido: numero },
+    const pedido = await models.Reserva.findByPk(numero, {
       include: [
         { model: models.Pessoa, as: 'pessoa', attributes: ['nome'] },
-        { model: models.Produto, as: 'produto', attributes: ['nome', 'preco'] }
+        { 
+          model: models.ReservaItens, 
+          as: 'itens',
+          include: [{ model: models.Produtos, as: 'produto', attributes: ['nome', 'preco'] }]
+        }
       ]
     });
 
@@ -45,9 +62,7 @@ export const atualizarStatusPedido = async (req, res) => {
       return res.status(400).json({ message: 'O campo status é obrigatório' });
     }
 
-    const pedido = await models.Reserva.findOne({
-      where: { id_reserva: id }
-    });
+    const pedido = await models.Reserva.findByPk(id);
 
     if (!pedido) {
       return res.status(404).json({ message: 'Pedido não encontrado' });
