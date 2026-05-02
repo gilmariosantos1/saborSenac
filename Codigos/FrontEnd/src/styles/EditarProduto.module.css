@@ -63,22 +63,43 @@
 /* Buttons */
 .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 10px;
     margin-top: 20px;
 }
 
 .cancel {
-    background: #e74c3c;
+    background: #DD9933;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 .confirm {
-    background: #2ecc71;
+    background: #1855A5;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 6px;
+    cursor: pointer;
+}
+
+.confirm:hover {
+    background: #1855A5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cancel:hover {
+    background: #DD9933;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
 }
