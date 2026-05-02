@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import Footer from "../components/footer";
 import Header from '../components/header';
@@ -9,11 +10,18 @@ import banner from '../assets/imagens/banner.png';
 import carrinhoImg from '../assets/imagens/carrinho_de_compras.png';
 import logo from '../assets/imagens/logo_sabor_senac.svg';
 
-import { listarProdutos } from "../services/homeService";
-// import {listarProdutos, addCarrinho} from "../services/homeService";
+import { listarProdutos, addCarrinho } from "../services/homeService";
 
 const Home = () => {
     const navigate = useNavigate();
+
+    const categoriasMap = {
+        salgados: 1,
+        doces: 2,
+        bebidas: 3
+    };
+
+    
     const [categoria, setCategoria] = useState("salgados")
     const [produtos, setProdutos] = useState([]);
     const [pessoa, setPessoa] = useState({
@@ -32,11 +40,16 @@ const Home = () => {
     const carregarProdutos = async () => {
         try {
             setLoading(true);
-            const response = await listarProdutos(categoria);
-            setProdutos(response.data.map((p) => ({
-                ...p,
-                quantidade_atual: p.quantidade > 0 ? 1 : 0
-            })));
+            const categoriaId = categoriasMap[categoria];
+            const response = await listarProdutos(categoriaId);
+
+            setProdutos(
+                response.data.map((p) => ({
+                    ...p,
+                    quantidade_atual: p.estoque > 0 ? 1 : 0
+                }))
+            );
+
             setError(null);
         } catch (err) {
             console.error("Erro ao carregar produtos: ", err);
@@ -46,50 +59,84 @@ const Home = () => {
         }
     };
 
-    async function adicionarAoCarrinho() {
+    async function adicionarAoCarrinho(item) {
         try {
-            await addCarrinho(carrinho)
-            console.log("Adicionado com sucesso");
+            await addCarrinho(item)
+            toast.success("Adicionado com sucesso");
         } catch (e) {
             console.error("Erro ao adicionar ao carrinho", e);
+            toast.error("Erro ao adicionar ao carrinho");
         }
     }
-    async function reservarAdicionarAoCarrinho() {
+    async function reservarAdicionarAoCarrinho(item) {
         try {
-            await addCarrinho(carrinho)
-            console.log("Adicionado com sucesso");
+            await addCarrinho(item)
+            toast.success("Adicionado com sucesso");
             navigate("/carrinho");
         } catch (e) {
             console.error("Erro ao adicionar ao carrinho", e);
+            toast.error("Erro ao adicionar ao carrinho");
         }
     }
 
     const handleAddCarrinho = (produto) => {
-        if (produto.quantidade === 0) return alert("Produto sem estoque!");
+        if (produto.estoque === 0) {
+            return toast.warning("Produto sem estoque");
+        }
+
+        const itemExistente = carrinho.find(
+            (item) => item.id_produto === produto.id_produto
+        );
+
+        const quantidadeAtualCarrinho = itemExistente
+            ? itemExistente.quantidade
+            : 0;
+
+        const novaQuantidade =
+            quantidadeAtualCarrinho + produto.quantidade_atual;
+
+        if (novaQuantidade > produto.estoque) {
+            return toast.error("Quantidade total excede o estoque!");
+        }
 
         const item = {
-            idPessoa: pessoa.id,
-            idProduto: produto.id,
+            id_pessoa: pessoa.id,
+            id_produto: produto.id_produto,
             nome: produto.nome,
-            preco: produto.preco,
+            preco_unitario: produto.preco,
             quantidade: produto.quantidade_atual
         };
-        setCarrinho(item);
-        // adicionarAoCarrinho(item);
+
+        // Atualiza carrinho local
+        if (itemExistente) {
+            setCarrinho(prev =>
+                prev.map(i =>
+                    i.id_produto === produto.id_produto
+                        ? { ...i, quantidade: novaQuantidade }
+                        : i
+                )
+            );
+        } else {
+            setCarrinho(prev => [...prev, item]);
+        }
+
+        adicionarAoCarrinho(item);
     };
 
     const handleReservar = (produto) => {
-        if (produto.quantidade === 0) return alert("Produto sem estoque!");
+        if (produto.estoque === 0) {
+            return toast.warning("Produto sem estoque");
+        }
 
         const item = {
-            idPessoa: pessoa.id,
-            idProduto: produto.id,
+            id_pessoa: pessoa.id,
+            id_produto: produto.id_produto,
             nome: produto.nome,
-            preco: produto.preco,
+            preco_unitario: produto.preco,
             quantidade: produto.quantidade_atual
         };
-        setCarrinho(item);
-        // reservarAdicionarAoCarrinho(item);
+
+        reservarAdicionarAoCarrinho(item);
     };
 
     async function onSubmit(e) {
@@ -99,12 +146,12 @@ const Home = () => {
     function aumentarQuantidade(id) {
         setProdutos((prev) =>
             prev.map((produto) =>
-                produto.id === id
+                produto.id_produto === id
                     ? {
                         ...produto,
                         quantidade_atual:
                             produto.quantidade_atual <
-                                produto.quantidade
+                                produto.estoque
                                 ? produto.quantidade_atual + 1
                                 : produto.quantidade_atual
                     }
@@ -115,7 +162,7 @@ const Home = () => {
     function diminuirQuantidade(id) {
         setProdutos((prevProdutos) =>
             prevProdutos.map((produto) =>
-                produto.id === id
+                produto.id_produto === id
                     ? {
                         ...produto,
                         quantidade_atual:
@@ -185,23 +232,28 @@ const Home = () => {
                 {!loading && produtos.length > 0 && (
                     <div className={styles.cardapio}>
                         {produtos.map((produto) => (
-                            <form onSubmit={onSubmit} key={produto.id} className={`${produto.quantidade === 0 ? styles.item_sem_estoque : ""} ${styles.cardapio_item}`}>
+                            <form onSubmit={onSubmit} key={produto.id_produto} className={`${produto.estoque === 0 ? styles.item_sem_estoque : ""} ${styles.cardapio_item}`}>
                                 <div className={styles.cardapio_item_head}>
-                                    <div className={`${styles.cardapio_item_head_qtd} ${produto.quantidade === 0 ? styles.bg_sem_estoque : ""}`}>{produto.quantidade}</div>
+                                    <div className={`${styles.cardapio_item_head_qtd} ${produto.estoque === 0 ? styles.bg_sem_estoque : ""}`}>{produto.estoque}</div>
                                     <img src={getImageUrl(produto.imagem)} alt={produto.nome} />
                                     <h4>{produto.nome}</h4>
                                 </div>
                                 <div className={styles.cardapio_item_mid}>
-                                    <div>R$ {produto.preco},00</div>
+                                    <div>
+                                        R$ {Number(produto.preco).toLocaleString("pt-BR", {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        })}
+                                    </div>
                                     <div className={styles.cardapio_item_mid_qtd}>
-                                        <div onClick={() => diminuirQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>-</div>
-                                        <input type="number" value={produto.quantidade_atual} readOnly disabled={produto.quantidade === 0} />
-                                        <div onClick={() => aumentarQuantidade(produto.id)} className={styles.cardapio_item_mid_seletores}>+</div>
+                                        <div onClick={() => diminuirQuantidade(produto.id_produto)} className={styles.cardapio_item_mid_seletores}>-</div>
+                                        <input type="number" value={produto.quantidade_atual ?? 0} readOnly disabled={produto.estoque === 0} />
+                                        <div onClick={() => aumentarQuantidade(produto.id_produto)} className={styles.cardapio_item_mid_seletores}>+</div>
                                     </div>
                                 </div>
                                 <div className={styles.cardapio_item_bottom}>
-                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.quantidade === 0 ? styles.cardapio_item_bottom_add_desativado : ""}`}>Adcionar ao carrinho</div>
-                                    <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.quantidade === 0}>Reservar</button>
+                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.estoque === 0 ? styles.cardapio_item_bottom_add_desativado : ""}`}>Adcionar ao carrinho</div>
+                                    <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.estoque === 0}>Reservar</button>
                                 </div>
                             </form>
                         ))}

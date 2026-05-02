@@ -18,14 +18,8 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 // ROTAS
-app.use("/api/produto", produtoRoutes);
-app.use("/api/carrinho", carrinhoRoutes);
-app.use("/api/pedidos", pedidoRoutes);
-
-async function testConnection() {
-    try {
-        await models.sequelize.authenticate()
-        console.log('Banco conectado com sucesso! server.js');
+app.use("/api/reservaItens", reservaItensRoutes);
+app.use("/api/produtos", produtoRoutes);
 
         app.listen(PORT, () => {
             console.log('Servidor rodando na porta', PORT)

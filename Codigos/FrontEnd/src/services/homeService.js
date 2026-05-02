@@ -1,9 +1,11 @@
-// import api from './api';
+import api from './api';
 
-// export const listarProdutos = (params = {}) => api.get('/produtos', { params });
-// export const addCarrinho = (data) => api.post('/carrinho', data);
+export const listarProdutos = (categoria) => {
+  return api.get(`/produtos?categoria=${categoria}`);
+};
+export const addCarrinho = (data) => api.post('/reservaItens', data);
 
-
+/*
 const mockProdutos_salgados = [
   { id: 1, nome: "Coxinha de frango", preco: 6, quantidade: 0, imagem: "coxinha-de-frango.jpg" },
   { id: 2, nome: "Pastel de carne", preco: 7, quantidade: 15, imagem: "pastel-de-carne.jpg" },

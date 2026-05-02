@@ -43,7 +43,7 @@ export function createReservaItensController(reservaItensModel) {
         },
 
         async getById(req, res, next) {
-            try {   
+            try {
                 const item = await reservaItensModel.findById(
                     Number(req.params.id)
                 );
@@ -62,9 +62,51 @@ export function createReservaItensController(reservaItensModel) {
 
         async create(req, res, next) {
             try {
-                const createdItem = await reservaItensModel.upsertItem(req.body);
+                const { id_pessoa, id_produto, quantidade, preco_unitario } = req.body;
 
-                return res.status(201).json(createdItem);
+                // 1. Buscar produto
+                const produto = await models.Produtos.findByPk(id_produto);
+
+                if (!produto) {
+                    return res.status(404).json({
+                        message: "Produto não encontrado"
+                    });
+                }
+
+                // 2. Buscar se já existe no carrinho
+                const existente = await reservaItensModel.findOne({
+                    where: { id_pessoa, id_produto }
+                });
+
+                // 3. Calcular quantidade total
+                const quantidadeAtual = existente ? existente.quantidade : 0;
+                const quantidadeFinal = quantidadeAtual + quantidade;
+
+                // 4. Validar estoque TOTAL
+                if (quantidadeFinal > produto.estoque) {
+                    return res.status(400).json({
+                        message: `Estoque insuficiente. Disponível: ${produto.estoque}`
+                    });
+                }
+
+                // 5. Atualizar OU criar
+                if (existente) {
+                    await existente.update({
+                        quantidade: quantidadeFinal
+                    });
+
+                    return res.status(200).json(existente);
+                }
+
+                const novo = await reservaItensModel.create({
+                    id_pessoa,
+                    id_produto,
+                    quantidade,
+                    preco_unitario
+                });
+
+                return res.status(201).json(novo);
+
             } catch (error) {
                 return next(error);
             }
@@ -72,7 +114,7 @@ export function createReservaItensController(reservaItensModel) {
 
         async update(req, res, next) {
             try {
-                const updatedItem = await reservaItensModel.update(
+                const updatedItem = await reservaItensModel.updateItem(
                     Number(req.params.id),
                     req.body
                 );
@@ -91,7 +133,7 @@ export function createReservaItensController(reservaItensModel) {
 
         async remove(req, res, next) {
             try {
-                const removed = await reservaItensModel.remove(
+                const removed = await reservaItensModel.removeItem(
                     Number(req.params.id)
                 );
 

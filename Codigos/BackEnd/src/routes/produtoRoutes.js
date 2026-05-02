@@ -1,11 +1,21 @@
-import express from "express";
+import { Router } from "express";
 import multer from "multer";
 import path from "path";
-import { cadastrarProduto } from "../controllers/produtoController.js";
 
-const router = express.Router();
+import {
+  createProdutoController,
+  produtoValidators,
+} from "../controllers/produtoController.js";
 
-// Configuração do multer — salva imagem na pasta uploads/produtos/
+import models from "../models/index.js";
+import { handleValidation } from "../middleware/handleValidation.js";
+
+const router = Router();
+
+const produtoModel = models.Produtos;
+const controller = createProdutoController(produtoModel);
+
+// Configuração do multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/produtos/");
@@ -18,7 +28,41 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// POST /cadastrarProduto
-router.post("/cadastrarProduto", upload.single("imagem"), cadastrarProduto);
+// LISTAR
+router.get("/", controller.list);
+
+// BUSCAR POR ID
+router.get(
+  "/:id",
+  [...produtoValidators.id],
+  handleValidation,
+  controller.getById
+);
+
+// CRIAR (com imagem)
+router.post(
+  "/",
+  upload.single("imagem"),
+  [...produtoValidators.create],
+  handleValidation,
+  controller.create
+);
+
+// ATUALIZAR (com imagem opcional)
+router.put(
+  "/:id",
+  upload.single("imagem"),
+  [...produtoValidators.id, ...produtoValidators.update],
+  handleValidation,
+  controller.update
+);
+
+// DELETAR
+router.delete(
+  "/:id",
+  [...produtoValidators.id],
+  handleValidation,
+  controller.remove
+);
 
 export default router;
