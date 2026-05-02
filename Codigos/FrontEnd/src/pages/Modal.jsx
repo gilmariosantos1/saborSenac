@@ -27,7 +27,6 @@ export default function Modal({ isOpen, setModalOpen, children }) {
                             </div>
 
                         </div>
-                        
 
                         <ConfirmaModal isOpen={openConfirmaModal}/>
 
