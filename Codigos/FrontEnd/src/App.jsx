@@ -20,9 +20,15 @@ import '@fontsource/sanchez';
 import ControleDeEstoque from './pages/ControleDeEstoque';
 import AdicionarProduto from './pages/Adicionarproduto';
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <>
+
+      <ToastContainer />
+
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/sugestoes' element={<Sugestoes />} />

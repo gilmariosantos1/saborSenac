@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import Footer from "../components/footer";
 import Header from '../components/header';
@@ -9,7 +10,7 @@ import banner from '../assets/imagens/banner.png';
 import carrinhoImg from '../assets/imagens/carrinho_de_compras.png';
 import logo from '../assets/imagens/logo_sabor_senac.svg';
 
-import {listarProdutos, addCarrinho} from "../services/homeService";
+import { listarProdutos, addCarrinho } from "../services/homeService";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Home = () => {
         bebidas: 3
     };
 
+    
     const [categoria, setCategoria] = useState("salgados")
     const [produtos, setProdutos] = useState([]);
     const [pessoa, setPessoa] = useState({
@@ -57,49 +59,83 @@ const Home = () => {
         }
     };
 
-    async function adicionarAoCarrinho() {
+    async function adicionarAoCarrinho(item) {
         try {
-            await addCarrinho(carrinho)
-            console.log("Adicionado com sucesso");
+            await addCarrinho(item)
+            toast.success("Adicionado com sucesso");
         } catch (e) {
             console.error("Erro ao adicionar ao carrinho", e);
+            toast.error("Erro ao adicionar ao carrinho");
         }
     }
-    async function reservarAdicionarAoCarrinho() {
+    async function reservarAdicionarAoCarrinho(item) {
         try {
-            await addCarrinho(carrinho)
-            console.log("Adicionado com sucesso");
+            await addCarrinho(item)
+            toast.success("Adicionado com sucesso");
             navigate("/carrinho");
         } catch (e) {
             console.error("Erro ao adicionar ao carrinho", e);
+            toast.error("Erro ao adicionar ao carrinho");
         }
     }
 
     const handleAddCarrinho = (produto) => {
-        if (produto.estoque === 0) return alert("Produto sem estoque!");
+        if (produto.estoque === 0) {
+            return toast.warning("Produto sem estoque");
+        }
+
+        const itemExistente = carrinho.find(
+            (item) => item.id_produto === produto.id_produto
+        );
+
+        const quantidadeAtualCarrinho = itemExistente
+            ? itemExistente.quantidade
+            : 0;
+
+        const novaQuantidade =
+            quantidadeAtualCarrinho + produto.quantidade_atual;
+
+        if (novaQuantidade > produto.estoque) {
+            return toast.error("Quantidade total excede o estoque!");
+        }
 
         const item = {
-            idPessoa: pessoa.id,
-            idProduto: produto.id_produto,
+            id_pessoa: pessoa.id,
+            id_produto: produto.id_produto,
             nome: produto.nome,
-            preco: produto.preco,
+            preco_unitario: produto.preco,
             quantidade: produto.quantidade_atual
         };
-        setCarrinho(item);
+
+        // Atualiza carrinho local
+        if (itemExistente) {
+            setCarrinho(prev =>
+                prev.map(i =>
+                    i.id_produto === produto.id_produto
+                        ? { ...i, quantidade: novaQuantidade }
+                        : i
+                )
+            );
+        } else {
+            setCarrinho(prev => [...prev, item]);
+        }
+
         adicionarAoCarrinho(item);
     };
 
     const handleReservar = (produto) => {
-        if (produto.estoque === 0) return alert("Produto sem estoque!");
+        if (produto.estoque === 0) {
+            return toast.warning("Produto sem estoque");
+        }
 
         const item = {
-            idPessoa: pessoa.id,
-            idProduto: produto.id_produto,
+            id_pessoa: pessoa.id,
+            id_produto: produto.id_produto,
             nome: produto.nome,
-            preco: produto.preco,
+            preco_unitario: produto.preco,
             quantidade: produto.quantidade_atual
         };
-        setCarrinho(item);
+
         reservarAdicionarAoCarrinho(item);
     };
 
