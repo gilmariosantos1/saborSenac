@@ -207,7 +207,7 @@ const Home = () => {
                         <h1>Cardápio</h1>
                     </div>
                     <div>
-                        <p>Reserve seu <span>sabor</span>, viva a experiência <span>Senac</span>.</p>
+                        <p>Reserve seu <span>sabor,</span> viva a experiência <span>Senac.</span></p>
                     </div>
                 </div>
                 <div className={styles.banner}>

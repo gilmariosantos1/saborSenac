@@ -4,6 +4,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 .logo {
@@ -106,6 +107,7 @@ nav {
     transform: translateY(-10px);
     transition: all 0.3s ease;
     pointer-events: none;
+    z-index: 10;
 }
 
 #menu_drop.ativo {
