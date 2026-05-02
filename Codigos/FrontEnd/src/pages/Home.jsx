@@ -16,12 +16,12 @@ const Home = () => {
     const navigate = useNavigate();
 
     const categoriasMap = {
-        salgados: 1,
-        doces: 2,
-        bebidas: 3
+        salgados: 2,
+        doces: 3,
+        bebidas: 1
     };
 
-    
+
     const [categoria, setCategoria] = useState("salgados")
     const [produtos, setProdutos] = useState([]);
     const [pessoa, setPessoa] = useState({
@@ -184,8 +184,7 @@ const Home = () => {
                 return DEFAULT_IMAGE;
             }
 
-            // return `${BASE_URL}/uploads/produtos/${imagem}`;
-            return DEFAULT_IMAGE;
+            return `${BASE_URL}/${imagem}`;
         } catch (error) {
             return DEFAULT_IMAGE;
         }
