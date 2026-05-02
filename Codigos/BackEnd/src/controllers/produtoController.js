@@ -13,7 +13,9 @@ export const produtoValidators = {
   create: [
     body("nome")
       .notEmpty()
-      .withMessage("Nome é obrigatório."),
+      .withMessage("Nome é obrigatório.")
+      .matches(/^(?=.*[a-zA-ZÀ-ÿ]).+$/)
+      .withMessage("O nome deve conter letras válidas."),
 
     body("preco")
       .notEmpty()
@@ -99,6 +101,17 @@ export function createProdutoController(produtoModel) {
           ? `uploads/produtos/${req.file.filename}`
           : null;
 
+        // 🔎 verifica se já existe
+        const produtoExistente = await produtoModel.findOne({
+          where: { nome }
+        });
+
+        if (produtoExistente) {
+          return res.status(400).json({
+            message: "Produto já cadastrado"
+          });
+        }
+
         const createdProduto = await produtoModel.createItem({
           nome,
           preco: parseFloat(preco),
@@ -108,7 +121,16 @@ export function createProdutoController(produtoModel) {
         });
 
         return res.status(201).json(createdProduto);
+
       } catch (error) {
+
+        // 🔥 tratamento do erro UNIQUE do banco
+        if (error.name === "SequelizeUniqueConstraintError") {
+          return res.status(400).json({
+            message: "Produto já cadastrado (duplicado)"
+          });
+        }
+
         return next(error);
       }
     },

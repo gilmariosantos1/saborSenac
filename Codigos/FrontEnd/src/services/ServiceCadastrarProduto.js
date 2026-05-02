@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "http://localhost:3000/api";
 
 const ServiceCadastrarProduto = async (dados) => {
   try {
@@ -8,14 +8,15 @@ const ServiceCadastrarProduto = async (dados) => {
 
     formData.append("nome", dados.nome);
     formData.append("preco", dados.preco);
-    formData.append("categoria_id_categoria", dados.categoria_id_categoria);
+    formData.append("estoque", dados.estoque);
+    formData.append("id_categoria", dados.id_categoria);
 
     if (dados.imagem) {
       formData.append("imagem", dados.imagem);
     }
 
     const response = await axios.post(
-      `${API_URL}/cadastrarProduto`,
+      `${API_URL}/produtos`,
       formData,
       {
         headers: {
