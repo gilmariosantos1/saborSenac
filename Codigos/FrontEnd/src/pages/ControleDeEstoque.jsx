@@ -29,7 +29,7 @@ export default function ControleDeEstoque() {
         { id: 15, nome: 'Quibe', quantidade: 11, categoria: 'Salgado', valor: 3.00 },
     ]);
     const [paginaAtual, setPaginaAtual] = useState(1);
-    
+
     const totalPaginas = Math.ceil(produtos.length / ITENS_POR_PAGINA);
     const indiceInicial = (paginaAtual - 1) * ITENS_POR_PAGINA;
     const indiceFinal = indiceInicial + ITENS_POR_PAGINA;
@@ -78,8 +78,8 @@ export default function ControleDeEstoque() {
             </div>
 
             <div className={styles.paginacao}>
-                <button 
-                    className={styles.botao} 
+                <button
+                    className={styles.botao}
                     onClick={() => irParaPagina(paginaAtual - 1)}
                     disabled={paginaAtual === 1}
                 >
@@ -98,8 +98,8 @@ export default function ControleDeEstoque() {
                     ))}
                 </div>
 
-                <button 
-                    className={styles.botao} 
+                <button
+                    className={styles.botao}
                     onClick={() => irParaPagina(paginaAtual + 1)}
                     disabled={paginaAtual === totalPaginas}
                 >

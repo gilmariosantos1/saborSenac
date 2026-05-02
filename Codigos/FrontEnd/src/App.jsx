@@ -14,9 +14,6 @@ import ConfirmarPedido from './pages/ConfirmarPedido';
 import ControleDeEstoque from './pages/ControleDeEstoque';
 import AdicionarProduto from './pages/Adicionarproduto';
 
-import '@fontsource/open-sans';
-import '@fontsource/open-sans/700.css';
-import '@fontsource/inter';
 
 // import '@fontsource/sanchez';
 //import DuvidasSugestoes from './pages/DuvidasSugestoes';
