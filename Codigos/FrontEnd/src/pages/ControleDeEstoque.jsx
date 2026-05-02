@@ -61,11 +61,11 @@ export default function ControleDeEstoque() {
                         <span>R$ {p.valor}</span>
 
                         <div className={styles.actions}>
-                            <Link to={`/editarProduto/${p.id}`}>
+                            <Link to={`/EditarProduto/${p.id}`}>
                                 <img src={icon1} alt="Editar" />
                             </Link>
 
-                            <Link to={`/adicionar/${p.id}`}>
+                            <Link to={`/adicionarproduto/${p.id}`}>
                                 <img src={icon2} alt="Adicionar" />
                             </Link>
 

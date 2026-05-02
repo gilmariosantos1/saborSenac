@@ -13,10 +13,7 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: 'mysql',
-        logging: process.env.DB_LOGGING === 'true' ? console.log : false, define: {
-            underscored: true,
-            timestamps: true,
-        },
+        logging: process.env.DB_LOGGING === 'true' ? console.log : false,
         pool: {
             max: 10,
             min: 0,

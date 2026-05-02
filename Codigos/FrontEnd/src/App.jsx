@@ -1,21 +1,22 @@
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 
+// páginas
 import Home from './pages/Home';
 import Sugestoes from './pages/Sugestoes';
 import Login from './pages/Login';
-
 import EditarProduto from "./pages/EditarProduto";
 import PainelAtentende from './pages/painelAtendente';
 import CadastrarProduto from './pages/CadastrarProduto';
-
-
+import Agendamento from './pages/Agendamento';
 import Consultapedido from './pages/Consultapedido';
 import ConfirmarPedido from './pages/ConfirmarPedido';
-// import '@fontsource/sanchez';
-
 import ControleDeEstoque from './pages/ControleDeEstoque';
 import AdicionarProduto from './pages/Adicionarproduto';
+
+
+// import '@fontsource/sanchez';
+//import DuvidasSugestoes from './pages/DuvidasSugestoes';
 
 function App() {
   return (
@@ -33,9 +34,10 @@ function App() {
         <Route path='/painelAtendente' element={<PainelAtentende />} />
         <Route path='/controledeestoque' element={<ControleDeEstoque />} />
         <Route path='/cadastrar-produto' element={<CadastrarProduto />} />
+        <Route path='/agendamento' element={<Agendamento />} />
+        {/* <Route path='/DuvidasSugestoes' element={<DuvidasSugestoes />} /> */}
       </Routes>
     </>
   )
 }
-
 export default App;

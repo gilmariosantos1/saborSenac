@@ -1,6 +1,6 @@
 import logo from '../assets/imagens/logo_sabor_senac.svg'
 import fundo from '../assets/fundo.svg'
-import './Login.css';
+import '../styles/Login.css';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 
