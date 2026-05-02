@@ -46,7 +46,7 @@ const Reserva = (sequelize, DataTypes) => {
       foreignKey: "pessoas_id_pessoas",
       as: "pessoa",
     });
-    Reserva.belongsTo(models.Produto, {
+    Reserva.belongsTo(models.Produtos, {
       foreignKey: "produtos_id_produtos",
       as: "produto",
     });

@@ -29,9 +29,15 @@ export default (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+
+      imagem: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
     },
     {
       tableName: "produtos",
+      timestamps: false,
     }
   );
 

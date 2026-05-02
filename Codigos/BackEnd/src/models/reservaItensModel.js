@@ -37,7 +37,7 @@ export default (sequelize) => {
     },
     {
       tableName: "reserva_itens",
-
+      timestamps: false,
       indexes: [
         {
           unique: true,

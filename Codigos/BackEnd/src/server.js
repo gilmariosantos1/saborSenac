@@ -1,33 +1,27 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import models from './models/index.js';
 import produtoRoutes from "./routes/produtoRoutes.js";
 import carrinhoRoutes from './routes/carrinhoRoutes.js';
 import pedidoRoutes from './routes/pedidoRoutes.js';
+import reservaItensRoutes from './routes/reservaItensRoutes.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-dotenv.config({
-    path: '../.env'
-})
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+// Middleware para servir as imagens
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // ROTAS
-app.use("/api/reservaItens", reservaItensRoutes);
 app.use("/api/produtos", produtoRoutes);
+app.use("/api/carrinho", carrinhoRoutes);
+app.use("/api/reservaItens", reservaItensRoutes);
+app.use("/api/pedidos", pedidoRoutes);
 
-        app.listen(PORT, () => {
-            console.log('Servidor rodando na porta', PORT)
-        })
-
-    } catch (error) {
-        console.error('Erro ao conectar no banco:', error.message);
-    }
-}
-
-testConnection();
+export default app;
