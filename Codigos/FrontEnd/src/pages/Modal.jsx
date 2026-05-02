@@ -1,40 +1,43 @@
 import React, { Children } from 'react'
-
-const BLACKGROUND_STYLE = {
-    position:'fixed',
-    top: '0',
-    botton: '0',
-    left: '0',
-    right: '0',
-    backgroundColor: 'rgb(0,0,0, 0.7)',
-    zIndex: '1000'
-}
-const MODAL_STYLE = {
-    position:'fixed',
-    top:'25%',
-    left:'20%',
-    tranform:'translate(-50%,-50%)',
-    padding: '150px',
-    backgroundColor: '#fff',
-    border: '1px solid #000000',
-    Color: 'Black'
-}
+import { useState } from "react";
+import ConfirmaModal from './ConfirmaModal';
+import './Modal.css'
 
 export default function Modal({ isOpen, setModalOpen, children }) {
-    if(isOpen) {
-        return(
-            <div style={BLACKGROUND_STYLE}>
-                <div style={MODAL_STYLE}>
-                    <div>
-                        {children}
-                    </div>
-                    <button onClick={setModalOpen}>Fechar</button>
-                    <button onClick={0}>Confirma</button>
-                </div>
+    if (isOpen) {
 
+        const [openConfirmaModal, setOpenConfirmaModal] = useState(false)
+
+        return (
+            <div className='overlay'>
+
+                <div className='BLACKGROUND_STYLE'>
+                    <div className='MODAL_STYLE'>
+                        <div>
+                            {children}
+                        </div>
+
+                        <div className='buttonContainer'>
+                            <div >
+                                <button onClick={setModalOpen} className='yesButton'>Cancelar</button>
+                            </div>
+
+                            <div>
+                                <button onClick={() => setOpenConfirmaModal(true)} className='noButton'>Confirma</button>
+                            </div>
+
+                        </div>
+                        
+
+                        <ConfirmaModal isOpen={openConfirmaModal}/>
+
+                    </div>
+
+                </div>
             </div>
+
         )
     }
-    
+
     return null
 }

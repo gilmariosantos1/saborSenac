@@ -46,10 +46,8 @@ const DuvidasSugestoes = () => {
           <div className="icon whatsapp">WA</div>
         </div>
 
-        <button onClick={() => setOpenConfirmaModal(true)}>Confirma</button>
-
         <Modal isOpen={openModal} setModalOpen={( ) => setOpenModal(!openModal)}>
-          <h5 className="text">REALMENTE DESEJA ENVIAR ESSE COMENTÁRIO?</h5>
+          <h5 className="textModal">REALMENTE DESEJA ENVIAR ESSE COMENTÁRIO?</h5>
         </Modal>
 
       </div>

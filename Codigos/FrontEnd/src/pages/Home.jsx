@@ -6,7 +6,6 @@ import Header from '../components/header'
 const Home = () => {
     const navigate = useNavigate();
 
-
     return (
         <>
             <Header />
