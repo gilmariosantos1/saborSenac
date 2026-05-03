@@ -2,7 +2,12 @@ import models from '../models/index.js';
 
 export const listarPedidos = async (req, res) => {
   try {
+    const { id_pessoa } = req.query;
+    const where = {};
+    if (id_pessoa) where.id_pessoa = id_pessoa;
+
     const pedidos = await models.Reserva.findAll({
+      where,
       include: [
         { model: models.Pessoa, as: 'pessoa', attributes: ['nome'] },
         { 

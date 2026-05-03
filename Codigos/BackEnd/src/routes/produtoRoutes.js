@@ -57,6 +57,14 @@ router.put(
   controller.update
 );
 
+// ATUALIZAR ESTOQUE (PATCH)
+router.patch(
+  "/:id/estoque",
+  [...produtoValidators.id],
+  handleValidation,
+  controller.updateEstoque
+);
+
 // DELETAR
 router.delete(
   "/:id",

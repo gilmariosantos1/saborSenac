@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import logo from '../assets/imagens/logo_sabor_senac.svg'
 import sugestoes from '../assets/imagens/sugestoes.svg'
 import perfil from '../assets/imagens/perfil.svg'
 import logout_icon from '../assets/imagens/logout_icon.svg'
 import '../styles/header.css'
 
-
-
 const Header = () => {
     const navigate = useNavigate();
+    const { user, signed, logout } = useAuth();
 
     const handleHome = () => {
         navigate('/')
@@ -22,15 +22,15 @@ const Header = () => {
     const handleCadastro = () => {
         navigate('/cadastro');
     }
-    // ✅ NOVO: navega para a página de cadastrar produto
     const handlePainelAtendente = () => {
         navigate('/painelatendente');
     }
     const handleSair = () => {
-        navigate('/sair');
+        logout();
+        navigate('/login');
     }
     const handleAgendamentos = () => {
-        navigate('/consultapedido');
+        navigate('/meus-agendamentos');
     }
     const handleCarrinho = () => {
         navigate('/carrinho');
@@ -55,29 +55,35 @@ const Header = () => {
                         <h3>Sugestões</h3>
                         <img src={sugestoes} alt="sugestoes" />
                     </div>
-                    <div onClick={handleAgendamentos} className="nav_itens">
-                        <h3>Meus Agendamentos</h3>
-                    </div>
+                    {signed && (
+                        <div onClick={handleAgendamentos} className="nav_itens">
+                            <h3>Meus Agendamentos</h3>
+                        </div>
+                    )}
                     <div onClick={handleCarrinho} className="nav_itens cart_destaque">
                         <h3>Carrinho</h3>
                     </div>
-                    <div onClick={openDrop} className="perfil">
-                        <img src={perfil} alt="perfil" />
-                        <p>Guilherme Antonio</p>
-                        <div className="adm">ADM</div>
-                    </div>
-                    <div className="login_cadastro">
-                        <p onClick={handleLogin}>Login</p>
-                        <span></span>
-                        <p onClick={handleCadastro}>Cadastro</p>
-                    </div>
+                    {signed ? (
+                        <div onClick={openDrop} className="perfil">
+                            <img src={perfil} alt="perfil" />
+                            <p>{user.nome}</p>
+                            <div className="adm">{user.perfil}</div>
+                        </div>
+                    ) : (
+                        <div className="login_cadastro">
+                            <p onClick={handleLogin}>Login</p>
+                            <span></span>
+                            <p onClick={handleCadastro}>Cadastro</p>
+                        </div>
+                    )}
                 </nav>
                 <div id="menu_drop">
-                    {/* ✅ NOVO: item no dropdown para cadastrar produto (visível só p/ ADM) */}
-                    <div onClick={handlePainelAtendente} className="menu_drop_item">
-                        <img src={logout_icon} alt="" />
-                        <div>Painel do Atendente</div>
-                    </div>
+                    {(user?.perfil === 'ADMIN' || user?.perfil === 'FUNCIONARIO') && (
+                        <div onClick={handlePainelAtendente} className="menu_drop_item">
+                            <img src={logout_icon} alt="" />
+                            <div>Painel do Atendente</div>
+                        </div>
+                    )}
                     <div onClick={handleSair} className="menu_drop_item">
                         <img src={logout_icon} alt="" />
                         <div>Sair da Conta</div>

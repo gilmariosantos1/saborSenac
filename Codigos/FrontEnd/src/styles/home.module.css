@@ -51,6 +51,50 @@ input[type=number] {
     color: #DD9933;
 }
 
+.auth_buttons_home {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.btn_login_home, .btn_register_home {
+    flex: 1;
+    height: 45px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn_login_home {
+    background: #DD9933;
+    color: #033061;
+    box-shadow: 0 4px 15px rgba(221, 153, 51, 0.3);
+}
+
+.btn_login_home:hover {
+    background: #f1ac42;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(221, 153, 51, 0.4);
+}
+
+.btn_register_home {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn_register_home:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    transform: translateY(-2px);
+}
+
 .categorias {
     display: flex;
     justify-content: center;

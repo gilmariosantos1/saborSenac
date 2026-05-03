@@ -22,7 +22,7 @@ export default function PainelAtentende() {
 
                     <div className={styles.icons}>
                         <div>
-                            <Link to="/consultapedido" className={styles.icon}>
+                            <Link to="/admin/consultar-pedidos" className={styles.icon}>
                                 <img src={icon1} alt='Icone de consultar' />
                             </Link>
                             <p>Consultar reserva</p>

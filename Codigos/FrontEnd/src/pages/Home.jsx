@@ -12,8 +12,11 @@ import logo from '../assets/imagens/logo_sabor_senac.svg';
 
 import { listarProdutos, adicionarAoCarrinho, reservar } from "../services/homeService";
 
+import { useAuth } from "../contexts/AuthContext";
+
 const Home = () => {
     const navigate = useNavigate();
+    const { user, signed } = useAuth();
 
     const categoriasMap = {
         salgados: 1,
@@ -21,14 +24,8 @@ const Home = () => {
         bebidas: 3
     };
 
-
     const [categoria, setCategoria] = useState("salgados")
     const [produtos, setProdutos] = useState([]);
-    const [pessoa, setPessoa] = useState({
-        id: 1,
-        nome: 'Guilherme',
-        perfil: 'ALUNO'
-    })
     const [carrinho, setCarrinho] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -63,9 +60,32 @@ const Home = () => {
         if (produto.estoque === 0) return toast.warning("Produto sem estoque");
         if (produto.quantidade_atual < 1) return toast.warning("Selecione ao menos 1 unidade");
 
+        if (!signed) {
+            // Lógica de Carrinho Local para Visitantes
+            const localCart = JSON.parse(localStorage.getItem('@SaborSenac:localCart') || '[]');
+            
+            const itemIndex = localCart.findIndex(item => item.id_produto === produto.id_produto);
+            
+            if (itemIndex > -1) {
+                localCart[itemIndex].quantidade += produto.quantidade_atual;
+            } else {
+                localCart.push({
+                    id_produto: produto.id_produto,
+                    nome: produto.nome,
+                    preco_unitario: produto.preco,
+                    quantidade: produto.quantidade_atual,
+                    imagem: produto.imagem
+                });
+            }
+            
+            localStorage.setItem('@SaborSenac:localCart', JSON.stringify(localCart));
+            toast.success(`🛒 "${produto.nome}" adicionado ao carrinho local!`);
+            return;
+        }
+
         try {
             await adicionarAoCarrinho(
-                pessoa.id,
+                user.id_pessoa,
                 produto.id_produto,
                 produto.quantidade_atual,
                 produto.preco
@@ -78,6 +98,11 @@ const Home = () => {
     };
 
     const handleReservar = async (produto) => {
+        if (!signed) {
+            toast.info("Faça login para realizar uma reserva!");
+            navigate('/login');
+            return;
+        }
         if (produto.estoque === 0) return toast.warning("Produto sem estoque");
         if (produto.quantidade_atual < 1) return toast.warning("Selecione ao menos 1 unidade");
 
@@ -87,7 +112,7 @@ const Home = () => {
                 quantidade: produto.quantidade_atual,
                 preco_unitario: produto.preco,
             }];
-            const response = await reservar(pessoa.id, itensPedido);
+            const response = await reservar(user.id_pessoa, itensPedido);
             const { id_reserva, expira_em } = response.data;
             const expira = new Date(expira_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             toast.success(`⏳ "${produto.nome}" reservado até ${expira}!`);
@@ -171,6 +196,18 @@ const Home = () => {
                     <div>
                         <p>Reserve seu <span>sabor,</span> viva a experiência <span>Senac.</span></p>
                     </div>
+                    {signed ? (
+                        (user?.perfil === 'ADMIN' || user?.perfil === 'FUNCIONARIO') && (
+                            <div className={styles.auth_buttons_home}>
+                                <button onClick={() => navigate('/painelAtendente')} className={styles.btn_login_home}>Painel Administrativo</button>
+                            </div>
+                        )
+                    ) : (
+                        <div className={styles.auth_buttons_home}>
+                            <button onClick={() => navigate('/login')} className={styles.btn_login_home}>Fazer Login</button>
+                            <button onClick={() => navigate('/cadastro')} className={styles.btn_register_home}>Criar Conta</button>
+                        </div>
+                    )}
                 </div>
                 <div className={styles.banner}>
                     <img src={banner} alt="Foto da frente do Sabor Senac" />
@@ -215,7 +252,7 @@ const Home = () => {
                                 </div>
                                 <div className={styles.cardapio_item_bottom}>
                                     <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.estoque === 0 ? styles.cardapio_item_bottom_add_desativado : ""}`}>Add ao carrinho</div>
-                                    {pessoa.perfil !== 'ALUNO' && (
+                                    {(!signed || user?.perfil !== 'ALUNO') && (
                                         <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.estoque === 0}>Reservar</button>
                                     )}
                                 </div>

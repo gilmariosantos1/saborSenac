@@ -7,8 +7,11 @@ import { getReservaById, confirmarReserva, cancelarReserva } from "../services/h
 import { listPedidos } from "../services/pedidoService";
 import styles from '../styles/confirmarpedido.module.css';
 
+import { useAuth } from "../contexts/AuthContext";
+
 const ConfirmarPedido = () => {
   const navigate = useNavigate();
+  const { user, signed } = useAuth();
   const [searchParams] = useSearchParams();
   const idReservaUrl = searchParams.get("id_reserva");
 
@@ -20,8 +23,19 @@ const ConfirmarPedido = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
+    if (!signed) {
+        navigate('/login');
+        return;
+    }
+    
+    if (user.perfil !== 'ADMIN' && user.perfil !== 'FUNCIONARIO') {
+        toast.warning("Acesso restrito para finalização de pedidos.");
+        navigate('/');
+        return;
+    }
+
     fetchData();
-  }, [idReservaUrl]);
+  }, [idReservaUrl, signed, user, navigate]);
 
   const fetchData = async () => {
     try {

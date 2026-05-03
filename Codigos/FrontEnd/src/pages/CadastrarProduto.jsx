@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
+import { cadastrarProduto } from "../services/estoqueService";
 import styles from "../styles/CadastroProduto.module.css";
 
 const CATEGORIAS = [
@@ -65,13 +65,16 @@ const CadastrarProduto = () => {
     }
 
     try {
-      await ServiceCadastrarProduto({
-        nome: form.nome,
-        preco: form.preco,
-        estoque: Number(form.estoque),
-        id_categoria: form.categoria,
-        imagem: form.imagem,
-      });
+      const formData = new FormData();
+      formData.append("nome", form.nome);
+      formData.append("preco", form.preco);
+      formData.append("estoque", Number(form.estoque));
+      formData.append("id_categoria", form.categoria);
+      if (form.imagem) {
+        formData.append("imagem", form.imagem);
+      }
+
+      await cadastrarProduto(formData);
       console.log("id_categoria:", form.categoria, "nome", form.nome);
       setSubmitted(true);
       setTimeout(() => navigate("/painelatendente"), 2200);

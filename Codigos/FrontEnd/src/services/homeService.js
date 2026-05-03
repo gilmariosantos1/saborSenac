@@ -9,6 +9,9 @@ export const adicionarAoCarrinho = (id_pessoa, id_produto, quantidade, preco_uni
 export const reservar = (id_pessoa, itens) =>
     api.post('/reservas', { id_pessoa, itens });
 
+export const comprarImediato = (id_pessoa, itens) =>
+    api.post('/reservas/comprar', { id_pessoa, itens });
+
 export const getReservaById = (id_reserva) =>
     api.get(`/reservas/${id_reserva}`);
 

@@ -7,10 +7,10 @@ import styles from '../styles/Agendamento.module.css';
 import imagem from "../assets/imagens/logo_sabor_senac.svg";
 import { reservar } from "../services/homeService";
 
-// Mock do usuário logado (substituir por AuthContext futuramente)
-const ID_USUARIO_MOCK = 1;
+import { useAuth } from "../contexts/AuthContext";
 
 const Agendamento = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const { itens = [], total = 0 } = location.state || {};
@@ -38,14 +38,14 @@ const Agendamento = () => {
         preco_unitario: item.preco_unitario
       }));
 
-      const response = await reservar(ID_USUARIO_MOCK, itensReserva);
+      const response = await reservar(user.id_pessoa, itensReserva);
 
       if (response.status === 201) {
         setAgendado(true);
         toast.success("Agendamento realizado com sucesso!");
         
         setTimeout(() => {
-          navigate("/consultapedido");
+          navigate("/meus-agendamentos");
         }, 3000);
       }
     } catch (error) {

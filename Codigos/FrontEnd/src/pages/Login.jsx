@@ -1,34 +1,65 @@
 import logo from '../assets/imagens/logo_sabor_senac.svg'
 import fundo from '../assets/fundo.svg'
-import '../styles/Login.module.css';
+import styles from '../styles/Login.module.css';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { toast } from 'react-toastify';
+
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      toast.warning('Preencha todos os campos!');
+      return;
+    }
+
+    setIsLoggingIn(true);
+    const result = await login(email, password);
+    setIsLoggingIn(false);
+
+    if (result.success) {
+      toast.success('Bem-vindo ao Sabor Senac!');
+      navigate('/');
+    } else {
+      toast.error(result.message);
+    }
+  };
 
 
   return (
     <>
       <Header />
-      <main className="auth-page">
-        <div className="login-left" />
-        <div className="login-container">
-          <div className="login-left" >
+      <main className={styles['auth-page']}>
+        <div className={styles['login-left']} />
+        <div className={styles['login-container']}>
+          <div className={styles['login-left']} >
           </div>
-          <div className="login-right">
-            <section className="login-card">
-              <div className="login-logo-wrapper">
-                <img className="login-logo" src={logo} alt="logo_sabor_senac" />
+          <div className={styles['login-right']}>
+            <section className={styles['login-card']}>
+              <div className={styles['login-logo-wrapper']}>
+                <img className={styles['login-logo']} src={logo} alt="logo_sabor_senac" />
               </div>
 
               <h1>Entre em sua conta</h1>
-              <p className="login-subtitle">Acesse para pedir seu lanche</p>
+              <p className={styles['login-subtitle']}>Acesse para pedir seu lanche</p>
 
-              <form className="login-form">
-                <div className="form-group">
+              <form className={styles['login-form']} onSubmit={handleLogin}>
+                <div className={styles['form-group']}>
                   <label htmlFor="email">E-mail</label>
-                  <div className="input-icon-group">
-                    <span className="input-icon" aria-hidden="true">
+                  <div className={styles['input-icon-group']}>
+                    <span className={styles['input-icon']} aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M4 6h16v12H4z" />
                         <polyline points="4 6 12 13 20 6" />
@@ -36,17 +67,20 @@ const Login = () => {
                     </span>
                     <input
                       type="email"
-                      className="form-control"
+                      className={styles['form-control']}
                       id="email"
                       placeholder="seuemail@exemplo.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoggingIn}
                     />
                   </div>
                 </div>
 
-                <div className="form-group">
+                <div className={styles['form-group']}>
                   <label htmlFor="password">Senha</label>
-                  <div className="input-icon-group">
-                    <span className="input-icon" aria-hidden="true">
+                  <div className={styles['input-icon-group']}>
+                    <span className={styles['input-icon']} aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="5" y="11" width="14" height="10" rx="2" />
                         <path d="M8 11V7a4 4 0 0 1 8 0v4" />
@@ -54,20 +88,27 @@ const Login = () => {
                     </span>
                     <input
                       type="password"
-                      className="form-control"
+                      className={styles['form-control']}
                       id="password"
                       placeholder="Digite sua senha"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      disabled={isLoggingIn}
                     />
                   </div>
                 </div>
 
-                <button type="submit" className="btn btn-login">
-                  ENTRAR AGORA
+                <button 
+                  type="submit" 
+                  className={styles['btn-login']}
+                  disabled={isLoggingIn}
+                >
+                  {isLoggingIn ? 'ENTRANDO...' : 'ENTRAR AGORA'}
                 </button>
               </form>
 
-              <p className="login-footer">
-                Não tem conta? <a href="#">Crie</a>
+              <p className={styles['login-footer']}>
+                Não tem conta? <span onClick={() => navigate('/cadastro')} style={{ color: '#1d5bbf', fontWeight: '800', cursor: 'pointer' }}>Crie</span>
               </p>
             </section>
           </div>

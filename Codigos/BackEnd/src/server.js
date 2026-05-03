@@ -5,6 +5,8 @@ import carrinhoRoutes from './routes/carrinhoRoutes.js';
 import pedidoRoutes from './routes/pedidoRoutes.js';
 import reservaItensRoutes from './routes/reservaItensRoutes.js';
 import reservaRoutes from './routes/reservaRoutes.js';
+import loginRoutes from './routes/LoginRoutes.js';
+import usuarioRoutes from './routes/UsuarioRoutes.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
@@ -25,5 +27,7 @@ app.use("/api/carrinho", carrinhoRoutes);
 app.use("/api/reservaItens", reservaItensRoutes);
 app.use("/api/reservas", reservaRoutes);
 app.use("/api/pedidos", pedidoRoutes);
+app.use("/api/login", loginRoutes);
+app.use("/api/usuarios", usuarioRoutes);
 
 export default app;

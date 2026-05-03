@@ -7,15 +7,15 @@ import Footer from "../components/footer";
 import styles from "../styles/Carrinho.module.css";
 
 import { listarCarrinho, removerItem, atualizarItem } from "../services/carrinhoService";
+import { comprarImediato } from "../services/homeService";
+
+import { useAuth } from "../contexts/AuthContext";
 
 const BASE_URL = "http://localhost:3000";
 
-// ID da pessoa logada (fixo por enquanto, virá do contexto de autenticação no futuro)
-const ID_PESSOA = 1;
-const PERFIL_USUARIO = "ALUNO"; // Mock do perfil para teste (ALUNO ou FUNCIONARIO)
-
 const Carrinho = () => {
     const navigate = useNavigate();
+    const { user, signed } = useAuth();
 
     const [itens, setItens] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,15 +23,24 @@ const Carrinho = () => {
     // ----- Carrega itens ao montar -----
     useEffect(() => {
         carregarCarrinho();
-    }, []);
+    }, [signed]);
 
     const carregarCarrinho = async () => {
         try {
             setLoading(true);
-            const response = await listarCarrinho(ID_PESSOA);
+            
+            if (!signed) {
+                // Carrega do LocalStorage se for visitante
+                const localCart = JSON.parse(localStorage.getItem('@SaborSenac:localCart') || '[]');
+                setItens(localCart);
+                setLoading(false);
+                return;
+            }
+
+            const response = await listarCarrinho(user.id_pessoa);
             // Filtra somente os itens da pessoa logada (caso a API retorne todos)
             const itensPessoa = response.data.filter(
-                (item) => item.id_pessoa === ID_PESSOA
+                (item) => item.id_pessoa === user.id_pessoa
             );
             setItens(itensPessoa);
         } catch (error) {
@@ -45,6 +54,15 @@ const Carrinho = () => {
     // ----- Remover item -----
     const handleRemover = async (id_item) => {
         try {
+            if (!signed) {
+                const localCart = JSON.parse(localStorage.getItem('@SaborSenac:localCart') || '[]');
+                const filteredCart = localCart.filter((i) => i.id_produto !== id_item);
+                localStorage.setItem('@SaborSenac:localCart', JSON.stringify(filteredCart));
+                setItens(filteredCart);
+                toast.success("Item removido do carrinho local.");
+                return;
+            }
+
             await removerItem(id_item);
             setItens((prev) => prev.filter((i) => i.id_item !== id_item));
             toast.success("Item removido do carrinho.");
@@ -57,11 +75,26 @@ const Carrinho = () => {
     // ----- Alterar quantidade -----
     const handleQuantidade = async (item, delta) => {
         const novaQtd = item.quantidade + delta;
+        
+        // id_identificador depende se é local (id_produto) ou banco (id_item)
+        const id_identificador = signed ? item.id_item : item.id_produto;
+
         if (novaQtd < 1) {
-            handleRemover(item.id_item);
+            handleRemover(id_identificador);
             return;
         }
+
         try {
+            if (!signed) {
+                const localCart = JSON.parse(localStorage.getItem('@SaborSenac:localCart') || '[]');
+                const updatedCart = localCart.map(i => 
+                    i.id_produto === item.id_produto ? { ...i, quantidade: novaQtd } : i
+                );
+                localStorage.setItem('@SaborSenac:localCart', JSON.stringify(updatedCart));
+                setItens(updatedCart);
+                return;
+            }
+
             await atualizarItem(item.id_item, { quantidade: novaQtd });
             setItens((prev) =>
                 prev.map((i) =>
@@ -87,16 +120,37 @@ const Carrinho = () => {
     };
 
     // ----- Finalizar pedido -----
-    const handleFinalizar = () => {
+    const handleFinalizar = async () => {
         if (itens.length === 0) {
             toast.warning("Seu carrinho está vazio!");
             return;
         }
 
-        if (PERFIL_USUARIO === "ALUNO") {
-            navigate("/agendamento", { state: { itens, total } });
-        } else {
-            navigate("/confirmarpedido");
+        if (!signed) {
+            toast.info("Por favor, faça login para finalizar seu pedido.");
+            navigate("/login");
+            return;
+        }
+
+        try {
+            if (user.perfil === "ALUNO") {
+                navigate("/agendamento", { state: { itens, total } });
+            } else {
+                // Venda Direta (Admin/Funcionário) - Abate estoque e finaliza
+                const itensFormatados = itens.map(item => ({
+                    id_produto: item.id_produto,
+                    quantidade: item.quantidade,
+                    preco_unitario: item.preco_unitario
+                }));
+
+                await comprarImediato(user.id_pessoa, itensFormatados);
+                toast.success("✅ Venda finalizada com sucesso! Estoque atualizado.");
+                navigate("/admin/consultar-pedidos");
+            }
+        } catch (error) {
+            console.error("Erro ao finalizar pedido:", error);
+            const msg = error.response?.data?.error || "Erro ao finalizar pedido.";
+            toast.error(msg);
         }
     };
 
@@ -221,7 +275,7 @@ const Carrinho = () => {
                                 className={styles.btnFinalizar}
                                 onClick={handleFinalizar}
                             >
-                                {PERFIL_USUARIO === "ALUNO" ? "Confirmar Reserva →" : "Finalizar Pedido →"}
+                                {(!signed || user?.perfil === "ALUNO") ? "Confirmar Reserva →" : "Finalizar Pedido →"}
                             </button>
                         </div>
                     </>

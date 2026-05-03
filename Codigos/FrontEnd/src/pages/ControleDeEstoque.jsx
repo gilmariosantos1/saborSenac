@@ -1,39 +1,55 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import styles from '../styles/ControleDeEstoque.module.css';
 import Header from '../components/header';
+import Footer from '../components/footer';
+import { listarTodosProdutos, excluirProduto } from '../services/estoqueService';
+
 import icon1 from '../assets/Edit.png';
 import icon2 from '../assets/add_circle.png';
 import icon3 from '../assets/Trash.png';
 
-const ITENS_POR_PAGINA = 10;
-
-//Observação: O código abaixo é apenas um exemplo de como implementar a funcionalidade de controle de estoque com paginação. Ele não inclui as funcionalidades de edição, adição e exclusão de produtos, que devem ser implementadas separadamente.
+const ITENS_POR_PAGINA = 8;
 
 export default function ControleDeEstoque() {
-    const [produtos, setProdutos] = useState([
-        { id: 1, nome: 'Coca-cola', quantidade: 3, categoria: 'Bebidas', valor: 8.00 },
-        { id: 2, nome: 'Pastel', quantidade: 5, categoria: 'Salgado', valor: 5.00 },
-        { id: 3, nome: 'Coxinha', quantidade: 6, categoria: 'Salgado', valor: 4.00 },
-        { id: 4, nome: 'Bauru', quantidade: 2, categoria: 'Salgado', valor: 6.50 },
-        { id: 5, nome: 'Enroladinho', quantidade: 3, categoria: 'Salgado', valor: 3.50 },
-        { id: 6, nome: 'Pizza', quantidade: 12, categoria: 'Salgado', valor: 12.00 },
-        { id: 7, nome: 'Hamburguer', quantidade: 8, categoria: 'Salgado', valor: 13.00 },
-        { id: 8, nome: 'Brigadeiro', quantidade: 9, categoria: 'Doces', valor: 2.50 },
-        { id: 9, nome: 'Pudim', quantidade: 14, categoria: 'Doces', valor: 5.50 },
-        { id: 10, nome: 'Bolo de Chocolate', quantidade: 4, categoria: 'Doces', valor: 8.00 },
-        { id: 11, nome: 'Refrigerante', quantidade: 20, categoria: 'Bebidas', valor: 4.50 },
-        { id: 12, nome: 'Água', quantidade: 50, categoria: 'Bebidas', valor: 2.00 },
-        { id: 13, nome: 'Suco Natural', quantidade: 10, categoria: 'Bebidas', valor: 6.00 },
-        { id: 14, nome: 'Acarajé', quantidade: 7, categoria: 'Salgado', valor: 7.00 },
-        { id: 15, nome: 'Quibe', quantidade: 11, categoria: 'Salgado', valor: 3.00 },
-    ]);
+    const navigate = useNavigate();
+    const [produtos, setProdutos] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [paginaAtual, setPaginaAtual] = useState(1);
+    const [showDeleteModal, setShowDeleteModal] = useState(null);
+
+    useEffect(() => {
+        fetchProdutos();
+    }, []);
+
+    const fetchProdutos = async () => {
+        try {
+            setLoading(true);
+            const response = await listarTodosProdutos();
+            setProdutos(response.data);
+        } catch (error) {
+            console.error("Erro ao buscar produtos:", error);
+            toast.error("Erro ao carregar estoque.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await excluirProduto(id);
+            toast.success("Produto excluído com sucesso!");
+            setProdutos(produtos.filter(p => p.id_produto !== id));
+            setShowDeleteModal(null);
+        } catch (error) {
+            toast.error("Erro ao excluir produto.");
+        }
+    };
 
     const totalPaginas = Math.ceil(produtos.length / ITENS_POR_PAGINA);
     const indiceInicial = (paginaAtual - 1) * ITENS_POR_PAGINA;
-    const indiceFinal = indiceInicial + ITENS_POR_PAGINA;
-    const produtosPaginados = produtos.slice(indiceInicial, indiceFinal);
+    const produtosPaginados = produtos.slice(indiceInicial, indiceInicial + ITENS_POR_PAGINA);
 
     const irParaPagina = (numeroPagina) => {
         if (numeroPagina > 0 && numeroPagina <= totalPaginas) {
@@ -41,75 +57,139 @@ export default function ControleDeEstoque() {
         }
     };
 
+    const getCategoriaNome = (id) => {
+        const cats = { 1: 'Salgado', 2: 'Doces', 3: 'Bebidas' };
+        return cats[id] || 'Outros';
+    };
+
     return (
         <>
             <Header />
-            <div className={styles.tabela}>
-                <div className={styles.header}>
-                    <span>Nome:</span>
-                    <span>Quantidade:</span>
-                    <span>Categoria</span>
-                    <span>Valor:</span>
-                    <span></span>
+            <main style={{ minHeight: '80vh', padding: '40px 20px' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                        <h1 style={{ color: '#fff', fontSize: '2.5rem' }}>Controle de Estoque</h1>
+                        <button 
+                            onClick={() => navigate('/cadastrar-produto')} 
+                            style={{ background: '#DD9933', color: '#033061', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold' }}
+                        >
+                            + Novo Produto
+                        </button>
+                    </div>
+
+                    {loading ? (
+                        <div style={{ color: '#fff', textAlign: 'center' }}>Carregando estoque...</div>
+                    ) : (
+                        <div className={styles.tabela}>
+                            <div className={styles.header}>
+                                <span>Nome:</span>
+                                <span>Quantidade:</span>
+                                <span>Categoria</span>
+                                <span>Valor:</span>
+                                <span style={{ textAlign: 'right' }}>Ações:</span>
+                            </div>
+
+                            {produtosPaginados.map((p) => (
+                                <div key={p.id_produto} className={styles.row}>
+                                    <span style={{ fontWeight: 'bold' }}>{p.nome}</span>
+                                    <span style={{ color: p.estoque < 10 ? '#ff4d4d' : '#2ecc71', fontWeight: 'bold' }}>
+                                        {p.estoque} unidades
+                                    </span>
+                                    <span>{getCategoriaNome(p.id_categoria)}</span>
+                                    <span>R$ {Number(p.preco).toFixed(2)}</span>
+
+                                    <div className={styles.actions} style={{ justifyContent: 'flex-end' }}>
+                                        <Link to={`/EditarProduto/${p.id_produto}`} title="Editar Produto">
+                                            <img src={icon1} alt="Editar" />
+                                        </Link>
+
+                                        <Link to={`/adicionar-estoque/${p.id_produto}`} title="Repor Estoque">
+                                            <img src={icon2} alt="Adicionar" />
+                                        </Link>
+
+                                        <button 
+                                            onClick={() => setShowDeleteModal(p)} 
+                                            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                                            title="Excluir Produto"
+                                        >
+                                            <img src={icon3} alt="Deletar" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {produtos.length === 0 && (
+                                <div style={{ padding: '40px', textAlign: 'center', color: '#fff', opacity: 0.6 }}>
+                                    Nenhum produto cadastrado no sistema.
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {!loading && totalPaginas > 1 && (
+                        <div className={styles.paginacao} style={{ marginTop: '30px' }}>
+                            <button
+                                className={styles.botao}
+                                onClick={() => irParaPagina(paginaAtual - 1)}
+                                disabled={paginaAtual === 1}
+                            >
+                                ← Anterior
+                            </button>
+
+                            <div className={styles.numeroPaginas}>
+                                {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((numero) => (
+                                    <button
+                                        key={numero}
+                                        className={`${styles.numeroPagina} ${paginaAtual === numero ? styles.ativo : ''}`}
+                                        onClick={() => irParaPagina(numero)}
+                                    >
+                                        {numero}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button
+                                className={styles.botao}
+                                onClick={() => irParaPagina(paginaAtual + 1)}
+                                disabled={paginaAtual === totalPaginas}
+                            >
+                                Próximo →
+                            </button>
+                        </div>
+                    )}
                 </div>
+            </main>
 
-                {produtosPaginados.map((p) => (
-                    <div key={p.id} className={styles.row}>
-                        <span>{p.nome}</span>
-                        <span>{p.quantidade}</span>
-                        <span>{p.categoria}</span>
-                        <span>R$ {p.valor}</span>
-
-                        <div className={styles.actions}>
-                            <Link to={`/EditarProduto/${p.id}`}>
-                                <img src={icon1} alt="Editar" />
-                            </Link>
-
-                            <Link to={`/adicionarproduto/${p.id}`}>
-                                <img src={icon2} alt="Adicionar" />
-                            </Link>
-
-                            <Link to={`/deletar/${p.id}`}>
-                                <img src={icon3} alt="Deletar" />
-                            </Link>
+            {/* MODAL DE EXCLUSÃO */}
+            {showDeleteModal && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+                }}>
+                    <div style={{ background: '#fff', padding: '30px', borderRadius: '12px', maxWidth: '400px', width: '90%', textAlign: 'center' }}>
+                        <h3 style={{ color: '#033061', marginBottom: '15px' }}>Excluir Produto?</h3>
+                        <p style={{ color: '#666', marginBottom: '25px' }}>
+                            Tem certeza que deseja excluir <strong>{showDeleteModal.nome}</strong>? Esta ação não pode ser desfeita.
+                        </p>
+                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <button 
+                                onClick={() => setShowDeleteModal(null)}
+                                style={{ padding: '10px 20px', borderRadius: '6px', border: '1px solid #ccc', cursor: 'pointer' }}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                onClick={() => handleDelete(showDeleteModal.id_produto)}
+                                style={{ background: '#e74c3c', color: '#fff', padding: '10px 20px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
+                            >
+                                Sim, Excluir
+                            </button>
                         </div>
                     </div>
-                ))}
-            </div>
-
-            <div className={styles.paginacao}>
-                <button
-                    className={styles.botao}
-                    onClick={() => irParaPagina(paginaAtual - 1)}
-                    disabled={paginaAtual === 1}
-                >
-                    ← Anterior
-                </button>
-
-                <div className={styles.numeroPaginas}>
-                    {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((numero) => (
-                        <button
-                            key={numero}
-                            className={`${styles.numeroPagina} ${paginaAtual === numero ? styles.ativo : ''}`}
-                            onClick={() => irParaPagina(numero)}
-                        >
-                            {numero}
-                        </button>
-                    ))}
                 </div>
+            )}
 
-                <button
-                    className={styles.botao}
-                    onClick={() => irParaPagina(paginaAtual + 1)}
-                    disabled={paginaAtual === totalPaginas}
-                >
-                    Próximo →
-                </button>
-            </div>
-
-            <div className={styles.infoPages}>
-                Página {paginaAtual} de {totalPaginas}
-            </div>
+            <Footer />
         </>
     )
 }

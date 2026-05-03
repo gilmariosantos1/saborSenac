@@ -187,6 +187,45 @@ export function createProdutoController(produtoModel) {
         return next(error);
       }
     },
+
+    async updateEstoque(req, res, next) {
+      try {
+        const { incremento } = req.body;
+        const id = req.params.id;
+
+        const produto = await produtoModel.findByPk(id);
+
+        if (!produto) {
+          return res.status(404).json({ message: "Produto não encontrado" });
+        }
+
+        if (incremento === undefined || isNaN(incremento)) {
+          return res.status(400).json({ message: "Informe a quantidade a ser adicionada." });
+        }
+
+        const novoEstoque = Number(produto.estoque) + Number(incremento);
+        
+        if (novoEstoque < 0) {
+          return res.status(400).json({ message: "O estoque não pode ser negativo." });
+        }
+
+        await produto.update({ estoque: novoEstoque });
+
+        return res.status(200).json({
+          message: "Estoque atualizado com sucesso!",
+          produto: {
+            id_produto: produto.id_produto,
+            nome: produto.nome,
+            estoque: produto.estoque
+          }
+        });
+
+      } catch (error) {
+        console.error("Erro ao atualizar estoque:", error);
+        return res.status(500).json({ error: "Erro interno ao atualizar estoque." });
+      }
+    },
+
     async remove(req, res, next) {
       try {
         const removed = await produtoModel.removeItem(
