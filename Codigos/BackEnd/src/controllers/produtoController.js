@@ -56,10 +56,11 @@ export function createProdutoController(produtoModel) {
     async list(req, res, next) {
       try {
         const { categoria } = req.query;
+        console.log("===> Buscando produtos. Categoria recebida:", categoria);
 
         let produtos;
 
-        if (categoria) {
+        if (categoria && categoria !== 'undefined') {
           produtos = await produtoModel.findAll({
             where: { id_categoria: Number(categoria) }
           });
@@ -69,7 +70,8 @@ export function createProdutoController(produtoModel) {
 
         return res.status(200).json(produtos);
       } catch (error) {
-        return next(error);
+        console.error("!!! ERRO AO LISTAR PRODUTOS:", error);
+        return res.status(500).json({ error: error.message, details: error });
       }
     },
 

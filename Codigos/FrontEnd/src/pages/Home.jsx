@@ -27,7 +27,7 @@ const Home = () => {
     const [pessoa, setPessoa] = useState({
         id: 1,
         nome: 'Guilherme',
-        perfil: 'user'
+        perfil: 'ALUNO'
     })
     const [carrinho, setCarrinho] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -91,14 +91,14 @@ const Home = () => {
             const { id_reserva, expira_em } = response.data;
             const expira = new Date(expira_em).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             toast.success(`⏳ "${produto.nome}" reservado até ${expira}!`);
-            
+
             setProdutos(prev => prev.map(p =>
                 p.id_produto === produto.id_produto
                     ? { ...p, estoque: p.estoque - produto.quantidade_atual, quantidade_atual: p.estoque - produto.quantidade_atual > 0 ? 1 : 0 }
                     : p
             ));
-            
-            navigate(`/confirmarpedido?id_reserva=${id_reserva}`);
+
+            navigate('/agendamento');
         } catch (e) {
             const msg = e.response?.data?.error || "Erro ao criar reserva";
             toast.error(msg);
@@ -162,9 +162,6 @@ const Home = () => {
         <>
             <Header />
 
-            <div onClick={() => navigate("/carrinho")} className={styles.carrinho}>
-                <img src={carrinhoImg} alt="carrinho de compras" />
-            </div>
 
             <section className={styles.section}>
                 <div className={styles.cardapio_title}>
@@ -217,8 +214,10 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <div className={styles.cardapio_item_bottom}>
-                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.estoque === 0 ? styles.cardapio_item_bottom_add_desativado : ""}`}>Adcionar ao carrinho</div>
-                                    <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.estoque === 0}>Reservar</button>
+                                    <div onClick={() => handleAddCarrinho(produto)} className={`${styles.cardapio_item_bottom_add} ${produto.estoque === 0 ? styles.cardapio_item_bottom_add_desativado : ""}`}>Add ao carrinho</div>
+                                    {pessoa.perfil !== 'ALUNO' && (
+                                        <button onClick={() => handleReservar(produto)} type="submit" className={styles.cardapio_item_bottom_reservar} disabled={produto.estoque === 0}>Reservar</button>
+                                    )}
                                 </div>
                             </form>
                         ))}

@@ -12,6 +12,7 @@ const BASE_URL = "http://localhost:3000";
 
 // ID da pessoa logada (fixo por enquanto, virá do contexto de autenticação no futuro)
 const ID_PESSOA = 1;
+const PERFIL_USUARIO = "ALUNO"; // Mock do perfil para teste (ALUNO ou FUNCIONARIO)
 
 const Carrinho = () => {
     const navigate = useNavigate();
@@ -82,7 +83,7 @@ const Carrinho = () => {
     // ----- URL da imagem -----
     const getImageUrl = (imagem) => {
         if (!imagem) return null;
-        return `${BASE_URL}/uploads/produtos/${imagem}`;
+        return `${BASE_URL}/${imagem}`;
     };
 
     // ----- Finalizar pedido -----
@@ -91,7 +92,12 @@ const Carrinho = () => {
             toast.warning("Seu carrinho está vazio!");
             return;
         }
-        navigate("/confirmarpedido");
+
+        if (PERFIL_USUARIO === "ALUNO") {
+            navigate("/agendamento", { state: { itens, total } });
+        } else {
+            navigate("/confirmarpedido");
+        }
     };
 
     return (
@@ -215,7 +221,7 @@ const Carrinho = () => {
                                 className={styles.btnFinalizar}
                                 onClick={handleFinalizar}
                             >
-                                Finalizar Pedido →
+                                {PERFIL_USUARIO === "ALUNO" ? "Confirmar Reserva →" : "Finalizar Pedido →"}
                             </button>
                         </div>
                     </>

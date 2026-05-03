@@ -42,7 +42,7 @@ const Footer = () => {
       </div>
 
       {/* PARTE PRETA */}
-      <div className="footer-bottom">
+      <div className="footer-bottom" style={{ display: 'none' }}>
         <div className="footer-bottom-container">
           <p>
             Serviço Nacional de Aprendizagem Comercial - Departamento Regional

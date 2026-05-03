@@ -77,7 +77,7 @@ nav {
 /* -----CARDAPIO----- */
 
 .cardapio {
-    display: none;
+    display: flex;
 }
 
 /* ----- SIMBOLO DO ADM */
@@ -181,4 +181,32 @@ nav {
     .nav_itens {
         font-size: 13px;
     }
+}
+
+/* ----- BOTÃO DE DESTAQUE CARRINHO ----- */
+.cart_destaque {
+    background-color: #eb9e3e; /* Laranja de destaque */
+    padding: 8px 20px;
+    border-radius: 20px;
+    color: #fff !important;
+    transition: background-color 0.2s;
+    margin-left: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cart_destaque h3 {
+    color: #fff !important;
+    font-weight: 700 !important;
+    margin: 0;
+}
+
+.cart_destaque:hover {
+    background-color: #d88e34;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.nav_itens h3 {
+    margin: 0;
+    font-weight: 500;
 }
