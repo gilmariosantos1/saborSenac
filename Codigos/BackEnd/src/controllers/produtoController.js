@@ -13,7 +13,9 @@ export const produtoValidators = {
   create: [
     body("nome")
       .notEmpty()
-      .withMessage("Nome é obrigatório."),
+      .withMessage("Nome é obrigatório.")
+      .matches(/^(?=.*[a-zA-ZÀ-ÿ]).+$/)
+      .withMessage("O nome deve conter letras válidas."),
 
     body("preco")
       .notEmpty()
@@ -101,6 +103,17 @@ export function createProdutoController(produtoModel) {
           ? `uploads/produtos/${req.file.filename}`
           : null;
 
+        // 🔎 verifica se já existe
+        const produtoExistente = await produtoModel.findOne({
+          where: { nome }
+        });
+
+        if (produtoExistente) {
+          return res.status(400).json({
+            message: "Produto já cadastrado"
+          });
+        }
+
         const createdProduto = await produtoModel.createItem({
           nome,
           preco: parseFloat(preco),
@@ -110,7 +123,16 @@ export function createProdutoController(produtoModel) {
         });
 
         return res.status(201).json(createdProduto);
+
       } catch (error) {
+
+        // 🔥 tratamento do erro UNIQUE do banco
+        if (error.name === "SequelizeUniqueConstraintError") {
+          return res.status(400).json({
+            message: "Produto já cadastrado (duplicado)"
+          });
+        }
+
         return next(error);
       }
     },
@@ -119,38 +141,52 @@ export function createProdutoController(produtoModel) {
       try {
         const { nome, preco, estoque, id_categoria } = req.body;
 
-        const imagem = req.file
-          ? `uploads/produtos/${req.file.filename}`
-          : null;
+        const produtoExistente = await produtoModel.findByPk(req.params.id);
 
-        const data = {
-          nome,
-          preco: preco ? parseFloat(preco) : undefined,
-          estoque: estoque ? parseInt(estoque) : undefined,
-          id_categoria: id_categoria
-            ? parseInt(id_categoria)
-            : undefined,
-        };
-
-        if (imagem) data.imagem = imagem;
-
-        const updatedProduto = await produtoModel.updateItem(
-          Number(req.params.id),
-          data
-        );
-
-        if (!updatedProduto) {
-          return res
-            .status(404)
-            .json({ message: "Produto não encontrado." });
+        if (!produtoExistente) {
+          return res.status(404).json({ message: "Produto não encontrado" });
         }
 
-        return res.status(200).json(updatedProduto);
+        // 🔥 validações
+        if (!nome || !preco || estoque === undefined || !id_categoria) {
+          return res.status(400).json({ message: "Campos obrigatórios." });
+        }
+
+        if (estoque < 0) {
+          return res.status(400).json({ message: "Estoque inválido." });
+        }
+
+        if (preco <= 0) {
+          return res.status(400).json({ message: "Preço inválido." });
+        }
+
+        // 🔥 nome duplicado
+        const existente = await produtoModel.findOne({ where: { nome } });
+
+        if (existente && existente.id_produto !== Number(req.params.id)) {
+          return res.status(400).json({
+            message: "Já existe um produto com esse nome."
+          });
+        }
+
+        const imagem = req.file
+          ? `uploads/produtos/${req.file.filename}`
+          : produtoExistente.imagem;
+
+        const updated = await produtoModel.updateItem(req.params.id, {
+          nome,
+          preco: parseFloat(preco),
+          estoque: parseInt(estoque),
+          id_categoria: parseInt(id_categoria),
+          imagem,
+        });
+
+        return res.status(200).json(updated);
+
       } catch (error) {
         return next(error);
       }
     },
-
     async remove(req, res, next) {
       try {
         const removed = await produtoModel.removeItem(

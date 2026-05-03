@@ -29,7 +29,7 @@ function App() {
         <Route path='/sugestoes' element={<Sugestoes />} />
         <Route path='/login' element={<Login />} />
 
-        <Route path='/EditarProduto' element={<EditarProduto />} />
+        <Route path='/EditarProduto/:id' element={<EditarProduto />} />
         <Route path='/adicionarproduto' element={<AdicionarProduto />} />
 
         <Route path='/consultapedido' element={<Consultapedido />} />

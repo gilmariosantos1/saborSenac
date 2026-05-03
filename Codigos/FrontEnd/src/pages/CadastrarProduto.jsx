@@ -6,10 +6,10 @@ import ServiceCadastrarProduto from "../services/ServiceCadastrarProduto";
 import styles from "../styles/CadastroProduto.module.css";
 
 const CATEGORIAS = [
-  "Selecione uma categoria",
-  "Salgados",
-  "Doces",
-  "Bebidas",
+  { id: "", nome: "Selecione uma categoria" },
+  { id: 1, nome: "Salgados" },
+  { id: 2, nome: "Doces" },
+  { id: 3, nome: "Bebidas" }
 ];
 
 const CadastrarProduto = () => {
@@ -18,6 +18,7 @@ const CadastrarProduto = () => {
   const [form, setForm] = useState({
     nome: "",
     preco: "",
+    estoque: 0,
     categoria: "",
     imagem: null,
   });
@@ -48,6 +49,8 @@ const CadastrarProduto = () => {
     if (!form.nome.trim()) newErrors.nome = "Nome é obrigatório.";
     if (!form.preco || isNaN(form.preco) || Number(form.preco) <= 0)
       newErrors.preco = "Informe um preço válido.";
+    if (form.estoque === "" || isNaN(form.estoque) || Number(form.estoque) < 0)
+      newErrors.estoque = "Informe um estoque válido.";
     if (!form.categoria || form.categoria === "Selecione uma categoria")
       newErrors.categoria = "Selecione uma categoria.";
     if (!form.imagem) newErrors.imagem = "Adicione uma imagem do produto.";
@@ -65,15 +68,19 @@ const CadastrarProduto = () => {
       await ServiceCadastrarProduto({
         nome: form.nome,
         preco: form.preco,
-        categoria_id_categoria: form.categoria,
+        estoque: Number(form.estoque),
+        id_categoria: form.categoria,
         imagem: form.imagem,
       });
 
       setSubmitted(true);
-      setTimeout(() => navigate("/"), 1800);
+      setTimeout(() => navigate("/painelatendente"), 1800);
     } catch (error) {
       console.error("Erro ao cadastrar produto:", error);
-      setErrors({ geral: "Erro ao cadastrar produto. Tente novamente." });
+      const mensagem =
+        error.response?.data?.message || "Erro ao cadastrar produto";
+      setErrors({ geral: mensagem });
+
     }
   };
 
@@ -126,22 +133,30 @@ const CadastrarProduto = () => {
             {errors.preco && <p className={styles.errorMsg}>{errors.preco}</p>}
           </div>
 
+          <div className={styles.fieldGroup}>
+            <label htmlFor="preco">Estoque</label>
+            <input
+              id="estoque"
+              name="estoque"
+              type="number"
+              min="0"
+              value={form.estoque}
+              onChange={handleChange}
+            />
+            {errors.estoque && <p className={styles.errorMsg}>{errors.estoque}</p>}
+          </div>
+
           {/* Categoria */}
           <div className={styles.fieldGroup}>
             <label htmlFor="categoria">Categoria</label>
             <select
-              id="categoria"
               name="categoria"
               value={form.categoria}
               onChange={handleChange}
             >
               {CATEGORIAS.map((cat) => (
-                <option
-                  key={cat}
-                  value={cat === "Selecione uma categoria" ? "" : cat}
-                  disabled={cat === "Selecione uma categoria"}
-                >
-                  {cat}
+                <option key={cat.id} value={cat.id} disabled={cat.id === ""}>
+                  {cat.nome}
                 </option>
               ))}
             </select>
