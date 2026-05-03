@@ -42,7 +42,7 @@
 }
 
 .login-card h1 {
- /* font-size: clamp(1.25rem, 2.5vw, 2.6rem);*/
+  /* font-size: clamp(1.25rem, 2.5vw, 2.6rem);*/
   margin-bottom: 0.5rem;
   color: #0f3a71;
 }

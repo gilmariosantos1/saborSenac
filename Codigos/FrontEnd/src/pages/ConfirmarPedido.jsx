@@ -5,7 +5,7 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { getReservaById, confirmarReserva, cancelarReserva } from "../services/homeService";
 import { listPedidos } from "../services/pedidoService";
-import '../styles/confirmarpedido.css';
+import styles from '../styles/confirmarpedido.module.css';
 
 const ConfirmarPedido = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const ConfirmarPedido = () => {
   const [reserva, setReserva] = useState(null);
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tipoPagamento, setTipoPagamento] = useState("PIX");
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -45,18 +46,18 @@ const ConfirmarPedido = () => {
 
     try {
       if (type === "confirm") {
-        await confirmarReserva(reserva.id_reserva, "PIX");
-        toast.success("✅ Pedido confirmado!");
+        await confirmarReserva(reserva.id_reserva, tipoPagamento);
+        toast.success("✅ Reserva confirmada e paga!");
       } else {
         await cancelarReserva(reserva.id_reserva);
-        toast.success("❌ Pedido cancelado.");
+        toast.success("❌ Reserva cancelada.");
       }
 
       setShowCancelModal(false);
       setShowConfirmModal(false);
 
       setTimeout(() => {
-        navigate('/');
+        navigate('/painelAtendente');
       }, 2000);
     } catch (error) {
       toast.error("Erro ao processar ação");
@@ -69,113 +70,130 @@ const ConfirmarPedido = () => {
   ) || 0;
 
   if (loading) {
-      return (
-          <>
-            <Header />
-            <div style={{ padding: "100px", textAlign: "center" }}>Carregando...</div>
-            <Footer />
-          </>
-      );
+    return (
+      <div className={styles.containerPrincipal}>
+        <Header />
+        <div style={{ color: '#fff' }}>Carregando detalhes da reserva...</div>
+      </div>
+    );
   }
 
   return (
     <>
       <Header />
 
-      <main className="consulta-container">
-        <section className="consulta-box">
-          <h3>Confirmar Reserva</h3>
+      <main className={styles.containerPrincipal}>
+        <div className={styles.cardConfirmar}>
 
-          <label>ID da Reserva</label>
-          <input type="text" value={`#${reserva?.id_reserva || "---"}`} readOnly />
+          {/* LADO ESQUERDO: DETALHES DA RESERVA */}
+          <section className={styles.infoArea}>
+            <h3>Detalhes da Reserva</h3>
 
-          <label>Cliente</label>
-          <input type="text" value={reserva?.pessoa?.nome || "---"} readOnly />
+            <label>ID da Reserva</label>
+            <input type="text" value={`#${reserva?.id_reserva || "---"}`} readOnly />
 
-          <div className="itens-reserva" style={{ marginTop: '15px' }}>
-            <label>Produtos Reservados</label>
-            {reserva?.itens?.map((item, idx) => (
-                <div key={idx} className="item-linha" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', background: '#f9f9f9', padding: '8px', borderRadius: '5px' }}>
-                    <span>{item.produto?.nome} (x{item.quantidade})</span>
-                    <span style={{ fontWeight: 'bold' }}>R$ {(Number(item.preco_unitario) * item.quantidade).toFixed(2)}</span>
+            <label>Cliente</label>
+            <input type="text" value={reserva?.pessoa?.nome || "---"} readOnly />
+
+            <label>Produtos</label>
+            <div className={styles.itensReserva}>
+              {reserva?.itens?.map((item, idx) => (
+                <div key={idx} className={styles.itemLinha}>
+                  <span>{item.produto?.nome} (x{item.quantidade})</span>
+                  <span style={{ fontWeight: 'bold' }}>R$ {(Number(item.preco_unitario) * item.quantidade).toFixed(2)}</span>
                 </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <label style={{ marginTop: '15px' }}>Total a Pagar</label>
-          <div className="preco-total">
-            <input type="text" value={`R$ ${totalReserva.toFixed(2)}`} readOnly />
-          </div>
+            <label>Forma de Pagamento</label>
+            <select
+              value={tipoPagamento}
+              onChange={(e) => setTipoPagamento(e.target.value)}
+              disabled={reserva?.status !== 'ABERTA'}
+            >
+              <option value="PIX">PIX</option>
+              <option value="DINHEIRO">Dinheiro</option>
+              <option value="DEBITO">Cartão de Débito</option>
+              <option value="CREDITO">Cartão de Crédito</option>
+            </select>
 
-          {reserva?.status === 'ABERTA' ? (
-              <div className="botoes-confirmar">
-                <button className="btn-cancelar" onClick={() => setShowCancelModal(true)}>
-                  Cancelar
-                </button>
-                <button className="btn-confirmar" onClick={() => setShowConfirmModal(true)}>
-                  Confirmar
-                </button>
-              </div>
-          ) : (
-              <div style={{ textAlign: 'center', padding: '15px', color: reserva?.status === 'PAGA' ? 'green' : 'red', fontWeight: 'bold' }}>
-                  Reserva já está {reserva?.status}
-              </div>
-          )}
+            <div className={styles.precoTotal}>
+              Total: R$ {totalReserva.toFixed(2)}
+            </div>
 
-          <button className="btn-voltar" onClick={() => navigate('/')}>
-            Voltar ao Cardápio
-          </button>
-        </section>
-
-        <section className="historico-box">
-          <h4>Seus Pedidos</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>Reserva</th>
-                <th>Status</th>
-                <th>Preço</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pedidos.length > 0 ? (
-                pedidos.map((p) => (
-                  <tr key={p.id_reserva}>
-                    <td>#{p.id_reserva}</td>
-                    <td style={{ color: p.status === 'PAGA' ? 'green' : p.status === 'CANCELADA' ? 'red' : 'orange' }}>{p.status}</td>
-                    <td>R$ {Number(p.valor_total || 0).toFixed(2)}</td>
-                  </tr>
-                ))
+            <div className={styles.botoes}>
+              {reserva?.status === 'ABERTA' ? (
+                <>
+                  <button className={styles.btnCancelar} onClick={() => setShowCancelModal(true)}>
+                    Cancelar
+                  </button>
+                  <button className={styles.btnConfirmar} onClick={() => setShowConfirmModal(true)}>
+                    Confirmar Pagamento
+                  </button>
+                </>
               ) : (
-                <tr>
-                  <td colSpan="3">Nenhum pedido encontrado</td>
-                </tr>
+                <button className={styles.btnVoltar} onClick={() => navigate('/painelAtendente')}>
+                  Voltar ao Painel
+                </button>
               )}
-            </tbody>
-          </table>
-        </section>
+            </div>
+          </section>
 
+          {/* LADO DIREITO: HISTÓRICO RECENTE */}
+          <section className={styles.historicoArea}>
+            <h4>Reservas Recentes</h4>
+            <div className={styles.tabelaWrapper}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pedidos.slice(0, 8).map((p) => (
+                    <tr key={p.id_reserva}>
+                      <td>#{p.id_reserva}</td>
+                      <td style={{
+                        color: p.status === 'PAGA' ? '#2ecc71' : p.status === 'CANCELADA' ? '#e74c3c' : '#f1c40f',
+                        fontWeight: 'bold'
+                      }}>
+                        {p.status}
+                      </td>
+                      <td>R$ {Number(p.valor_total || 0).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
+
+        {/* MODAL DE CANCELAMENTO */}
         {showCancelModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <h3>Deseja realmente cancelar esta reserva?</h3>
-              <p>O estoque será liberado para outros clientes.</p>
-              <div className="modal-buttons">
-                <button className="btn-nao" onClick={() => setShowCancelModal(false)}>Não</button>
-                <button className="btn-sim" onClick={() => handleAction("cancel")}>Sim, Cancelar</button>
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <h3>Deseja cancelar esta reserva?</h3>
+              {/* <p>O estoque será devolvido para o cardápio.</p> */}
+              <div className={styles.modalButtons}>
+                <button className={styles.btnNao} onClick={() => setShowCancelModal(false)}>Não</button>
+                <button className={styles.btnSim} onClick={() => handleAction("cancel")}>Sim, Cancelar</button>
               </div>
             </div>
           </div>
         )}
 
+        {/* MODAL DE CONFIRMAÇÃO */}
         {showConfirmModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <h3>Confirmar pagamento?</h3>
-              <p>O pedido será enviado para a cozinha.</p>
-              <div className="modal-buttons">
-                <button className="btn-nao" onClick={() => setShowConfirmModal(false)}>Não</button>
-                <button className="btn-sim" onClick={() => handleAction("confirm")}>Sim, Confirmar</button>
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <h3>Confirmar Recebimento?</h3>
+              <p>Confirme se o pagamento foi realizado via {tipoPagamento}.</p>
+              <div className={styles.modalButtons}>
+                <button className={styles.btnNao} onClick={() => setShowConfirmModal(false)}>Não</button>
+                <button className={styles.btnSim} onClick={() => handleAction("confirm")}>Confirmar Pago</button>
               </div>
             </div>
           </div>

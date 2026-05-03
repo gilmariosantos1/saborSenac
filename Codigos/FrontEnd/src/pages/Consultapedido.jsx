@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import { listPedidos } from "../services/pedidoService";
-import '../styles/consultapedido.css'
+import styles from '../styles/consultapedido.module.css';
 
 const Consultapedido = () => {
   const navigate = useNavigate();
@@ -24,69 +24,92 @@ const Consultapedido = () => {
 
   const handleBuscar = () => {
     if (numeroBusca) {
-      navigate('/confirmarpedido', { state: { numeroPedido: numeroBusca } });
+      navigate(`/confirmarpedido?id_reserva=${numeroBusca}`);
     }
   };
 
   return (
     <>
       <Header />
-      
-      <main className="consulta-container">
-        <section className="consulta-box">
-          <h3>Consultar Pedido</h3>
 
-          <label>Número do Pedido</label>
+      <main className={styles.containerPrincipal}>
+        <div className={styles.cardConsultar}>
 
-          <input
-            type="text"
-            placeholder="000"
-            value={numeroBusca}
-            onChange={(e) => setNumeroBusca(e.target.value)}
-          />
+          {/* LADO ESQUERDO: BUSCA */}
+          <section className={styles.buscaArea}>
+            <h3>Consultar Pedido</h3>
 
-          <div className="botoes">
-            <button className="voltar" onClick={() => navigate(-1)}>
-              Voltar
-            </button>
+            <label>Número do Pedido</label>
+            <input
+              type="text"
+              placeholder="Ex: 123"
+              value={numeroBusca}
+              onChange={(e) => setNumeroBusca(e.target.value)}
+            />
 
-            <button className="buscar" onClick={handleBuscar}>
-              Buscar
-            </button>
-          </div>
-        </section>
+            <div className={styles.botoes}>
+              <button className={styles.btnVoltar} onClick={() => navigate(-1)}>
+                Voltar
+              </button>
 
+              <button className={styles.btnBuscar} onClick={handleBuscar}>
+                Buscar
+              </button>
+            </div>
+          </section>
 
-        <section className="historico-box">
-          <h4>Histórico de pedidos</h4>
+          {/* LADO DIREITO: HISTÓRICO */}
+          <section className={styles.historicoArea}>
+            <h4>Histórico de Pedidos</h4>
 
-          <table>
-            <thead>
-              <tr>
-                <th>Número</th>
-                <th>Status</th>
-                <th>Preço</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {pedidos.length > 0 ? (
-                pedidos.map((pedido) => (
-                  <tr key={pedido.id_reserva}>
-                    <td>{pedido.pedido}</td>
-                    <td>{pedido.status}</td>
-                    <td>R$: {pedido.produto?.preco?.toFixed(2) || "0.00"}</td>
+            <div className={styles.tabelaWrapper}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pedido</th>
+                    <th>Status do agendamento</th>
+                    <th>Data do agendamento</th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3">Nenhum pedido encontrado</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                </thead>
 
-        </section>
+                <tbody>
+                  {pedidos.length > 0 ? (
+                    pedidos.map((pedido) => (
+                      <tr key={pedido.id_reserva}>
+                        <td>#{pedido.pedido || pedido.id_reserva}</td>
+                        <td>
+                          <span className={
+                            pedido.status?.toLowerCase() === 'paga' ? styles.status_paga :
+                              pedido.status?.toLowerCase() === 'pendente' ? styles.status_pendente :
+                                styles.status_cancelada
+                          }>
+                            {pedido.status}
+                          </span>
+                        </td>
+                        <td>
+                          {new Date(pedido.data_reserva).toLocaleString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" style={{ padding: '30px', opacity: 0.6 }}>
+                        Nenhum pedido encontrado
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
       </main>
 
       <Footer />

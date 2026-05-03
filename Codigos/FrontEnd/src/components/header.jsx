@@ -29,6 +29,12 @@ const Header = () => {
     const handleSair = () => {
         navigate('/sair');
     }
+    const handleAgendamentos = () => {
+        navigate('/consultapedido');
+    }
+    const handleCarrinho = () => {
+        navigate('/carrinho');
+    }
     const openDrop = () => {
         const drop = document.getElementById("menu_drop");
         drop.classList.toggle("ativo");
@@ -49,9 +55,15 @@ const Header = () => {
                         <h3>Sugestões</h3>
                         <img src={sugestoes} alt="sugestoes" />
                     </div>
+                    <div onClick={handleAgendamentos} className="nav_itens">
+                        <h3>Meus Agendamentos</h3>
+                    </div>
+                    <div onClick={handleCarrinho} className="nav_itens cart_destaque">
+                        <h3>Carrinho</h3>
+                    </div>
                     <div onClick={openDrop} className="perfil">
                         <img src={perfil} alt="perfil" />
-                        <p>Exemplo Exemplo</p>
+                        <p>Guilherme Antonio</p>
                         <div className="adm">ADM</div>
                     </div>
                     <div className="login_cadastro">

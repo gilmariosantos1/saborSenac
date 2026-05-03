@@ -2,38 +2,27 @@ const Venda = (sequelize, DataTypes) => {
   const Venda = sequelize.define(
     "Venda",
     {
-      id_vendas: {
+      id_venda: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      pedido: {
+      id_reserva: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      preco: {
-        type: DataTypes.REAL,
+      tipo_pagamento: {
+        type: DataTypes.ENUM('DINHEIRO', 'CREDITO', 'DEBITO', 'PIX'),
         allowNull: false,
       },
-      quantidade_saida: {
-        type: DataTypes.STRING(45),
+      valor_total: {
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
-      reservas_id_reserva: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true, 
-      },
-      reservas_pessoas_id_pessoas: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true, 
-      },
-      reservas_produtos_id_produtos: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true, 
-      },
+      data_venda: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      }
     },
     {
       tableName: "vendas",
@@ -43,7 +32,7 @@ const Venda = (sequelize, DataTypes) => {
 
   Venda.associate = (models) => {
     Venda.belongsTo(models.Reserva, {
-      foreignKey: "reservas_id_reserva",
+      foreignKey: "id_reserva",
       as: "reserva",
     });
   };

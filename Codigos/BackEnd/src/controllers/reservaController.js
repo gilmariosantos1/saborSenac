@@ -99,6 +99,14 @@ export const criarReserva = async (req, res) => {
 
         await t.commit();
 
+        // Limpa o carrinho do usuário após a reserva ser criada
+        await models.ReservaItens.destroy({
+            where: {
+                id_pessoa,
+                id_reserva: null
+            }
+        });
+
         const timer = setTimeout(async () => {
             try {
                 const reservaAtual = await models.Reserva.findByPk(reserva.id_reserva);
@@ -125,7 +133,7 @@ export const criarReserva = async (req, res) => {
             expira_em: new Date(Date.now() + 10 * 60 * 1000),
         });
     } catch (error) {
-        await t.rollback();
+        if (t) await t.rollback();
         console.error('Erro ao criar reserva:', error);
         return res.status(500).json({ error: 'Erro interno ao criar reserva.' });
     }

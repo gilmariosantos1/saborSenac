@@ -1,0 +1,229 @@
+.containerPrincipal {
+  display: flex;
+  flex-direction: column;
+  background-color: #2c2c2c; /* Fundo externo escuro */
+  min-height: 100vh;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 40px;
+}
+
+.cardAgendamento {
+  display: flex;
+  background-color: #1a569d; /* Azul Senac */
+  padding: 60px;
+  gap: 60px;
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  max-width: 1200px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.areaFormulario {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+  z-index: 2;
+}
+
+.titulo {
+  font-size: 32px;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.listaItens {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.listaItens::-webkit-scrollbar {
+  width: 6px;
+}
+.listaItens::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.itemAgendamento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.itemName {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.itemSub {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.itemPreco {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.resumo {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+  margin-bottom: 30px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.valorTotal {
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.botaoAgendar {
+  background-color: #eb9e3e;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 8px 0 #ffffff;
+}
+
+.botaoAgendar:hover {
+  background-color: #f2a94a;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 0 #ffffff;
+}
+
+.botaoAgendar:active {
+  transform: translateY(6px);
+  box-shadow: 0 2px 0 #ffffff;
+}
+
+.sucesso {
+  background-color: #27ae60 !important;
+}
+
+.areaImagem {
+  background-color: #ffffff;
+  border-radius: 10px;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+}
+
+.timerCircle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.textoTimer {
+  font-size: 14px;
+  color: #666;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tempo {
+  font-size: 72px;
+  font-weight: 800;
+  color: #1a569d;
+  line-height: 1;
+  margin: 10px 0;
+}
+
+.sucessoMsg {
+  color: #27ae60;
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.instrucoes {
+  margin-top: 30px;
+  color: #555;
+  font-size: 14px;
+  max-width: 300px;
+}
+
+.logoFundo {
+  position: absolute;
+  bottom: 20px;
+  opacity: 0.1;
+  width: 150px;
+  pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+  .cardAgendamento {
+    padding: 40px;
+    gap: 40px;
+  }
+  
+  .areaImagem {
+    width: 400px;
+    height: 400px;
+  }
+}
+
+@media (max-width: 950px) {
+  .cardAgendamento {
+    flex-direction: column;
+    padding: 30px;
+  }
+  
+  .areaImagem {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  
+  .areaFormulario {
+    width: 100%;
+    max-width: 450px;
+  }
+}
