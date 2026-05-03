@@ -72,9 +72,9 @@ const CadastrarProduto = () => {
         id_categoria: form.categoria,
         imagem: form.imagem,
       });
-
+      console.log("id_categoria:", form.categoria, "nome", form.nome);
       setSubmitted(true);
-      setTimeout(() => navigate("/painelatendente"), 1800);
+      setTimeout(() => navigate("/painelatendente"), 2200);
     } catch (error) {
       console.error("Erro ao cadastrar produto:", error);
       const mensagem =
@@ -167,7 +167,7 @@ const CadastrarProduto = () => {
           <div className={styles.fieldGroup}>
             <label>Imagem</label>
             <div className={styles.uploadBox} onClick={() => fileInputRef.current.click()}>
-              <span>🖼️ Add file</span>
+              <span>🖼️ Adicionar Imagem</span>
               {preview && (
                 <img
                   src={preview}

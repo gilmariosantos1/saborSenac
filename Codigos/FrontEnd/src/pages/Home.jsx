@@ -16,9 +16,9 @@ const Home = () => {
     const navigate = useNavigate();
 
     const categoriasMap = {
-        salgados: 2,
-        doces: 3,
-        bebidas: 1
+        salgados: 1,
+        doces: 2,
+        bebidas: 3
     };
 
 
