@@ -123,14 +123,14 @@ export const criarReserva = async (req, res) => {
             } catch (e) {
                 console.error('Erro ao expirar reserva:', e);
             }
-        }, 1 * 60 * 1000);
+        }, 10 * 60 * 1000);
 
         timersReserva.set(reserva.id_reserva, timer);
 
         return res.status(201).json({
             message: 'Reserva criada!',
             id_reserva: reserva.id_reserva,
-            expira_em: new Date(Date.now() + 1 * 60 * 1000),
+            expira_em: new Date(Date.now() + 10 * 60 * 1000),
         });
     } catch (error) {
         if (t) await t.rollback();
