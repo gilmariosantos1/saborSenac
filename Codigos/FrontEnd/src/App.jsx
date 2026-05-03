@@ -3,7 +3,7 @@ import './App.css';
 
 // páginas
 import Home from './pages/Home';
-import Sugestoes from './pages/Sugestoes';
+import DuvidasSugestoes from './pages/DuvidasSugestoes';
 import Login from './pages/Login';
 import EditarProduto from "./pages/EditarProduto";
 import PainelAtentende from './pages/painelAtendente';
@@ -26,7 +26,6 @@ function App() {
 
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/sugestoes' element={<Sugestoes />} />
         <Route path='/login' element={<Login />} />
 
         <Route path='/EditarProduto/:id' element={<EditarProduto />} />
@@ -39,7 +38,7 @@ function App() {
         <Route path='/cadastrar-produto' element={<CadastrarProduto />} />
         <Route path='/carrinho' element={<Carrinho />} />
         <Route path='/agendamento' element={<Agendamento />} />
-        {/* <Route path='/DuvidasSugestoes' element={<DuvidasSugestoes />} /> */}
+        <Route path='/DuvidasSugestoes' element={<DuvidasSugestoes />} />
       </Routes>
     </>
   )
